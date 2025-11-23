@@ -2,7 +2,7 @@ import axios from 'axios';
 import { mapEventsFromAPI, mapEventFromAPI } from '../utils/dataMapper';
 
 // URL base de la API
-const API_URL = 'https://projecte-n-gjs25ish7-pausintesps-projects.vercel.app';
+const API_URL = 'https://projecte-n-5enunpr2y-pausintesps-projects.vercel.app';
 
 const api = axios.create({
     baseURL: API_URL,
