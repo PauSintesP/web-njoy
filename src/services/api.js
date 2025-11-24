@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { mapEventsFromAPI, mapEventFromAPI } from '../utils/dataMapper';
 
-// URL base de la API
-const API_URL = 'https://projecte-n-5enunpr2y-pausintesps-projects.vercel.app';
+// URL base de la API - usar variable de entorno o fallback a la URL actual
+const API_URL = import.meta.env.VITE_API_URL || 'https://projecte-n-obijiuwkl-pausintesps-projects.vercel.app';
 
 const api = axios.create({
     baseURL: API_URL,
@@ -70,9 +70,22 @@ api.interceptors.response.use(
  */
 export const getEvents = async (params = {}) => {
     try {
-        const response = await api.get('/evento/', { params });
+        // Fetch events and locations in parallel to avoid N+1 problem
+        const [eventsResponse, locationsResponse] = await Promise.all([
+            api.get('/evento/', { params }),
+            api.get('/localidad/')
+        ]);
+
+        // Create a map of location IDs to city names
+        const locationsMap = {};
+        if (Array.isArray(locationsResponse.data)) {
+            locationsResponse.data.forEach(loc => {
+                locationsMap[loc.id] = loc.ciudad;
+            });
+        }
+
         // Map Spanish field names to English for frontend
-        return mapEventsFromAPI(response.data);
+        return mapEventsFromAPI(eventsResponse.data, locationsMap);
     } catch (error) {
         console.error("Error fetching events:", error);
         throw error;
@@ -87,7 +100,20 @@ export const getEvents = async (params = {}) => {
 export const getEventById = async (eventId) => {
     try {
         const response = await api.get(`/evento/${eventId}`);
-        return mapEventFromAPI(response.data);
+        const event = response.data;
+
+        let locationName = '';
+        if (event.localidad_id) {
+            try {
+                const locResponse = await api.get(`/localidad/${event.localidad_id}`);
+                locationName = locResponse.data.ciudad;
+            } catch (e) {
+                console.error("Error fetching location details", e);
+            }
+        }
+
+        const locationsMap = { [event.localidad_id]: locationName };
+        return mapEventFromAPI(event, locationsMap);
     } catch (error) {
         console.error(`Error fetching event ${eventId}:`, error);
         throw error;
@@ -105,6 +131,21 @@ export const getCurrentUser = async () => {
     } catch (error) {
         console.error("Error fetching user:", error);
         throw error;
+    }
+};
+
+/**
+ * Get location details by ID
+ * @param {number} locationId - The location ID
+ * @returns {Promise<Object>} Location object
+ */
+export const getLocation = async (locationId) => {
+    try {
+        const response = await api.get(`/localidad/${locationId}`);
+        return response.data;
+    } catch (error) {
+        console.error(`Error fetching location ${locationId}:`, error);
+        return null;
     }
 };
 

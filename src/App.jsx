@@ -38,7 +38,21 @@ function App() {
         setError(null);
       } catch (err) {
         console.error("Failed to load events", err);
-        setError("No se pudieron cargar los eventos. Por favor, intenta más tarde.");
+
+        // Handle authentication errors specifically
+        if (err.response?.status === 401) {
+          if (authService.isAuthenticated()) {
+            // Token expired
+            setError("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.");
+            authService.logout();
+            setUser(null);
+          } else {
+            // Not logged in - but events should be public now
+            setError("Error de autenticación. Por favor, recarga la página.");
+          }
+        } else {
+          setError("No se pudieron cargar los eventos. Por favor, intenta más tarde.");
+        }
         setEvents([]);
       } finally {
         setLoading(false);

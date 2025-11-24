@@ -3,7 +3,7 @@ import authService from '../services/authService';
 import './LoginModal.css';
 
 const LoginModal = ({ isOpen, onClose, onLoginSuccess, onShowRegister }) => {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -16,11 +16,11 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, onShowRegister }) => {
         setLoading(true);
 
         try {
-            const response = await authService.login(username, password);
+            const response = await authService.login(email, password);
             console.log('Login successful:', response);
 
             // Clear form
-            setUsername('');
+            setEmail('');
             setPassword('');
 
             // Call success callback
@@ -38,7 +38,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, onShowRegister }) => {
     };
 
     const handleClose = () => {
-        setUsername('');
+        setEmail('');
         setPassword('');
         setError('');
         onClose();
@@ -61,12 +61,12 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, onShowRegister }) => {
 
                 <form className="login-form" onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <label>Username</label>
+                        <label>Email</label>
                         <input
-                            type="text"
-                            placeholder="your_username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            type="email"
+                            placeholder="your@email.com"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             required
                             disabled={loading}
                         />

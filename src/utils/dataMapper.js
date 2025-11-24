@@ -5,63 +5,45 @@
 /**
  * Maps an event from API format (Spanish) to frontend format (English)
  * @param {Object} apiEvent - Event object from the API
+ * @param {Object} locationsMap - Map of location IDs to city names
  * @returns {Object} Event object formatted for the frontend
  */
-export const mapEventFromAPI = (apiEvent) => {
+export const mapEventFromAPI = (apiEvent, locationsMap = {}) => {
     if (!apiEvent) return null;
+
+    const cityName = locationsMap[apiEvent.localidad_id] || 'Unknown Location';
 
     return {
         id: apiEvent.id,
         title: apiEvent.nombre || '',
         description: apiEvent.descripcion || '',
-        date: apiEvent.fecha || '',
-        location: parseLocation(apiEvent.ubicacion),
-        price: apiEvent.precio || 0,
-        category: apiEvent.categoria || 'Other',
-        image: apiEvent.imagen_url || ''
+        date: apiEvent.fechayhora || '',
+        location: {
+            city: cityName,
+            venue: apiEvent.recinto || ''
+        },
+        price: apiEvent.categoria_precio || 'Free',
+        category: apiEvent.tipo || 'Other',
+        image: apiEvent.imagen || ''
     };
 };
 
 /**
  * Maps multiple events from API to frontend format
  * @param {Array} apiEvents - Array of events from the API
+ * @param {Object} locationsMap - Map of location IDs to city names
  * @returns {Array} Array of events formatted for the frontend
  */
-export const mapEventsFromAPI = (apiEvents) => {
+export const mapEventsFromAPI = (apiEvents, locationsMap = {}) => {
     if (!Array.isArray(apiEvents)) return [];
-    return apiEvents.map(mapEventFromAPI).filter(event => event !== null);
+    return apiEvents.map(event => mapEventFromAPI(event, locationsMap)).filter(event => event !== null);
 };
 
 /**
  * Parses the location field from the API
- * Handles both string format ("Barcelona") and object format ({ciudad: "Barcelona", venue: "Venue"})
- * @param {String|Object} ubicacion - Location data from API
- * @returns {Object} Location object with city and venue
+ * @deprecated Since API v3 uses localidad_id and separate endpoint
  */
 const parseLocation = (ubicacion) => {
-    // If it's already an object with ciudad and venue
-    if (typeof ubicacion === 'object' && ubicacion !== null) {
-        return {
-            city: ubicacion.ciudad || ubicacion.city || '',
-            venue: ubicacion.venue || ubicacion.lugar || ''
-        };
-    }
-
-    // If it's a string, try to parse it
-    if (typeof ubicacion === 'string') {
-        // Check if it contains a delimiter like " - " or ","
-        if (ubicacion.includes(' - ')) {
-            const [venue, city] = ubicacion.split(' - ');
-            return { city: city.trim(), venue: venue.trim() };
-        } else if (ubicacion.includes(',')) {
-            const [venue, city] = ubicacion.split(',');
-            return { city: city.trim(), venue: venue.trim() };
-        }
-        // Otherwise, assume it's just the city
-        return { city: ubicacion, venue: '' };
-    }
-
-    // Fallback
     return { city: '', venue: '' };
 };
 

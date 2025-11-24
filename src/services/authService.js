@@ -9,14 +9,14 @@ const USER_KEY = 'njoy_user';
  */
 class AuthService {
     /**
-     * Login user with username and password
-     * @param {string} username - User's username
+     * Login user with email and password
+     * @param {string} email - User's email
      * @param {string} password - User's password
      * @returns {Promise<Object>} Login response with tokens and user data
      */
-    async login(username, password) {
+    async login(email, password) {
         try {
-            const response = await api.post('/login', { username, password });
+            const response = await api.post('/login', { email, contrasena: password });
 
             if (response.data.access_token) {
                 this.setTokens(response.data.access_token, response.data.refresh_token);
