@@ -2,7 +2,8 @@ import axios from 'axios';
 import { mapEventsFromAPI, mapEventFromAPI } from '../utils/dataMapper';
 
 // URL base de la API - usar variable de entorno o fallback a la URL de producción
-const API_URL = import.meta.env.VITE_API_URL || 'https://projecte-n-joy.vercel.app';
+// IMPORTANTE: Si cambias esto, también actualiza VITE_API_URL en las variables de entorno de Vercel
+const API_URL = 'https://projecte-n-joy.vercel.app'; // Hardcoded para forzar la URL correcta
 console.log('API URL configured:', API_URL); // Debug log
 
 const api = axios.create({
