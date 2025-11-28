@@ -2,7 +2,7 @@ import axios from 'axios';
 import { mapEventsFromAPI, mapEventFromAPI } from '../utils/dataMapper';
 
 // URL base de la API - usar variable de entorno o fallback a la URL actual
-const API_URL = import.meta.env.VITE_API_URL || 'https://projecte-n-obijiuwkl-pausintesps-projects.vercel.app';
+const API_URL = import.meta.env.VITE_API_URL || 'https://projecte-n-bdpw17a74-pausintesps-projects.vercel.app';
 
 const api = axios.create({
     baseURL: API_URL,
@@ -51,10 +51,14 @@ api.interceptors.response.use(
                     return api(originalRequest);
                 }
             } catch (refreshError) {
-                // Refresh failed, clear tokens and redirect to login
+                // Refresh failed, clear tokens and emit session expired event
                 localStorage.removeItem('njoy_access_token');
                 localStorage.removeItem('njoy_refresh_token');
                 localStorage.removeItem('njoy_user');
+
+                // Emit session expired event for UI handling
+                window.dispatchEvent(new Event('session-expired'));
+
                 return Promise.reject(refreshError);
             }
         }
@@ -146,6 +150,98 @@ export const getLocation = async (locationId) => {
     } catch (error) {
         console.error(`Error fetching location ${locationId}:`, error);
         return null;
+    }
+};
+
+/**
+ * Create a new event
+ * @param {Object} eventData - Event data
+ * @returns {Promise<Object>} Created event
+ */
+export const createEvent = async (eventData) => {
+    try {
+        const response = await api.post('/evento/', eventData);
+        return response.data;
+    } catch (error) {
+        console.error("Error creating event:", error);
+        throw error;
+    }
+};
+
+/**
+ * Get all locations
+ * @returns {Promise<Array>} Array of locations
+ */
+export const getLocations = async () => {
+    try {
+        const response = await api.get('/localidad/');
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching locations:", error);
+        return [];
+    }
+};
+
+/**
+ * Get all genres
+ * @returns {Promise<Array>} Array of genres
+ */
+export const getGenres = async () => {
+    try {
+        const response = await api.get('/genero/');
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching genres:", error);
+        return [];
+    }
+};
+
+/**
+ * Get all organizers
+ * @returns {Promise<Array>} Array of organizers
+ */
+export const getOrganizers = async () => {
+    try {
+        const response = await api.get('/organizador/');
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching organizers:", error);
+        return [];
+    }
+};
+
+/**
+ * Update user profile
+ * @param {number} userId - User ID
+ * @param {Object} userData - Updated user data
+ * @returns {Promise<Object>} Updated user object
+ */
+export const updateUser = async (userId, userData) => {
+    try {
+        const response = await api.put(`/usuario/${userId}`, userData);
+        return response.data;
+    } catch (error) {
+        console.error('Error updating user:', error);
+        throw error;
+    }
+};
+
+/**
+ * Change user password
+ * @param {string} currentPassword - Current password
+ * @param {string} newPassword - New password
+ * @returns {Promise<Object>} Success response
+ */
+export const changePassword = async (currentPassword, newPassword) => {
+    try {
+        const response = await api.post('/usuario/change-password', {
+            current_password: currentPassword,
+            new_password: newPassword
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error changing password:', error);
+        throw error;
     }
 };
 

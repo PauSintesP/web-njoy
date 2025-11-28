@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 import Navbar from './components/Navbar';
 import EventCard from './components/EventCard';
 import LoginModal from './components/LoginModal';
 import RegisterModal from './components/RegisterModal';
+import CreateEventModal from './components/CreateEventModal';
 import EventDetailModal from './components/EventDetailModal';
 import authService from './services/authService';
 import { getEvents } from './services/api';
 import './App.css';
 
 function App() {
+  const { t } = useTranslation();
   const [location, setLocation] = useState('Barcelona');
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+  const [isCreateEventOpen, setIsCreateEventOpen] = useState(false);
   const [isEventDetailOpen, setIsEventDetailOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [events, setEvents] = useState([]);
@@ -29,36 +33,36 @@ function App() {
     }
   }, []);
 
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        setLoading(true);
-        const data = await getEvents();
-        setEvents(Array.isArray(data) ? data : []);
-        setError(null);
-      } catch (err) {
-        console.error("Failed to load events", err);
+  const fetchEvents = async () => {
+    try {
+      setLoading(true);
+      const data = await getEvents();
+      setEvents(Array.isArray(data) ? data : []);
+      setError(null);
+    } catch (err) {
+      console.error("Failed to load events", err);
 
-        // Handle authentication errors specifically
-        if (err.response?.status === 401) {
-          if (authService.isAuthenticated()) {
-            // Token expired
-            setError("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.");
-            authService.logout();
-            setUser(null);
-          } else {
-            // Not logged in - but events should be public now
-            setError("Error de autenticación. Por favor, recarga la página.");
-          }
+      // Handle authentication errors specifically
+      if (err.response?.status === 401) {
+        if (authService.isAuthenticated()) {
+          // Token expired
+          setError(t('common.sessionExpired'));
+          authService.logout();
+          setUser(null);
         } else {
-          setError("No se pudieron cargar los eventos. Por favor, intenta más tarde.");
+          // Not logged in - but events should be public now
+          setError(t('common.authError'));
         }
-        setEvents([]);
-      } finally {
-        setLoading(false);
+      } else {
+        setError(t('common.error'));
       }
-    };
+      setEvents([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchEvents();
   }, []);
 
@@ -93,6 +97,12 @@ function App() {
     setIsLoginOpen(true);
   };
 
+  const handleCreateEventSuccess = (newEvent) => {
+    console.log('Event created successfully');
+    // Refresh events list
+    fetchEvents();
+  };
+
   const handleLogout = () => {
     authService.logout();
     setUser(null);
@@ -117,6 +127,7 @@ function App() {
     <div className="app">
       <Navbar
         onLoginClick={() => setIsLoginOpen(true)}
+        onCreateEventClick={() => setIsCreateEventOpen(true)}
         location={location}
         setLocation={setLocation}
         user={user}
@@ -127,10 +138,12 @@ function App() {
         <section className="hero">
           <div className="container hero-content">
             <h1 className="hero-title">
-              Discover the best events in <span className="highlight">{location}</span>
+              <Trans i18nKey="hero.title" values={{ location }}>
+                Discover the best events in <span className="highlight">{{ location }}</span>
+              </Trans>
             </h1>
             <p className="hero-subtitle">
-              Experience the vibe. Live the moment. njoy.
+              {t('hero.subtitle')}
             </p>
           </div>
           <div className="hero-glow"></div>
@@ -138,37 +151,37 @@ function App() {
 
         <section className="events-section container">
           <div className="section-header">
-            <h2>Upcoming Events</h2>
+            <h2>{t('filters.upcoming')}</h2>
             <div className="filter-tags">
               <span
                 className={`tag ${selectedCategory === 'All' ? 'active' : ''}`}
                 onClick={() => setSelectedCategory('All')}
               >
-                All
+                {t('filters.all')}
               </span>
               <span
                 className={`tag ${selectedCategory === 'Music' ? 'active' : ''}`}
                 onClick={() => setSelectedCategory('Music')}
               >
-                Music
+                {t('filters.music')}
               </span>
               <span
                 className={`tag ${selectedCategory === 'Art' ? 'active' : ''}`}
                 onClick={() => setSelectedCategory('Art')}
               >
-                Art
+                {t('filters.art')}
               </span>
               <span
                 className={`tag ${selectedCategory === 'Tech' ? 'active' : ''}`}
                 onClick={() => setSelectedCategory('Tech')}
               >
-                Tech
+                {t('filters.tech')}
               </span>
               <span
                 className={`tag ${selectedCategory === 'Food' ? 'active' : ''}`}
                 onClick={() => setSelectedCategory('Food')}
               >
-                Food
+                {t('filters.food')}
               </span>
             </div>
           </div>
@@ -176,7 +189,7 @@ function App() {
           <div className="events-grid">
             {loading ? (
               <div className="loading-state">
-                <i className="fa-solid fa-spinner fa-spin"></i> Loading events...
+                <i className="fa-solid fa-spinner fa-spin"></i> {t('common.loading')}
               </div>
             ) : error ? (
               <div className="error-state">
@@ -188,7 +201,7 @@ function App() {
               ))
             ) : (
               <div className="no-events">
-                <p>No events found in {location} at the moment.</p>
+                <p>{t('common.noEvents', { location })}</p>
               </div>
             )}
           </div>
@@ -207,6 +220,12 @@ function App() {
         onClose={() => setIsRegisterOpen(false)}
         onRegisterSuccess={handleRegisterSuccess}
         onShowLogin={switchToLogin}
+      />
+
+      <CreateEventModal
+        isOpen={isCreateEventOpen}
+        onClose={() => setIsCreateEventOpen(false)}
+        onEventCreated={handleCreateEventSuccess}
       />
 
       <EventDetailModal

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import authService from '../services/authService';
 import './LoginModal.css';
 
 const LoginModal = ({ isOpen, onClose, onLoginSuccess, onShowRegister }) => {
+    const { t } = useTranslation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -31,7 +33,9 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, onShowRegister }) => {
             // Close modal
             onClose();
         } catch (err) {
-            setError(err.message || 'Error al iniciar sesión');
+            // Show specific error messages from the API
+            const errorMessage = err.message || 'Error al iniciar sesión';
+            setError(errorMessage);
         } finally {
             setLoading(false);
         }
@@ -49,8 +53,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, onShowRegister }) => {
             <div className="modal-content glass" onClick={(e) => e.stopPropagation()}>
                 <button className="close-btn" onClick={handleClose}>&times;</button>
 
-                <h2 className="modal-title">Welcome Back</h2>
-                <p className="modal-subtitle">Login to manage your tickets</p>
+                <h2 className="modal-title">{t('login.title')}</h2>
 
                 {error && (
                     <div className="error-message">
@@ -61,7 +64,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, onShowRegister }) => {
 
                 <form className="login-form" onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <label>Email</label>
+                        <label>{t('login.email')}</label>
                         <input
                             type="email"
                             placeholder="your@email.com"
@@ -73,7 +76,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, onShowRegister }) => {
                     </div>
 
                     <div className="form-group">
-                        <label>Password</label>
+                        <label>{t('login.password')}</label>
                         <input
                             type="password"
                             placeholder="••••••••"
@@ -91,16 +94,16 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, onShowRegister }) => {
                     >
                         {loading ? (
                             <>
-                                <i className="fa-solid fa-spinner fa-spin"></i> Logging in...
+                                <i className="fa-solid fa-spinner fa-spin"></i> {t('common.loading')}
                             </>
                         ) : (
-                            'Login'
+                            t('login.submit')
                         )}
                     </button>
                 </form>
 
                 <div className="modal-footer">
-                    <p>Don't have an account? <a href="#" onClick={(e) => { e.preventDefault(); onShowRegister && onShowRegister(); }}>Sign up</a></p>
+                    <p>{t('login.noAccount')} <a href="#" onClick={(e) => { e.preventDefault(); onShowRegister && onShowRegister(); }}>{t('login.register')}</a></p>
                 </div>
             </div>
         </div>

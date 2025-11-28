@@ -21,10 +21,20 @@ class AuthService {
             if (response.data.access_token) {
                 this.setTokens(response.data.access_token, response.data.refresh_token);
 
-                // Store user data if provided
-                if (response.data.user) {
-                    this.setUser(response.data.user);
+                // Fetch and store user data after successful login
+                try {
+                    const userResponse = await api.get('/me');
+                    if (userResponse.data) {
+                        this.setUser(userResponse.data);
+                        response.data.user = userResponse.data;
+                    }
+                } catch (userError) {
+                    console.warn('Could not fetch user data:', userError);
+                    // Don't fail login if user fetch fails
                 }
+
+                // Emit login success event for UI updates
+                window.dispatchEvent(new CustomEvent('auth-login', { detail: response.data.user }));
             }
 
             return response.data;
@@ -56,6 +66,27 @@ class AuthService {
         localStorage.removeItem(TOKEN_KEY);
         localStorage.removeItem(REFRESH_TOKEN_KEY);
         localStorage.removeItem(USER_KEY);
+
+        // Emit logout event for UI updates
+        window.dispatchEvent(new Event('auth-logout'));
+    }
+
+    /**
+     * Get current user data from the API
+     * @returns {Promise<Object>} User object
+     */
+    async getCurrentUser() {
+        try {
+            const response = await api.get('/me');
+            if (response.data) {
+                this.setUser(response.data);
+                return response.data;
+            }
+            throw new Error('No user data in response');
+        } catch (error) {
+            console.error('Get current user error:', error);
+            throw this.handleAuthError(error);
+        }
     }
 
     /**

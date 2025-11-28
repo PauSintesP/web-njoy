@@ -1,0 +1,49 @@
+{
+    "categories": {
+        "all": "Tutti",
+        "music": "Musica",
+        "art": "Arte",
+        "tech": "Tecnologia",
+        "food": "Cibo"
+    },
+    "common": {
+        "loading": "Caricamento eventi...",
+        "error": "Impossibile caricare gli eventi. Riprova più tardi.",
+        "noEvents": "Nessun evento trovato a {{location}} al momento.",
+        "authError": "Errore di autenticazione. Ricarica la pagina.",
+        "sessionExpired": "La tua sessione è scaduta. Accedi di nuovo."
+    },
+    "eventCard": {
+        "location": "Posizione",
+        "date": "Data"
+    },
+    "login": {
+        "title": "Bentornato",
+        "email": "Email",
+        "password": "Password",
+        "submit": "Accedi",
+        "noAccount": "Non hai un account?",
+        "register": "Registrati"
+    },
+    "register": {
+        "title": "Crea Account",
+        "name": "Nome Completo",
+        "email": "Email",
+        "password": "Password",
+        "confirmPassword": "Conferma Password",
+        "submit": "Registrati",
+        "hasAccount": "Hai già un account?",
+        "login": "Accedi"
+    },
+    "eventDetail": {
+        "back": "Indietro",
+        "buyTickets": "Acquista Biglietti",
+        "date": "Data",
+        "time": "Ora",
+        "location": "Posizione",
+        "price": "Prezzo",
+        "category": "Categoria",
+        "organizer": "Organizzatore",
+        "description": "Descrizione"
+    }
+}

@@ -1,7 +1,9 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import './EventDetailModal.css';
 
 const EventDetailModal = ({ event, isOpen, onClose }) => {
+    const { t, i18n } = useTranslation();
     if (!isOpen || !event) return null;
 
     const formatDate = (dateString) => {
@@ -13,7 +15,7 @@ const EventDetailModal = ({ event, isOpen, onClose }) => {
             hour: '2-digit',
             minute: '2-digit'
         };
-        return new Date(dateString).toLocaleDateString('es-ES', options);
+        return new Date(dateString).toLocaleDateString(i18n.language, options);
     };
 
     return (
@@ -33,7 +35,7 @@ const EventDetailModal = ({ event, isOpen, onClose }) => {
                         <div className="info-item">
                             <i className="fa-solid fa-calendar"></i>
                             <div>
-                                <span className="info-label">Fecha</span>
+                                <span className="info-label">{t('eventDetail.date')}</span>
                                 <span className="info-value">{formatDate(event.date)}</span>
                             </div>
                         </div>
@@ -41,7 +43,7 @@ const EventDetailModal = ({ event, isOpen, onClose }) => {
                         <div className="info-item">
                             <i className="fa-solid fa-location-dot"></i>
                             <div>
-                                <span className="info-label">Ubicación</span>
+                                <span className="info-label">{t('eventDetail.location')}</span>
                                 <span className="info-value">
                                     {event.location.venue && `${event.location.venue}, `}
                                     {event.location.city}
@@ -52,20 +54,20 @@ const EventDetailModal = ({ event, isOpen, onClose }) => {
                         <div className="info-item">
                             <i className="fa-solid fa-tag"></i>
                             <div>
-                                <span className="info-label">Precio</span>
+                                <span className="info-label">{t('eventDetail.price')}</span>
                                 <span className="info-value">{event.price}€</span>
                             </div>
                         </div>
                     </div>
 
                     <div className="event-detail-description">
-                        <h3>Descripción</h3>
+                        <h3>{t('eventDetail.description')}</h3>
                         <p>{event.description || 'Disfruta de este increíble evento. ¡No te lo pierdas!'}</p>
                     </div>
 
                     <div className="event-detail-actions">
                         <button className="btn btn-primary full-width">
-                            <i className="fa-solid fa-ticket"></i> Comprar Entradas
+                            <i className="fa-solid fa-ticket"></i> {t('eventDetail.buyTickets')}
                         </button>
                     </div>
                 </div>

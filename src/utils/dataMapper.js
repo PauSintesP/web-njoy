@@ -73,7 +73,7 @@ export const mapUserFromAPI = (apiUser) => {
 export const mapUserToAPI = (userData) => {
     return {
         email: userData.email,
-        password: userData.password,
+        contrasena: userData.password,
         nombre: userData.firstName || userData.nombre,
         apellidos: userData.lastName || userData.apellidos,
         fecha_nacimiento: userData.dateOfBirth || userData.fecha_nacimiento,

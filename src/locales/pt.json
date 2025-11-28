@@ -1,0 +1,49 @@
+{
+    "categories": {
+        "all": "Todos",
+        "music": "Música",
+        "art": "Arte",
+        "tech": "Tecnologia",
+        "food": "Comida"
+    },
+    "common": {
+        "loading": "Carregando eventos...",
+        "error": "Falha ao carregar eventos. Por favor, tente novamente mais tarde.",
+        "noEvents": "Nenhum evento encontrado em {{location}} no momento.",
+        "authError": "Erro de autenticação. Por favor, recarregue a página.",
+        "sessionExpired": "Sua sessão expirou. Por favor, faça login novamente."
+    },
+    "eventCard": {
+        "location": "Localização",
+        "date": "Data"
+    },
+    "login": {
+        "title": "Bem-vindo de volta",
+        "email": "Email",
+        "password": "Senha",
+        "submit": "Entrar",
+        "noAccount": "Não tem uma conta?",
+        "register": "Registrar"
+    },
+    "register": {
+        "title": "Criar Conta",
+        "name": "Nome Completo",
+        "email": "Email",
+        "password": "Senha",
+        "confirmPassword": "Confirmar Senha",
+        "submit": "Registrar",
+        "hasAccount": "Já tem uma conta?",
+        "login": "Entrar"
+    },
+    "eventDetail": {
+        "back": "Voltar",
+        "buyTickets": "Comprar Ingressos",
+        "date": "Data",
+        "time": "Hora",
+        "location": "Localização",
+        "price": "Preço",
+        "category": "Categoria",
+        "organizer": "Organizador",
+        "description": "Descrição"
+    }
+}

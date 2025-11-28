@@ -1,0 +1,73 @@
+{
+    "categories": {
+        "all": "Todos",
+        "music": "Música",
+        "art": "Arte",
+        "tech": "Tecnología",
+        "food": "Comida"
+    },
+    "common": {
+        "loading": "Cargando eventos...",
+        "error": "No se pudieron cargar los eventos. Por favor, intenta más tarde.",
+        "noEvents": "No se encontraron eventos en {{location}} en este momento.",
+        "authError": "Error de autenticación. Por favor, recarga la página.",
+        "sessionExpired": "Tu sesión ha expirado. Por favor, inicia sesión nuevamente."
+    },
+    "eventCard": {
+        "location": "Ubicación",
+        "date": "Fecha"
+    },
+    "login": {
+        "title": "Bienvenido de nuevo",
+        "email": "Correo electrónico",
+        "password": "Contraseña",
+        "submit": "Iniciar Sesión",
+        "noAccount": "¿No tienes una cuenta?",
+        "register": "Regístrate"
+    },
+    "register": {
+        "title": "Crear Cuenta",
+        "name": "Nombre Completo",
+        "email": "Correo electrónico",
+        "password": "Contraseña",
+        "confirmPassword": "Confirmar Contraseña",
+        "submit": "Registrarse",
+        "hasAccount": "¿Ya tienes una cuenta?",
+        "login": "Inicia Sesión"
+    },
+    "navbar": {
+        "login": "Iniciar Sesión",
+        "myProfile": "Mi Perfil",
+        "createEvent": "Crear Evento",
+        "logout": "Cerrar Sesión",
+        "welcome": "Bienvenido"
+    },
+    "profile": {
+        "title": "Mi Perfil",
+        "personalInfo": "Información Personal",
+        "editProfile": "Editar Perfil",
+        "saveChanges": "Guardar Cambios",
+        "cancel": "Cancelar",
+        "changePassword": "Cambiar Contraseña",
+        "currentPassword": "Contraseña Actual",
+        "newPassword": "Nueva Contraseña",
+        "confirmNewPassword": "Confirmar Nueva Contraseña",
+        "updateSuccess": "Perfil actualizado exitosamente",
+        "passwordChangeSuccess": "Contraseña cambiada exitosamente"
+    },
+    "session": {
+        "expired": "Tu sesión ha expirado",
+        "pleaseLogin": "Por favor, inicia sesión nuevamente"
+    },
+    "eventDetail": {
+        "back": "Volver",
+        "buyTickets": "Comprar Entradas",
+        "date": "Fecha",
+        "time": "Hora",
+        "location": "Ubicación",
+        "price": "Precio",
+        "category": "Categoría",
+        "organizer": "Organizador",
+        "description": "Descripción"
+    }
+}

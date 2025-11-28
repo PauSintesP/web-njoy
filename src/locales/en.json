@@ -1,0 +1,49 @@
+{
+    "categories": {
+        "all": "All",
+        "music": "Music",
+        "art": "Art",
+        "tech": "Tech",
+        "food": "Food"
+    },
+    "common": {
+        "loading": "Loading events...",
+        "error": "Failed to load events. Please try again later.",
+        "noEvents": "No events found in {{location}} at the moment.",
+        "authError": "Authentication error. Please reload the page.",
+        "sessionExpired": "Your session has expired. Please log in again."
+    },
+    "eventCard": {
+        "location": "Location",
+        "date": "Date"
+    },
+    "login": {
+        "title": "Welcome Back",
+        "email": "Email",
+        "password": "Password",
+        "submit": "Login",
+        "noAccount": "Don't have an account?",
+        "register": "Register"
+    },
+    "register": {
+        "title": "Create Account",
+        "name": "Full Name",
+        "email": "Email",
+        "password": "Password",
+        "confirmPassword": "Confirm Password",
+        "submit": "Register",
+        "hasAccount": "Already have an account?",
+        "login": "Login"
+    },
+    "eventDetail": {
+        "back": "Back",
+        "buyTickets": "Buy Tickets",
+        "date": "Date",
+        "time": "Time",
+        "location": "Location",
+        "price": "Price",
+        "category": "Category",
+        "organizer": "Organizer",
+        "description": "Description"
+    }
+}

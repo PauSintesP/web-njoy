@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import authService from '../services/authService';
 import { mapUserToAPI } from '../utils/dataMapper';
 import './RegisterModal.css';
 
 const RegisterModal = ({ isOpen, onClose, onRegisterSuccess, onShowLogin }) => {
+    const { t } = useTranslation();
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -40,6 +42,23 @@ const RegisterModal = ({ isOpen, onClose, onRegisterSuccess, onShowLogin }) => {
             return;
         }
 
+        // Validate minimum age (13 years)
+        if (formData.dateOfBirth) {
+            const birthDate = new Date(formData.dateOfBirth);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+
+            if (age < 13) {
+                setError('Debes tener al menos 13 años para registrarte');
+                return;
+            }
+        }
+
         setLoading(true);
 
         try {
@@ -50,11 +69,15 @@ const RegisterModal = ({ isOpen, onClose, onRegisterSuccess, onShowLogin }) => {
                 firstName: formData.firstName,
                 lastName: formData.lastName,
                 dateOfBirth: formData.dateOfBirth,
-                country: formData.country
+                country: formData.country || undefined // Make it optional
             });
 
             const response = await authService.register(userData);
             console.log('Registration successful:', response);
+
+            // Save credentials before clearing form (needed for auto-login)
+            const savedEmail = formData.email;
+            const savedPassword = formData.password;
 
             // Clear form
             setFormData({
@@ -72,15 +95,21 @@ const RegisterModal = ({ isOpen, onClose, onRegisterSuccess, onShowLogin }) => {
                 onRegisterSuccess(response);
             }
 
+            // Auto-login after successful registration
+            try {
+                await authService.login(savedEmail, savedPassword);
+                console.log('Auto-login successful after registration');
+            } catch (loginError) {
+                console.warn('Auto-login failed, user will need to login manually:', loginError);
+            }
+
             // Close modal
             onClose();
 
-            // Optionally show login modal
-            if (onShowLogin) {
-                onShowLogin();
-            }
         } catch (err) {
-            setError(err.message || 'Error al registrarse');
+            // Show specific error messages from the API
+            const errorMessage = err.message || 'Error al registrarse';
+            setError(errorMessage);
         } finally {
             setLoading(false);
         }
@@ -105,8 +134,8 @@ const RegisterModal = ({ isOpen, onClose, onRegisterSuccess, onShowLogin }) => {
             <div className="modal-content glass" onClick={(e) => e.stopPropagation()}>
                 <button className="close-btn" onClick={handleClose}>&times;</button>
 
-                <h2 className="modal-title">Join njoy</h2>
-                <p className="modal-subtitle">Create your account to start booking</p>
+                <h2 className="modal-title">{t('register.title')}</h2>
+                <p className="modal-subtitle">Join njoy to experience the best events</p>
 
                 {error && (
                     <div className="error-message">
@@ -115,9 +144,9 @@ const RegisterModal = ({ isOpen, onClose, onRegisterSuccess, onShowLogin }) => {
                     </div>
                 )}
 
-                <form className="login-form" onSubmit={handleSubmit}>
+                <form className="register-form" onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <label>Email *</label>
+                        <label>{t('register.email')} *</label>
                         <input
                             type="email"
                             name="email"
@@ -131,7 +160,7 @@ const RegisterModal = ({ isOpen, onClose, onRegisterSuccess, onShowLogin }) => {
 
                     <div className="form-row">
                         <div className="form-group">
-                            <label>Nombre *</label>
+                            <label>{t('register.name')} *</label>
                             <input
                                 type="text"
                                 name="firstName"
@@ -171,21 +200,20 @@ const RegisterModal = ({ isOpen, onClose, onRegisterSuccess, onShowLogin }) => {
                         </div>
 
                         <div className="form-group">
-                            <label>País *</label>
+                            <label>País</label>
                             <input
                                 type="text"
                                 name="country"
                                 placeholder="España"
                                 value={formData.country}
                                 onChange={handleChange}
-                                required
                                 disabled={loading}
                             />
                         </div>
                     </div>
 
                     <div className="form-group">
-                        <label>Contraseña *</label>
+                        <label>{t('register.password')} *</label>
                         <input
                             type="password"
                             name="password"
@@ -198,7 +226,7 @@ const RegisterModal = ({ isOpen, onClose, onRegisterSuccess, onShowLogin }) => {
                     </div>
 
                     <div className="form-group">
-                        <label>Confirmar Contraseña *</label>
+                        <label>{t('register.confirmPassword')} *</label>
                         <input
                             type="password"
                             name="confirmPassword"
@@ -217,16 +245,16 @@ const RegisterModal = ({ isOpen, onClose, onRegisterSuccess, onShowLogin }) => {
                     >
                         {loading ? (
                             <>
-                                <i className="fa-solid fa-spinner fa-spin"></i> Registrando...
+                                <i className="fa-solid fa-spinner fa-spin"></i> {t('common.loading')}
                             </>
                         ) : (
-                            'Crear Cuenta'
+                            t('register.submit')
                         )}
                     </button>
                 </form>
 
                 <div className="modal-footer">
-                    <p>¿Ya tienes cuenta? <a href="#" onClick={(e) => { e.preventDefault(); onShowLogin && onShowLogin(); }}>Iniciar sesión</a></p>
+                    <p>{t('register.hasAccount')} <a href="#" onClick={(e) => { e.preventDefault(); onShowLogin && onShowLogin(); }}>{t('register.login')}</a></p>
                 </div>
             </div>
         </div>
