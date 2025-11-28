@@ -71,12 +71,18 @@ export const mapUserFromAPI = (apiUser) => {
  * @returns {Object} User object formatted for API
  */
 export const mapUserToAPI = (userData) => {
-    return {
+    const apiData = {
         email: userData.email,
-        contrasena: userData.password,
+        password: userData.password,  // API expects 'password' (not 'contrasena')
         nombre: userData.firstName || userData.nombre,
         apellidos: userData.lastName || userData.apellidos,
-        fecha_nacimiento: userData.dateOfBirth || userData.fecha_nacimiento,
-        pais: userData.country || userData.pais
+        fecha_nacimiento: userData.dateOfBirth || userData.fecha_nacimiento
     };
+    
+    // Only include pais if it has a value (it's optional)
+    if (userData.country || userData.pais) {
+        apiData.pais = userData.country || userData.pais;
+    }
+    
+    return apiData;
 };
