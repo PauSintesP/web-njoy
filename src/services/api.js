@@ -213,6 +213,61 @@ export const getOrganizers = async () => {
 };
 
 /**
+ * Create or get a genre automatically
+ * @param {string} nombre - Genre name
+ * @returns {Promise<Object>} Genre object
+ */
+export const createOrGetGenre = async (nombre) => {
+    try {
+        const response = await api.post('/genero/auto', null, {
+            params: { nombre }
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error creating/getting genre:", error);
+        throw error;
+    }
+};
+
+/**
+ * Create or get a location automatically
+ * @param {string} ciudad - City name
+ * @param {number} latitud - Latitude (optional)
+ * @param {number} longitud - Longitude (optional)
+ * @returns {Promise<Object>} Location object
+ */
+export const createOrGetLocation = async (ciudad, latitud = null, longitud = null) => {
+    try {
+        const params = { ciudad };
+        if (latitud !== null) params.latitud = latitud;
+        if (longitud !== null) params.longitud = longitud;
+        
+        const response = await api.post('/localidad/auto', null, { params });
+        return response.data;
+    } catch (error) {
+        console.error("Error creating/getting location:", error);
+        throw error;
+    }
+};
+
+/**
+ * Create or get an organizer automatically
+ * @param {Object} organizerData - Organizer data
+ * @returns {Promise<Object>} Organizer object
+ */
+export const createOrGetOrganizer = async (organizerData) => {
+    try {
+        const response = await api.post('/organizador/auto', null, {
+            params: organizerData
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error creating/getting organizer:", error);
+        throw error;
+    }
+};
+
+/**
  * Update user profile
  * @param {number} userId - User ID
  * @param {Object} userData - Updated user data
