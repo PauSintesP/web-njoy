@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import EventCard from './components/EventCard';
 import LoginModal from './components/LoginModal';
 import RegisterModal from './components/RegisterModal';
 import CreateEventModal from './components/CreateEventModal';
 import EventDetailModal from './components/EventDetailModal';
+import Profile from './pages/Profile';
 import authService from './services/authService';
 import { getEvents } from './services/api';
 import './App.css';
@@ -123,90 +125,98 @@ function App() {
     setIsEventDetailOpen(true);
   };
 
-  return (
-    <div className="app">
-      <Navbar
-        onLoginClick={() => setIsLoginOpen(true)}
-        onCreateEventClick={() => setIsCreateEventOpen(true)}
-        location={location}
-        setLocation={setLocation}
-        user={user}
-        onLogout={handleLogout}
-      />
+  const HomePage = () => (
+    <main>
+      <section className="hero">
+        <div className="container hero-content">
+          <h1 className="hero-title">
+            <Trans i18nKey="hero.title" values={{ location }}>
+              Discover the best events in <span className="highlight">{{ location }}</span>
+            </Trans>
+          </h1>
+          <p className="hero-subtitle">
+            {t('hero.subtitle')}
+          </p>
+        </div>
+        <div className="hero-glow"></div>
+      </section>
 
-      <main>
-        <section className="hero">
-          <div className="container hero-content">
-            <h1 className="hero-title">
-              <Trans i18nKey="hero.title" values={{ location }}>
-                Discover the best events in <span className="highlight">{{ location }}</span>
-              </Trans>
-            </h1>
-            <p className="hero-subtitle">
-              {t('hero.subtitle')}
-            </p>
+      <section className="events-section container">
+        <div className="section-header">
+          <h2>{t('filters.upcoming')}</h2>
+          <div className="filter-tags">
+            <span
+              className={`tag ${selectedCategory === 'All' ? 'active' : ''}`}
+              onClick={() => setSelectedCategory('All')}
+            >
+              {t('filters.all')}
+            </span>
+            <span
+              className={`tag ${selectedCategory === 'Music' ? 'active' : ''}`}
+              onClick={() => setSelectedCategory('Music')}
+            >
+              {t('filters.music')}
+            </span>
+            <span
+              className={`tag ${selectedCategory === 'Art' ? 'active' : ''}`}
+              onClick={() => setSelectedCategory('Art')}
+            >
+              {t('filters.art')}
+            </span>
+            <span
+              className={`tag ${selectedCategory === 'Tech' ? 'active' : ''}`}
+              onClick={() => setSelectedCategory('Tech')}
+            >
+              {t('filters.tech')}
+            </span>
+            <span
+              className={`tag ${selectedCategory === 'Food' ? 'active' : ''}`}
+              onClick={() => setSelectedCategory('Food')}
+            >
+              {t('filters.food')}
+            </span>
           </div>
-          <div className="hero-glow"></div>
-        </section>
+        </div>
 
-        <section className="events-section container">
-          <div className="section-header">
-            <h2>{t('filters.upcoming')}</h2>
-            <div className="filter-tags">
-              <span
-                className={`tag ${selectedCategory === 'All' ? 'active' : ''}`}
-                onClick={() => setSelectedCategory('All')}
-              >
-                {t('filters.all')}
-              </span>
-              <span
-                className={`tag ${selectedCategory === 'Music' ? 'active' : ''}`}
-                onClick={() => setSelectedCategory('Music')}
-              >
-                {t('filters.music')}
-              </span>
-              <span
-                className={`tag ${selectedCategory === 'Art' ? 'active' : ''}`}
-                onClick={() => setSelectedCategory('Art')}
-              >
-                {t('filters.art')}
-              </span>
-              <span
-                className={`tag ${selectedCategory === 'Tech' ? 'active' : ''}`}
-                onClick={() => setSelectedCategory('Tech')}
-              >
-                {t('filters.tech')}
-              </span>
-              <span
-                className={`tag ${selectedCategory === 'Food' ? 'active' : ''}`}
-                onClick={() => setSelectedCategory('Food')}
-              >
-                {t('filters.food')}
-              </span>
+        <div className="events-grid">
+          {loading ? (
+            <div className="loading-state">
+              <i className="fa-solid fa-spinner fa-spin"></i> {t('common.loading')}
             </div>
-          </div>
+          ) : error ? (
+            <div className="error-state">
+              <p>{error}</p>
+            </div>
+          ) : filteredEvents.length > 0 ? (
+            filteredEvents.map(event => (
+              <EventCard key={event.id} event={event} onClick={() => handleEventClick(event)} />
+            ))
+          ) : (
+            <div className="no-events">
+              <p>{t('common.noEvents', { location })}</p>
+            </div>
+          )}
+        </div>
+      </section>
+    </main>
+  );
 
-          <div className="events-grid">
-            {loading ? (
-              <div className="loading-state">
-                <i className="fa-solid fa-spinner fa-spin"></i> {t('common.loading')}
-              </div>
-            ) : error ? (
-              <div className="error-state">
-                <p>{error}</p>
-              </div>
-            ) : filteredEvents.length > 0 ? (
-              filteredEvents.map(event => (
-                <EventCard key={event.id} event={event} onClick={() => handleEventClick(event)} />
-              ))
-            ) : (
-              <div className="no-events">
-                <p>{t('common.noEvents', { location })}</p>
-              </div>
-            )}
-          </div>
-        </section>
-      </main>
+  return (
+    <Router>
+      <div className="app">
+        <Navbar
+          onLoginClick={() => setIsLoginOpen(true)}
+          onCreateEventClick={() => setIsCreateEventOpen(true)}
+          location={location}
+          setLocation={setLocation}
+          user={user}
+          onLogout={handleLogout}
+        />
+
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
 
       <LoginModal
         isOpen={isLoginOpen}
@@ -240,6 +250,7 @@ function App() {
         </div>
       </footer>
     </div>
+    </Router>
   );
 }
 

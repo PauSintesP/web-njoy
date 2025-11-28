@@ -11,11 +11,54 @@
         "error": "Impossible de charger les événements. Veuillez réessayer plus tard.",
         "noEvents": "Aucun événement trouvé à {{location}} pour le moment.",
         "authError": "Erreur d'authentification. Veuillez recharger la page.",
-        "sessionExpired": "Votre session a expiré. Veuillez vous reconnecter."
+        "sessionExpired": "Votre session a expiré. Veuillez vous reconnecter.",
+        "cancel": "Annuler",
+        "save": "Enregistrer les modifications",
+        "saving": "Enregistrement..."
+    },
+    "navbar": {
+        "login": "Se connecter",
+        "logout": "Se déconnecter",
+        "profile": "Mon Profil",
+        "createEvent": "Créer un événement"
+    },
+    "profile": {
+        "title": "Mon Profil",
+        "personalInfo": "Informations personnelles",
+        "edit": "Modifier le profil",
+        "firstName": "Prénom",
+        "lastName": "Nom",
+        "email": "Email",
+        "birthDate": "Date de naissance",
+        "country": "Pays",
+        "accountStatus": "Statut du compte",
+        "active": "Actif",
+        "inactive": "Inactif",
+        "memberSince": "Membre depuis",
+        "notProvided": "Non fourni",
+        "countryPlaceholder": "Entrez votre pays",
+        "emailNotEditable": "L'email ne peut pas être modifié",
+        "nameRequired": "Le prénom et le nom sont obligatoires",
+        "invalidEmail": "Veuillez entrer une adresse email valide",
+        "updateSuccess": "Profil mis à jour avec succès !",
+        "updateError": "Échec de la mise à jour du profil. Veuillez réessayer.",
+        "errorLoading": "Échec du chargement des données du profil. Veuillez réessayer."
     },
     "eventCard": {
         "location": "Lieu",
         "date": "Date"
+    },
+    "filters": {
+        "upcoming": "Événements à venir",
+        "all": "Tous",
+        "music": "Musique",
+        "art": "Art",
+        "tech": "Tech",
+        "food": "Nourriture"
+    },
+    "hero": {
+        "title": "Découvrez les meilleurs événements à {{location}}",
+        "subtitle": "Trouvez et réservez des billets pour des concerts, festivals et événements culturels"
     },
     "login": {
         "title": "Bon retour",
@@ -27,10 +70,13 @@
     },
     "register": {
         "title": "Créer un compte",
-        "name": "Nom complet",
+        "firstName": "Prénom",
+        "lastName": "Nom",
         "email": "Email",
         "password": "Mot de passe",
         "confirmPassword": "Confirmer le mot de passe",
+        "dateOfBirth": "Date de naissance",
+        "country": "Pays",
         "submit": "S'inscrire",
         "hasAccount": "Vous avez déjà un compte ?",
         "login": "Se connecter"

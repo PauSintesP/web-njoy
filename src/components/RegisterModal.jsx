@@ -62,7 +62,6 @@ const RegisterModal = ({ isOpen, onClose, onRegisterSuccess, onShowLogin }) => {
         setLoading(true);
 
         try {
-            // Map frontend data to API format
             const userData = mapUserToAPI({
                 email: formData.email,
                 password: formData.password,
@@ -72,6 +71,7 @@ const RegisterModal = ({ isOpen, onClose, onRegisterSuccess, onShowLogin }) => {
                 country: formData.country || undefined // Make it optional
             });
 
+            console.log('Sending registration data:', JSON.stringify(userData, null, 2));
             const response = await authService.register(userData);
             console.log('Registration successful:', response);
 

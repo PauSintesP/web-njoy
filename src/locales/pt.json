@@ -11,11 +11,54 @@
         "error": "Falha ao carregar eventos. Por favor, tente novamente mais tarde.",
         "noEvents": "Nenhum evento encontrado em {{location}} no momento.",
         "authError": "Erro de autenticação. Por favor, recarregue a página.",
-        "sessionExpired": "Sua sessão expirou. Por favor, faça login novamente."
+        "sessionExpired": "Sua sessão expirou. Por favor, faça login novamente.",
+        "cancel": "Cancelar",
+        "save": "Salvar Alterações",
+        "saving": "Salvando..."
+    },
+    "navbar": {
+        "login": "Entrar",
+        "logout": "Sair",
+        "profile": "Meu Perfil",
+        "createEvent": "Criar Evento"
+    },
+    "profile": {
+        "title": "Meu Perfil",
+        "personalInfo": "Informações Pessoais",
+        "edit": "Editar Perfil",
+        "firstName": "Nome",
+        "lastName": "Sobrenome",
+        "email": "Email",
+        "birthDate": "Data de Nascimento",
+        "country": "País",
+        "accountStatus": "Status da Conta",
+        "active": "Ativa",
+        "inactive": "Inativa",
+        "memberSince": "Membro desde",
+        "notProvided": "Não fornecido",
+        "countryPlaceholder": "Digite seu país",
+        "emailNotEditable": "O email não pode ser alterado",
+        "nameRequired": "Nome e sobrenome são obrigatórios",
+        "invalidEmail": "Por favor, insira um endereço de email válido",
+        "updateSuccess": "Perfil atualizado com sucesso!",
+        "updateError": "Falha ao atualizar o perfil. Por favor, tente novamente.",
+        "errorLoading": "Falha ao carregar dados do perfil. Por favor, tente novamente."
     },
     "eventCard": {
         "location": "Localização",
         "date": "Data"
+    },
+    "filters": {
+        "upcoming": "Próximos Eventos",
+        "all": "Todos",
+        "music": "Música",
+        "art": "Arte",
+        "tech": "Tecnologia",
+        "food": "Comida"
+    },
+    "hero": {
+        "title": "Descubra os melhores eventos em {{location}}",
+        "subtitle": "Encontre e compre ingressos para shows, festivais e eventos culturais"
     },
     "login": {
         "title": "Bem-vindo de volta",
@@ -27,10 +70,13 @@
     },
     "register": {
         "title": "Criar Conta",
-        "name": "Nome Completo",
+        "firstName": "Nome",
+        "lastName": "Sobrenome",
         "email": "Email",
         "password": "Senha",
         "confirmPassword": "Confirmar Senha",
+        "dateOfBirth": "Data de Nascimento",
+        "country": "País",
         "submit": "Registrar",
         "hasAccount": "Já tem uma conta?",
         "login": "Entrar"

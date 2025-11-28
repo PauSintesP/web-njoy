@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18n';
-import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import authService from '../services/authService';
 import './Navbar.css';
 
@@ -44,15 +44,14 @@ const Navbar = ({ onLoginClick, onCreateEventClick, location, setLocation }) => 
     const handleLogout = () => {
         authService.logout();
         setIsUserMenuOpen(false);
-        navigate('/');
     };
 
     return (
         <nav className="navbar glass">
             <div className="container navbar-content">
-                <Link to="/" className="logo">
+                <a href="#" className="logo" onClick={(e) => e.preventDefault()}>
                     <span className="logo-n">n</span>joy
-                </Link>
+                </a>
 
                 <div className="nav-actions">
                     <div className="location-selector">
@@ -127,25 +126,29 @@ const Navbar = ({ onLoginClick, onCreateEventClick, location, setLocation }) => 
                                     <span>{user.email}</span>
                                 </div>
                                 <hr />
-                                <Link
-                                    to="/profile"
+                                <button
                                     className="dropdown-link"
-                                    onClick={() => setIsUserMenuOpen(false)}
+                                    onClick={() => {
+                                        setIsUserMenuOpen(false);
+                                        navigate('/profile');
+                                    }}
                                 >
                                     <i className="fa-solid fa-user"></i>
-                                    {t('navbar.myProfile')}
-                                </Link>
+                                    {t('navbar.profile')}
+                                </button>
                                 {onCreateEventClick && (
-                                    <button
-                                        className="dropdown-link"
-                                        onClick={() => {
-                                            setIsUserMenuOpen(false);
-                                            onCreateEventClick();
-                                        }}
-                                    >
-                                        <i className="fa-solid fa-plus"></i>
-                                        {t('navbar.createEvent')}
-                                    </button>
+                                    <>
+                                        <button
+                                            className="dropdown-link"
+                                            onClick={() => {
+                                                setIsUserMenuOpen(false);
+                                                onCreateEventClick();
+                                            }}
+                                        >
+                                            <i className="fa-solid fa-plus"></i>
+                                            {t('navbar.createEvent')}
+                                        </button>
+                                    </>
                                 )}
                                 <hr />
                                 <button className="dropdown-link logout" onClick={handleLogout}>

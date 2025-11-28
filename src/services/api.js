@@ -2,7 +2,7 @@ import axios from 'axios';
 import { mapEventsFromAPI, mapEventFromAPI } from '../utils/dataMapper';
 
 // URL base de la API - usar variable de entorno o fallback a la URL actual
-const API_URL = import.meta.env.VITE_API_URL || 'https://projecte-n-bdpw17a74-pausintesps-projects.vercel.app';
+const API_URL = import.meta.env.VITE_API_URL || 'https://projecte-n-obijiuwkl-pausintesps-projects.vercel.app';
 
 const api = axios.create({
     baseURL: API_URL,
@@ -130,7 +130,7 @@ export const getEventById = async (eventId) => {
  */
 export const getCurrentUser = async () => {
     try {
-        const response = await api.get('/usuario/');
+        const response = await api.get('/me');
         return response.data;
     } catch (error) {
         console.error("Error fetching user:", error);

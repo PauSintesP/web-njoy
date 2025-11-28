@@ -11,11 +11,54 @@
         "error": "Events konnten nicht geladen werden. Bitte versuche es später erneut.",
         "noEvents": "Derzeit keine Events in {{location}} gefunden.",
         "authError": "Authentifizierungsfehler. Bitte lade die Seite neu.",
-        "sessionExpired": "Deine Sitzung ist abgelaufen. Bitte melde dich erneut an."
+        "sessionExpired": "Deine Sitzung ist abgelaufen. Bitte melde dich erneut an.",
+        "cancel": "Abbrechen",
+        "save": "Änderungen speichern",
+        "saving": "Speichern..."
+    },
+    "navbar": {
+        "login": "Anmelden",
+        "logout": "Abmelden",
+        "profile": "Mein Profil",
+        "createEvent": "Event erstellen"
+    },
+    "profile": {
+        "title": "Mein Profil",
+        "personalInfo": "Persönliche Informationen",
+        "edit": "Profil bearbeiten",
+        "firstName": "Vorname",
+        "lastName": "Nachname",
+        "email": "E-Mail",
+        "birthDate": "Geburtsdatum",
+        "country": "Land",
+        "accountStatus": "Kontostatus",
+        "active": "Aktiv",
+        "inactive": "Inaktiv",
+        "memberSince": "Mitglied seit",
+        "notProvided": "Nicht angegeben",
+        "countryPlaceholder": "Gib dein Land ein",
+        "emailNotEditable": "E-Mail kann nicht geändert werden",
+        "nameRequired": "Vor- und Nachname sind erforderlich",
+        "invalidEmail": "Bitte gib eine gültige E-Mail-Adresse ein",
+        "updateSuccess": "Profil erfolgreich aktualisiert!",
+        "updateError": "Profil konnte nicht aktualisiert werden. Bitte versuche es erneut.",
+        "errorLoading": "Profildaten konnten nicht geladen werden. Bitte versuche es erneut."
     },
     "eventCard": {
         "location": "Ort",
         "date": "Datum"
+    },
+    "filters": {
+        "upcoming": "Kommende Events",
+        "all": "Alle",
+        "music": "Musik",
+        "art": "Kunst",
+        "tech": "Technologie",
+        "food": "Essen"
+    },
+    "hero": {
+        "title": "Entdecke die besten Events in {{location}}",
+        "subtitle": "Finde und buche Tickets für Konzerte, Festivals und kulturelle Veranstaltungen"
     },
     "login": {
         "title": "Willkommen zurück",
@@ -27,10 +70,13 @@
     },
     "register": {
         "title": "Konto erstellen",
-        "name": "Vollständiger Name",
+        "firstName": "Vorname",
+        "lastName": "Nachname",
         "email": "E-Mail",
         "password": "Passwort",
         "confirmPassword": "Passwort bestätigen",
+        "dateOfBirth": "Geburtsdatum",
+        "country": "Land",
         "submit": "Registrieren",
         "hasAccount": "Hast du schon ein Konto?",
         "login": "Anmelden"

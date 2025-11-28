@@ -11,11 +11,54 @@
         "error": "Impossibile caricare gli eventi. Riprova più tardi.",
         "noEvents": "Nessun evento trovato a {{location}} al momento.",
         "authError": "Errore di autenticazione. Ricarica la pagina.",
-        "sessionExpired": "La tua sessione è scaduta. Accedi di nuovo."
+        "sessionExpired": "La tua sessione è scaduta. Accedi di nuovo.",
+        "cancel": "Annulla",
+        "save": "Salva Modifiche",
+        "saving": "Salvataggio..."
+    },
+    "navbar": {
+        "login": "Accedi",
+        "logout": "Esci",
+        "profile": "Il Mio Profilo",
+        "createEvent": "Crea Evento"
+    },
+    "profile": {
+        "title": "Il Mio Profilo",
+        "personalInfo": "Informazioni Personali",
+        "edit": "Modifica Profilo",
+        "firstName": "Nome",
+        "lastName": "Cognome",
+        "email": "Email",
+        "birthDate": "Data di Nascita",
+        "country": "Paese",
+        "accountStatus": "Stato dell'Account",
+        "active": "Attivo",
+        "inactive": "Inattivo",
+        "memberSince": "Membro dal",
+        "notProvided": "Non fornito",
+        "countryPlaceholder": "Inserisci il tuo paese",
+        "emailNotEditable": "L'email non può essere modificata",
+        "nameRequired": "Nome e cognome sono obbligatori",
+        "invalidEmail": "Inserisci un indirizzo email valido",
+        "updateSuccess": "Profilo aggiornato con successo!",
+        "updateError": "Impossibile aggiornare il profilo. Riprova.",
+        "errorLoading": "Impossibile caricare i dati del profilo. Riprova."
     },
     "eventCard": {
         "location": "Posizione",
         "date": "Data"
+    },
+    "filters": {
+        "upcoming": "Prossimi Eventi",
+        "all": "Tutti",
+        "music": "Musica",
+        "art": "Arte",
+        "tech": "Tecnologia",
+        "food": "Cibo"
+    },
+    "hero": {
+        "title": "Scopri i migliori eventi a {{location}}",
+        "subtitle": "Trova e prenota biglietti per concerti, festival ed eventi culturali"
     },
     "login": {
         "title": "Bentornato",
@@ -27,10 +70,13 @@
     },
     "register": {
         "title": "Crea Account",
-        "name": "Nome Completo",
+        "firstName": "Nome",
+        "lastName": "Cognome",
         "email": "Email",
         "password": "Password",
         "confirmPassword": "Conferma Password",
+        "dateOfBirth": "Data di Nascita",
+        "country": "Paese",
         "submit": "Registrati",
         "hasAccount": "Hai già un account?",
         "login": "Accedi"

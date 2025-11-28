@@ -11,7 +11,10 @@
         "error": "No se pudieron cargar los eventos. Por favor, intenta más tarde.",
         "noEvents": "No se encontraron eventos en {{location}} en este momento.",
         "authError": "Error de autenticación. Por favor, recarga la página.",
-        "sessionExpired": "Tu sesión ha expirado. Por favor, inicia sesión nuevamente."
+        "sessionExpired": "Tu sesión ha expirado. Por favor, inicia sesión nuevamente.",
+        "cancel": "Cancelar",
+        "save": "Guardar Cambios",
+        "saving": "Guardando..."
     },
     "eventCard": {
         "location": "Ubicación",
@@ -27,37 +30,56 @@
     },
     "register": {
         "title": "Crear Cuenta",
-        "name": "Nombre Completo",
+        "firstName": "Nombre",
+        "lastName": "Apellidos",
         "email": "Correo electrónico",
         "password": "Contraseña",
         "confirmPassword": "Confirmar Contraseña",
+        "dateOfBirth": "Fecha de Nacimiento",
+        "country": "País",
         "submit": "Registrarse",
         "hasAccount": "¿Ya tienes una cuenta?",
         "login": "Inicia Sesión"
     },
     "navbar": {
         "login": "Iniciar Sesión",
-        "myProfile": "Mi Perfil",
-        "createEvent": "Crear Evento",
         "logout": "Cerrar Sesión",
-        "welcome": "Bienvenido"
+        "profile": "Mi Perfil",
+        "createEvent": "Crear Evento"
+    },
+    "filters": {
+        "upcoming": "Próximos Eventos",
+        "all": "Todos",
+        "music": "Música",
+        "art": "Arte",
+        "tech": "Tecnología",
+        "food": "Comida"
+    },
+    "hero": {
+        "title": "Descubre los mejores eventos en {{location}}",
+        "subtitle": "Encuentra y compra entradas para conciertos, festivales y eventos culturales"
     },
     "profile": {
         "title": "Mi Perfil",
         "personalInfo": "Información Personal",
-        "editProfile": "Editar Perfil",
-        "saveChanges": "Guardar Cambios",
-        "cancel": "Cancelar",
-        "changePassword": "Cambiar Contraseña",
-        "currentPassword": "Contraseña Actual",
-        "newPassword": "Nueva Contraseña",
-        "confirmNewPassword": "Confirmar Nueva Contraseña",
-        "updateSuccess": "Perfil actualizado exitosamente",
-        "passwordChangeSuccess": "Contraseña cambiada exitosamente"
-    },
-    "session": {
-        "expired": "Tu sesión ha expirado",
-        "pleaseLogin": "Por favor, inicia sesión nuevamente"
+        "edit": "Editar Perfil",
+        "firstName": "Nombre",
+        "lastName": "Apellidos",
+        "email": "Correo Electrónico",
+        "birthDate": "Fecha de Nacimiento",
+        "country": "País",
+        "accountStatus": "Estado de la Cuenta",
+        "active": "Activa",
+        "inactive": "Inactiva",
+        "memberSince": "Miembro desde",
+        "notProvided": "No proporcionado",
+        "countryPlaceholder": "Introduce tu país",
+        "emailNotEditable": "El correo electrónico no se puede cambiar",
+        "nameRequired": "El nombre y apellidos son obligatorios",
+        "invalidEmail": "Por favor, introduce un correo electrónico válido",
+        "updateSuccess": "¡Perfil actualizado correctamente!",
+        "updateError": "Error al actualizar el perfil. Por favor, inténtalo de nuevo.",
+        "errorLoading": "Error al cargar los datos del perfil. Por favor, inténtalo de nuevo."
     },
     "eventDetail": {
         "back": "Volver",
