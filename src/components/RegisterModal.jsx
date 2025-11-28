@@ -13,7 +13,8 @@ const RegisterModal = ({ isOpen, onClose, onRegisterSuccess, onShowLogin }) => {
         firstName: '',
         lastName: '',
         dateOfBirth: '',
-        country: ''
+        country: '',
+        role: 'user'
     });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -68,7 +69,8 @@ const RegisterModal = ({ isOpen, onClose, onRegisterSuccess, onShowLogin }) => {
                 firstName: formData.firstName,
                 lastName: formData.lastName,
                 dateOfBirth: formData.dateOfBirth,
-                country: formData.country || undefined // Make it optional
+                country: formData.country || undefined, // Make it optional
+                role: formData.role || 'user'
             });
 
             console.log('Sending registration data:', JSON.stringify(userData, null, 2));
@@ -87,7 +89,8 @@ const RegisterModal = ({ isOpen, onClose, onRegisterSuccess, onShowLogin }) => {
                 firstName: '',
                 lastName: '',
                 dateOfBirth: '',
-                country: ''
+                country: '',
+                role: 'user'
             });
 
             // Call success callback
@@ -210,6 +213,20 @@ const RegisterModal = ({ isOpen, onClose, onRegisterSuccess, onShowLogin }) => {
                                 disabled={loading}
                             />
                         </div>
+                    </div>
+
+                    <div className="form-group">
+                        <label>Tipo de Cuenta *</label>
+                        <select
+                            name="role"
+                            value={formData.role}
+                            onChange={handleChange}
+                            required
+                            disabled={loading}
+                        >
+                            <option value="user">Usuario (Asistir a eventos)</option>
+                            <option value="promotor">Promotor (Crear eventos)</option>
+                        </select>
                     </div>
 
                     <div className="form-group">

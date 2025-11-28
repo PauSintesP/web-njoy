@@ -1,22 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { createEvent, getLocations, getGenres, getOrganizers } from '../services/api';
-import LocationPicker from './LocationPicker';
-import './CreateEventModal.css';
+import { createEvent, getOrganizers, createOrGetGenre, createOrGetLocation } from '../services/api';
+import { getCurrentUser } from '../services/authService';
+import LocationPicker from '../components/LocationPicker';
+import './CreateEvent.css';
 
-const CreateEventModal = ({ isOpen, onClose, onEventCreated }) => {
+export default function CreateEvent() {
     const { t } = useTranslation();
+    const navigate = useNavigate();
+    
+    const [currentUser, setCurrentUser] = useState(null);
     const [formData, setFormData] = useState({
         nombre: '',
         descripcion: '',
-        localidad_id: null,
         recinto: '',
         plazas: '',
         fechayhora: '',
         tipo: '',
         categoria_precio: '',
         organizador_dni: null,
-        genero_id: null,
         imagen: ''
     });
 
@@ -27,39 +30,39 @@ const CreateEventModal = ({ isOpen, onClose, onEventCreated }) => {
     });
     const [genreText, setGenreText] = useState('');
     
-    const [locations, setLocations] = useState([]);
-    const [genres, setGenres] = useState([]);
     const [organizers, setOrganizers] = useState([]);
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
     const [loading, setLoading] = useState(false);
-    const [loadingData, setLoadingData] = useState(false);
 
     useEffect(() => {
-        if (isOpen) {
-            loadDependencies();
-        }
-    }, [isOpen]);
+        checkAuth();
+        loadOrganizers();
+    }, []);
 
-    const loadDependencies = async () => {
-        setLoadingData(true);
+    const checkAuth = async () => {
         try {
-            const [locs, gens, orgs] = await Promise.all([
-                getLocations(),
-                getGenres(),
-                getOrganizers()
-            ]);
-            setLocations(locs);
-            setGenres(gens);
-            setOrganizers(orgs);
+            const user = await getCurrentUser();
+            setCurrentUser(user);
+            
+            if (user.role !== 'promotor') {
+                setError('Solo los promotores pueden crear eventos');
+                setTimeout(() => navigate('/'), 3000);
+            }
         } catch (err) {
-            console.error("Error loading dependencies", err);
-            setError("Error loading form data");
-        } finally {
-            setLoadingData(false);
+            setError('Debes iniciar sesión para acceder a esta página');
+            setTimeout(() => navigate('/'), 3000);
         }
     };
 
-    if (!isOpen) return null;
+    const loadOrganizers = async () => {
+        try {
+            const orgs = await getOrganizers();
+            setOrganizers(orgs);
+        } catch (err) {
+            console.error("Error loading organizers:", err);
+        }
+    };
 
     const handleChange = (e) => {
         setFormData({
@@ -71,13 +74,13 @@ const CreateEventModal = ({ isOpen, onClose, onEventCreated }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        setSuccess('');
         setLoading(true);
 
         try {
             // Crear género automáticamente si se especifica
             let genreId = null;
             if (genreText.trim()) {
-                const { createOrGetGenre } = await import('../services/api');
                 const genre = await createOrGetGenre(genreText.trim());
                 genreId = genre.id;
             }
@@ -85,7 +88,6 @@ const CreateEventModal = ({ isOpen, onClose, onEventCreated }) => {
             // Crear localidad automáticamente si se especifica
             let locationId = null;
             if (locationData.ciudad && locationData.ciudad.trim()) {
-                const { createOrGetLocation } = await import('../services/api');
                 const location = await createOrGetLocation(
                     locationData.ciudad,
                     locationData.latitud,
@@ -111,70 +113,85 @@ const CreateEventModal = ({ isOpen, onClose, onEventCreated }) => {
             if (genreId) eventData.genero_id = genreId;
             if (formData.imagen) eventData.imagen = formData.imagen;
 
-            const response = await createEvent(eventData);
-            console.log('Event created:', response);
-
+            await createEvent(eventData);
+            
+            setSuccess('¡Evento creado exitosamente!');
+            
             // Clear form
             setFormData({
                 nombre: '',
                 descripcion: '',
-                localidad_id: null,
                 recinto: '',
                 plazas: '',
                 fechayhora: '',
                 tipo: '',
                 categoria_precio: '',
                 organizador_dni: null,
-                genero_id: null,
                 imagen: ''
             });
             setLocationData({ ciudad: '', latitud: null, longitud: null });
             setGenreText('');
 
-            if (onEventCreated) {
-                onEventCreated(response);
-            }
-
-            onClose();
+            // Redirect after success
+            setTimeout(() => navigate('/'), 2000);
         } catch (err) {
             console.error('Error creating event:', err);
-            setError(err.response?.data?.detail || err.message || 'Error creating event');
+            setError(err.response?.data?.detail || err.message || 'Error al crear el evento');
         } finally {
             setLoading(false);
         }
     };
 
-    const handleClose = () => {
-        setError('');
-        onClose();
-    };
+    if (!currentUser || currentUser.role !== 'promotor') {
+        return (
+            <div className="create-event-page">
+                <div className="access-denied">
+                    <i className="fa-solid fa-lock"></i>
+                    <h2>Acceso Denegado</h2>
+                    <p>{error || 'Solo los promotores pueden acceder a esta página'}</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
-        <div className="modal-overlay" onClick={handleClose}>
-            <div className="modal-content glass" onClick={(e) => e.stopPropagation()}>
-                <button className="close-btn" onClick={handleClose}>&times;</button>
-
-                <h2 className="modal-title">Create New Event</h2>
+        <div className="create-event-page">
+            <div className="create-event-container">
+                <div className="page-header">
+                    <button className="back-btn" onClick={() => navigate('/')}>
+                        <i className="fa-solid fa-arrow-left"></i> Volver
+                    </button>
+                    <h1>
+                        <i className="fa-solid fa-calendar-plus"></i>
+                        Crear Nuevo Evento
+                    </h1>
+                    <p className="subtitle">Complete los detalles del evento</p>
+                </div>
 
                 {error && (
-                    <div className="error-message">
+                    <div className="alert alert-error">
                         <i className="fa-solid fa-circle-exclamation"></i>
                         <span>{error}</span>
                     </div>
                 )}
 
-                {loadingData ? (
-                    <div className="loading-state">
-                        <i className="fa-solid fa-spinner fa-spin"></i> Loading form data...
+                {success && (
+                    <div className="alert alert-success">
+                        <i className="fa-solid fa-circle-check"></i>
+                        <span>{success}</span>
                     </div>
-                ) : (
-                    <form className="register-form" onSubmit={handleSubmit}>
+                )}
+
+                <form className="event-form" onSubmit={handleSubmit}>
+                    <div className="form-section">
+                        <h3><i className="fa-solid fa-info-circle"></i> Información Básica</h3>
+                        
                         <div className="form-group">
-                            <label>Event Name *</label>
+                            <label>Nombre del Evento *</label>
                             <input
                                 type="text"
                                 name="nombre"
-                                placeholder="Summer Festival 2025"
+                                placeholder="ej. Festival de Verano 2025"
                                 value={formData.nombre}
                                 onChange={handleChange}
                                 required
@@ -183,41 +200,48 @@ const CreateEventModal = ({ isOpen, onClose, onEventCreated }) => {
                         </div>
 
                         <div className="form-group">
-                            <label>Description *</label>
+                            <label>Descripción *</label>
                             <textarea
                                 name="descripcion"
-                                placeholder="Describe your event..."
+                                placeholder="Describe tu evento..."
                                 value={formData.descripcion}
                                 onChange={handleChange}
                                 required
                                 disabled={loading}
+                                rows="4"
                             />
                         </div>
+                    </div>
 
+                    <div className="form-section">
+                        <h3><i className="fa-solid fa-map-marker-alt"></i> Ubicación</h3>
+                        
                         <div className="form-group">
-                            <label>Location (optional - write or select on map)</label>
+                            <label>Localidad (opcional)</label>
                             <LocationPicker 
                                 onLocationChange={(loc) => setLocationData(loc)}
                             />
                         </div>
 
-                        <div className="form-row">
-                            <div className="form-group">
-                                <label>Venue (optional)</label>
-                                <input
-                                    type="text"
-                                    name="recinto"
-                                    placeholder="Stadium, Club, etc."
-                                    value={formData.recinto}
-                                    onChange={handleChange}
-                                    disabled={loading}
-                                />
-                            </div>
+                        <div className="form-group">
+                            <label>Recinto (opcional)</label>
+                            <input
+                                type="text"
+                                name="recinto"
+                                placeholder="ej. Estadio Nacional, Club XYZ..."
+                                value={formData.recinto}
+                                onChange={handleChange}
+                                disabled={loading}
+                            />
                         </div>
+                    </div>
 
+                    <div className="form-section">
+                        <h3><i className="fa-solid fa-calendar"></i> Detalles del Evento</h3>
+                        
                         <div className="form-row">
                             <div className="form-group">
-                                <label>Date & Time (optional)</label>
+                                <label>Fecha y Hora (opcional)</label>
                                 <input
                                     type="datetime-local"
                                     name="fechayhora"
@@ -228,7 +252,7 @@ const CreateEventModal = ({ isOpen, onClose, onEventCreated }) => {
                             </div>
 
                             <div className="form-group">
-                                <label>Capacity (optional)</label>
+                                <label>Capacidad (opcional)</label>
                                 <input
                                     type="number"
                                     name="plazas"
@@ -243,11 +267,11 @@ const CreateEventModal = ({ isOpen, onClose, onEventCreated }) => {
 
                         <div className="form-row">
                             <div className="form-group">
-                                <label>Type (optional)</label>
+                                <label>Tipo de Evento (opcional)</label>
                                 <input
                                     type="text"
                                     name="tipo"
-                                    placeholder="Concert, Festival, etc."
+                                    placeholder="ej. Concierto, Festival, Conferencia..."
                                     value={formData.tipo}
                                     onChange={handleChange}
                                     disabled={loading}
@@ -255,11 +279,11 @@ const CreateEventModal = ({ isOpen, onClose, onEventCreated }) => {
                             </div>
 
                             <div className="form-group">
-                                <label>Price Category (optional)</label>
+                                <label>Categoría de Precio (opcional)</label>
                                 <input
                                     type="text"
                                     name="categoria_precio"
-                                    placeholder="General, VIP, etc."
+                                    placeholder="ej. General, VIP, Premium..."
                                     value={formData.categoria_precio}
                                     onChange={handleChange}
                                     disabled={loading}
@@ -269,11 +293,11 @@ const CreateEventModal = ({ isOpen, onClose, onEventCreated }) => {
 
                         <div className="form-row">
                             <div className="form-group">
-                                <label>Genre (optional - write to create new)</label>
+                                <label>Género Musical (opcional - escribe para crear nuevo)</label>
                                 <input
                                     type="text"
                                     name="genero_text"
-                                    placeholder="Rock, Pop, Jazz..."
+                                    placeholder="ej. Rock, Pop, Jazz, Electrónica..."
                                     value={genreText}
                                     onChange={(e) => setGenreText(e.target.value)}
                                     disabled={loading}
@@ -281,14 +305,14 @@ const CreateEventModal = ({ isOpen, onClose, onEventCreated }) => {
                             </div>
 
                             <div className="form-group">
-                                <label>Organizer (optional)</label>
+                                <label>Organizador (opcional)</label>
                                 <select
                                     name="organizador_dni"
                                     value={formData.organizador_dni || ''}
                                     onChange={handleChange}
                                     disabled={loading}
                                 >
-                                    <option value="">Select Organizer</option>
+                                    <option value="">Seleccionar organizador</option>
                                     {organizers.map(org => (
                                         <option key={org.dni} value={org.dni}>{org.ncompleto}</option>
                                     ))}
@@ -297,35 +321,45 @@ const CreateEventModal = ({ isOpen, onClose, onEventCreated }) => {
                         </div>
 
                         <div className="form-group">
-                            <label>Image URL</label>
+                            <label>URL de Imagen (opcional)</label>
                             <input
-                                type="text"
+                                type="url"
                                 name="imagen"
-                                placeholder="http://example.com/image.jpg"
+                                placeholder="https://ejemplo.com/imagen.jpg"
                                 value={formData.imagen}
                                 onChange={handleChange}
                                 disabled={loading}
                             />
                         </div>
+                    </div>
 
+                    <div className="form-actions">
+                        <button
+                            type="button"
+                            className="btn btn-secondary"
+                            onClick={() => navigate('/')}
+                            disabled={loading}
+                        >
+                            Cancelar
+                        </button>
                         <button
                             type="submit"
-                            className="btn btn-primary full-width"
+                            className="btn btn-primary"
                             disabled={loading}
                         >
                             {loading ? (
                                 <>
-                                    <i className="fa-solid fa-spinner fa-spin"></i> Creating...
+                                    <i className="fa-solid fa-spinner fa-spin"></i> Creando...
                                 </>
                             ) : (
-                                'Create Event'
+                                <>
+                                    <i className="fa-solid fa-check"></i> Crear Evento
+                                </>
                             )}
                         </button>
-                    </form>
-                )}
+                    </div>
+                </form>
             </div>
         </div>
     );
-};
-
-export default CreateEventModal;
+}

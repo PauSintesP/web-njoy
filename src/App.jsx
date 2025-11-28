@@ -8,6 +8,7 @@ import RegisterModal from './components/RegisterModal';
 import CreateEventModal from './components/CreateEventModal';
 import EventDetailModal from './components/EventDetailModal';
 import Profile from './pages/Profile';
+import CreateEvent from './pages/CreateEvent';
 import authService from './services/authService';
 import { getEvents } from './services/api';
 import './App.css';
@@ -216,6 +217,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/create-event" element={<CreateEvent />} />
         </Routes>
 
       <LoginModal

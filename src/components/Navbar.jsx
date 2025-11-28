@@ -136,13 +136,13 @@ const Navbar = ({ onLoginClick, onCreateEventClick, location, setLocation }) => 
                                     <i className="fa-solid fa-user"></i>
                                     {t('navbar.profile')}
                                 </button>
-                                {onCreateEventClick && (
+                                {user && user.role === 'promotor' && (
                                     <>
                                         <button
                                             className="dropdown-link"
                                             onClick={() => {
                                                 setIsUserMenuOpen(false);
-                                                onCreateEventClick();
+                                                navigate('/create-event');
                                             }}
                                         >
                                             <i className="fa-solid fa-plus"></i>

@@ -61,7 +61,8 @@ export const mapUserFromAPI = (apiUser) => {
         firstName: apiUser.nombre || '',
         lastName: apiUser.apellidos || '',
         dateOfBirth: apiUser.fecha_nacimiento || '',
-        country: apiUser.pais || ''
+        country: apiUser.pais || '',
+        role: apiUser.role || 'user'
     };
 };
 
@@ -82,6 +83,11 @@ export const mapUserToAPI = (userData) => {
     // Only include pais if it has a value (it's optional)
     if (userData.country || userData.pais) {
         apiData.pais = userData.country || userData.pais;
+    }
+
+    // Include role if provided
+    if (userData.role) {
+        apiData.role = userData.role;
     }
     
     return apiData;
