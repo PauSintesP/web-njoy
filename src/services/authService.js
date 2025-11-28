@@ -212,3 +212,10 @@ class AuthService {
 }
 
 export default new AuthService();
+
+// Export commonly used functions as named exports for convenience
+export const getCurrentUser = () => new AuthService().getCurrentUser();
+export const login = (email, password) => new AuthService().login(email, password);
+export const logout = () => new AuthService().logout();
+export const isAuthenticated = () => new AuthService().isAuthenticated();
+export const getUser = () => new AuthService().getUser();

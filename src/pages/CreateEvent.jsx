@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { createEvent, getOrganizers, createOrGetGenre, createOrGetLocation } from '../services/api';
-import { getCurrentUser } from '../services/authService';
+import authService from '../services/authService';
 import LocationPicker from '../components/LocationPicker';
 import './CreateEvent.css';
 
@@ -42,7 +42,7 @@ export default function CreateEvent() {
 
     const checkAuth = async () => {
         try {
-            const user = await getCurrentUser();
+            const user = await authService.getCurrentUser();
             setCurrentUser(user);
             
             if (user.role !== 'promotor') {
