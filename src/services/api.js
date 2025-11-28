@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { mapEventsFromAPI, mapEventFromAPI } from '../utils/dataMapper';
 
-// URL base de la API - usar variable de entorno o fallback a la URL actual
+// URL base de la API - usar variable de entorno o fallback a la URL de producción
 const API_URL = import.meta.env.VITE_API_URL || 'https://projecte-n-joy.vercel.app';
+console.log('API URL configured:', API_URL); // Debug log
 
 const api = axios.create({
     baseURL: API_URL,
