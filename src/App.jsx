@@ -9,6 +9,8 @@ import CreateEventModal from './components/CreateEventModal';
 import EventDetailModal from './components/EventDetailModal';
 import Profile from './pages/Profile';
 import CreateEvent from './pages/CreateEvent';
+import AdminPanel from './pages/AdminPanel';
+import ProtectedRoute from './components/ProtectedRoute';
 import authService from './services/authService';
 import { getEvents } from './services/api';
 import './App.css';
@@ -218,40 +220,48 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/create-event" element={<CreateEvent />} />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute user={user} requiredRole="admin">
+                <AdminPanel />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
 
-      <LoginModal
-        isOpen={isLoginOpen}
-        onClose={() => setIsLoginOpen(false)}
-        onLoginSuccess={handleLoginSuccess}
-        onShowRegister={switchToRegister}
-      />
+        <LoginModal
+          isOpen={isLoginOpen}
+          onClose={() => setIsLoginOpen(false)}
+          onLoginSuccess={handleLoginSuccess}
+          onShowRegister={switchToRegister}
+        />
 
-      <RegisterModal
-        isOpen={isRegisterOpen}
-        onClose={() => setIsRegisterOpen(false)}
-        onRegisterSuccess={handleRegisterSuccess}
-        onShowLogin={switchToLogin}
-      />
+        <RegisterModal
+          isOpen={isRegisterOpen}
+          onClose={() => setIsRegisterOpen(false)}
+          onRegisterSuccess={handleRegisterSuccess}
+          onShowLogin={switchToLogin}
+        />
 
-      <CreateEventModal
-        isOpen={isCreateEventOpen}
-        onClose={() => setIsCreateEventOpen(false)}
-        onEventCreated={handleCreateEventSuccess}
-      />
+        <CreateEventModal
+          isOpen={isCreateEventOpen}
+          onClose={() => setIsCreateEventOpen(false)}
+          onEventCreated={handleCreateEventSuccess}
+        />
 
-      <EventDetailModal
-        event={selectedEvent}
-        isOpen={isEventDetailOpen}
-        onClose={() => setIsEventDetailOpen(false)}
-      />
+        <EventDetailModal
+          event={selectedEvent}
+          isOpen={isEventDetailOpen}
+          onClose={() => setIsEventDetailOpen(false)}
+        />
 
-      <footer className="footer">
-        <div className="container">
-          <p>&copy; 2023 njoy. All rights reserved.</p>
-        </div>
-      </footer>
-    </div>
+        <footer className="footer">
+          <div className="container">
+            <p>&copy; 2023 njoy. All rights reserved.</p>
+          </div>
+        </footer>
+      </div>
     </Router>
   );
 }

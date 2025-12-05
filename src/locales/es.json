@@ -31,6 +31,7 @@
     "register": {
         "title": "Crear Cuenta",
         "firstName": "Nombre",
+        "name": "Nombre",
         "lastName": "Apellidos",
         "email": "Correo electrónico",
         "password": "Contraseña",
@@ -91,5 +92,66 @@
         "category": "Categoría",
         "organizer": "Organizador",
         "description": "Descripción"
+    },
+    "admin": {
+        "panelTitle": "Panel de Administración",
+        "panelSubtitle": "Gestión de usuarios y estadísticas",
+        "statistics": {
+            "totalUsers": "Usuarios Totales",
+            "activeUsers": "Activos",
+            "bannedUsers": "Baneados",
+            "owners": "Owners"
+        },
+        "filters": {
+            "searchPlaceholder": "Buscar por nombre o email...",
+            "allRoles": "Todos los roles",
+            "allStatuses": "Todos los estados",
+            "banStatus": "Estado de baneo",
+            "active": "Activos",
+            "inactive": "Inactivos",
+            "notBanned": "No baneados",
+            "banned": "Baneados"
+        },
+        "table": {
+            "id": "ID",
+            "name": "Nombre",
+            "email": "Email",
+            "role": "Rol",
+            "status": "Estado",
+            "created": "Creado",
+            "actions": "Acciones"
+        },
+        "actions": {
+            "edit": "Editar",
+            "ban": "Banear",
+            "unban": "Desbanear",
+            "delete": "Eliminar",
+            "promoteToOwner": "Promover a Owner"
+        },
+        "confirmations": {
+            "deleteUser": "¿Estás seguro de que quieres eliminar este usuario?",
+            "promoteUser": "¿Promover este usuario a Owner?"
+        },
+        "editModal": {
+            "title": "Editar Usuario",
+            "name": "Nombre",
+            "lastName": "Apellidos",
+            "email": "Email",
+            "country": "País",
+            "role": "Rol",
+            "isActive": "Usuario Activo",
+            "isBanned": "Usuario Baneado",
+            "cancel": "Cancelar",
+            "save": "Guardar Cambios"
+        },
+        "messages": {
+            "loadingUsers": "Cargando usuarios...",
+            "noUsers": "No se encontraron usuarios",
+            "errorLoading": "Error cargando usuarios",
+            "errorUpdating": "Error actualizando usuario",
+            "errorDeleting": "Error eliminando usuario",
+            "errorBanning": "Error actualizando estado de baneo",
+            "errorPromoting": "Error promoviendo usuario"
+        }
     }
 }

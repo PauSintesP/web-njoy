@@ -150,6 +150,18 @@ const Navbar = ({ onLoginClick, onCreateEventClick, location, setLocation }) => 
                                         </button>
                                     </>
                                 )}
+                                {user && user.role === 'admin' && (
+                                    <button
+                                        className="dropdown-link"
+                                        onClick={() => {
+                                            setIsUserMenuOpen(false);
+                                            navigate('/admin');
+                                        }}
+                                    >
+                                        <i className="fa-solid fa-shield-halved"></i>
+                                        Panel Admin
+                                    </button>
+                                )}
                                 <hr />
                                 <button className="dropdown-link logout" onClick={handleLogout}>
                                     <i className="fa-solid fa-right-from-bracket"></i>

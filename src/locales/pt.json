@@ -91,5 +91,66 @@
         "category": "Categoria",
         "organizer": "Organizador",
         "description": "Descrição"
+    },
+    "admin": {
+        "panelTitle": "Painel de Administração",
+        "panelSubtitle": "Gestão de usuários e estatísticas",
+        "statistics": {
+            "totalUsers": "Usuários Totais",
+            "activeUsers": "Ativos",
+            "bannedUsers": "Banidos",
+            "owners": "Proprietários "
+        },
+        "filters": {
+            "searchPlaceholder": "Pesquisar por nome ou email...",
+            "allRoles": "Todos os papéis",
+            "allStatuses": "Todos os status",
+            "banStatus": "Status de banimento",
+            "active": "Ativos",
+            "inactive": "Inativos",
+            "notBanned": "Não banidos",
+            "banned": "Banidos"
+        },
+        "table": {
+            "id": "ID",
+            "name": "Nome",
+            "email": "Email",
+            "role": "Papel",
+            "status": "Status",
+            "created": "Criado",
+            "actions": "Ações"
+        },
+        "actions": {
+            "edit": "Editar",
+            "ban": "Banir",
+            "unban": "Desbanir",
+            "delete": "Excluir",
+            "promoteToOwner": "Promover a Proprietário"
+        },
+        "confirmations": {
+            "deleteUser": "Tem certeza de que deseja excluir este usuário?",
+            "promoteUser": "Promover este usuário a Proprietário?"
+        },
+        "editModal": {
+            "title": "Editar Usuário",
+            "name": "Nome",
+            "lastName": "Sobrenome",
+            "email": "Email",
+            "country": "País",
+            "role": "Papel",
+            "isActive": "Usuário ativo",
+            "isBanned": "Usuário banido",
+            "cancel": "Cancelar",
+            "save": "Salvar alterações"
+        },
+        "messages": {
+            "loadingUsers": "Carregando usuários...",
+            "noUsers": "Nenhum usuário encontrado",
+            "errorLoading": "Erro ao carregar usuários",
+            "errorUpdating": "Erro ao atualizar usuário",
+            "errorDeleting": "Erro ao excluir usuário",
+            "errorBanning": "Erro ao atualizar status de banimento",
+            "errorPromoting": "Erro ao promover usuário"
+        }
     }
 }

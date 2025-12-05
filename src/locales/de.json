@@ -91,5 +91,66 @@
         "category": "Kategorie",
         "organizer": "Veranstalter",
         "description": "Beschreibung"
+    },
+    "admin": {
+        "panelTitle": "Admin-Panel",
+        "panelSubtitle": "Benutzerverwaltung und Statistiken",
+        "statistics": {
+            "totalUsers": "Gesamtbenutzer",
+            "activeUsers": "Aktiv",
+            "bannedUsers": "Gesperrt",
+            "owners": "Eigentümer"
+        },
+        "filters": {
+            "searchPlaceholder": "Nach Name oder E-Mail suchen...",
+            "allRoles": "Alle Rollen",
+            "allStatuses": "Alle Status",
+            "banStatus": "Sperrstatus",
+            "active": "Aktiv",
+            "inactive": "Inaktiv",
+            "notBanned": "Nicht gesperrt",
+            "banned": "Gesperrt"
+        },
+        "table": {
+            "id": "ID",
+            "name": "Name",
+            "email": "E-Mail",
+            "role": "Rolle",
+            "status": "Status",
+            "created": "Erstellt",
+            "actions": "Aktionen"
+        },
+        "actions": {
+            "edit": "Bearbeiten",
+            "ban": "Sperren",
+            "unban": "Entsperren",
+            "delete": "Löschen",
+            "promoteToOwner": "Zu Eigentümer befördern"
+        },
+        "confirmations": {
+            "deleteUser": "Sind Sie sicher, dass Sie diesen Benutzer löschen möchten?",
+            "promoteUser": "Diesen Benutzer zum Eigentümer befördern?"
+        },
+        "editModal": {
+            "title": "Benutzer bearbeiten",
+            "name": "Vorname",
+            "lastName": "Nachname",
+            "email": "E-Mail",
+            "country": "Land",
+            "role": "Rolle",
+            "isActive": "Benutzer aktiv",
+            "isBanned": "Benutzer gesperrt",
+            "cancel": "Abbrechen",
+            "save": "Änderungen speichern"
+        },
+        "messages": {
+            "loadingUsers": "Benutzer werden geladen...",
+            "noUsers": "Keine Benutzer gefunden",
+            "errorLoading": "Fehler beim Laden der Benutzer",
+            "errorUpdating": "Fehler beim Aktualisieren des Benutzers",
+            "errorDeleting": "Fehler beim Löschen des Benutzers",
+            "errorBanning": "Fehler beim Aktualisieren des Sperrstatus",
+            "errorPromoting": "Fehler beim Befördern des Benutzers"
+        }
     }
 }

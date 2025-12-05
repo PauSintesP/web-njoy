@@ -91,5 +91,66 @@
         "category": "Catégorie",
         "organizer": "Organisateur",
         "description": "Description"
+    },
+    "admin": {
+        "panelTitle": "Panneau d'administration",
+        "panelSubtitle": "Gestion des utilisateurs et statistiques",
+        "statistics": {
+            "totalUsers": "Utilisateurs totaux",
+            "activeUsers": "Actifs",
+            "bannedUsers": "Bannis",
+            "owners": "Propriétaires"
+        },
+        "filters": {
+            "searchPlaceholder": "Rechercher par nom ou email...",
+            "allRoles": "Tous les rôles",
+            "allStatuses": "Tous les statuts",
+            "banStatus": "Statut de bannissement",
+            "active": "Actifs",
+            "inactive": "Inactifs",
+            "notBanned": "Non bannis",
+            "banned": "Bannis"
+        },
+        "table": {
+            "id": "ID",
+            "name": "Nom",
+            "email": "Email",
+            "role": "Rôle",
+            "status": "Statut",
+            "created": "Créé",
+            "actions": "Actions"
+        },
+        "actions": {
+            "edit": "Modifier",
+            "ban": "Bannir",
+            "unban": "Débannir",
+            "delete": "Supprimer",
+            "promoteToOwner": "Promouvoir en Propriétaire"
+        },
+        "confirmations": {
+            "deleteUser": "Êtes-vous sûr de vouloir supprimer cet utilisateur ?",
+            "promoteUser": "Promouvoir cet utilisateur en Propriétaire ?"
+        },
+        "editModal": {
+            "title": "Modifier l'utilisateur",
+            "name": "Prénom",
+            "lastName": "Nom",
+            "email": "Email",
+            "country": "Pays",
+            "role": "Rôle",
+            "isActive": "Utilisateur actif",
+            "isBanned": "Utilisateur banni",
+            "cancel": "Annuler",
+            "save": "Enregistrer les modifications"
+        },
+        "messages": {
+            "loadingUsers": "Chargement des utilisateurs...",
+            "noUsers": "Aucun utilisateur trouvé",
+            "errorLoading": "Erreur lors du chargement des utilisateurs",
+            "errorUpdating": "Erreur lors de la mise à jour de l'utilisateur",
+            "errorDeleting": "Erreur lors de la suppression de l'utilisateur",
+            "errorBanning": "Erreur lors de la mise à jour du statut de bannissement",
+            "errorPromoting": "Erreur lors de la promotion de l'utilisateur"
+        }
     }
 }

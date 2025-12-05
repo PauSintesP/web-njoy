@@ -91,5 +91,66 @@
         "category": "Category",
         "organizer": "Organizer",
         "description": "Description"
+    },
+    "admin": {
+        "panelTitle": "Admin Panel",
+        "panelSubtitle": "User management and statistics",
+        "statistics": {
+            "totalUsers": "Total Users",
+            "activeUsers": "Active",
+            "bannedUsers": "Banned",
+            "owners": "Owners"
+        },
+        "filters": {
+            "searchPlaceholder": "Search by name or email...",
+            "allRoles": "All roles",
+            "allStatuses": "All statuses",
+            "banStatus": "Ban status",
+            "active": "Active",
+            "inactive": "Inactive",
+            "notBanned": "Not banned",
+            "banned": "Banned"
+        },
+        "table": {
+            "id": "ID",
+            "name": "Name",
+            "email": "Email",
+            "role": "Role",
+            "status": "Status",
+            "created": "Created",
+            "actions": "Actions"
+        },
+        "actions": {
+            "edit": "Edit",
+            "ban": "Ban",
+            "unban": "Unban",
+            "delete": "Delete",
+            "promoteToOwner": "Promote to Owner"
+        },
+        "confirmations": {
+            "deleteUser": "Are you sure you want to delete this user?",
+            "promoteUser": "Promote this user to Owner?"
+        },
+        "editModal": {
+            "title": "Edit User",
+            "name": "First Name",
+            "lastName": "Last Name",
+            "email": "Email",
+            "country": "Country",
+            "role": "Role",
+            "isActive": "User Active",
+            "isBanned": "User Banned",
+            "cancel": "Cancel",
+            "save": "Save Changes"
+        },
+        "messages": {
+            "loadingUsers": "Loading users...",
+            "noUsers": "No users found",
+            "errorLoading": "Error loading users",
+            "errorUpdating": "Error updating user",
+            "errorDeleting": "Error deleting user",
+            "errorBanning": "Error updating ban status",
+            "errorPromoting": "Error promoting user"
+        }
     }
 }

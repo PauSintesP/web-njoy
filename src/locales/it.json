@@ -91,5 +91,66 @@
         "category": "Categoria",
         "organizer": "Organizzatore",
         "description": "Descrizione"
+    },
+    "admin": {
+        "panelTitle": "Pannello Admin",
+        "panelSubtitle": "Gestione utenti e statistiche",
+        "statistics": {
+            "totalUsers": "Utenti totali",
+            "activeUsers": "Attivi",
+            "bannedUsers": "Bannati",
+            "owners": "Proprietari"
+        },
+        "filters": {
+            "searchPlaceholder": "Cerca per nome o email...",
+            "allRoles": "Tutti i ruoli",
+            "allStatuses": "Tutti gli stati",
+            "banStatus": "Stato ban",
+            "active": "Attivi",
+            "inactive": "Inattivi",
+            "notBanned": "Non bannati",
+            "banned": "Bannati"
+        },
+        "table": {
+            "id": "ID",
+            "name": "Nome",
+            "email": "Email",
+            "role": "Ruolo",
+            "status": "Stato",
+            "created": "Creato",
+            "actions": "Azioni"
+        },
+        "actions": {
+            "edit": "Modifica",
+            "ban": "Banna",
+            "unban": "Rimuovi ban",
+            "delete": "Elimina",
+            "promoteToOwner": "Promuovi a Proprietario"
+        },
+        "confirmations": {
+            "deleteUser": "Sei sicuro di voler eliminare questo utente?",
+            "promoteUser": "Promuovere questo utente a Proprietario?"
+        },
+        "editModal": {
+            "title": "Modifica Utente",
+            "name": "Nome",
+            "lastName": "Cognome",
+            "email": "Email",
+            "country": "Paese",
+            "role": "Ruolo",
+            "isActive": "Utente attivo",
+            "isBanned": "Utente bannato",
+            "cancel": "Annulla",
+            "save": "Salva modifiche"
+        },
+        "messages": {
+            "loadingUsers": "Caricamento utenti...",
+            "noUsers": "Nessun utente trovato",
+            "errorLoading": "Errore nel caricamento utenti",
+            "errorUpdating": "Errore nell'aggiornamento utente",
+            "errorDeleting": "Errore nell'eliminazione utente",
+            "errorBanning": "Errore nell'aggiornamento stato ban",
+            "errorPromoting": "Errore nella promozione utente"
+        }
     }
 }
