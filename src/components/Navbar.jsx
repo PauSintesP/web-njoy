@@ -150,6 +150,18 @@ const Navbar = ({ onLoginClick, onCreateEventClick, location, setLocation }) => 
                                         </button>
                                     </>
                                 )}
+                                {user && ['scanner', 'promotor', 'owner', 'admin'].includes(user.role) && (
+                                    <button
+                                        className="dropdown-link"
+                                        onClick={() => {
+                                            setIsUserMenuOpen(false);
+                                            navigate('/scanner');
+                                        }}
+                                    >
+                                        <i className="fa-solid fa-qrcode"></i>
+                                        {t('navbar.scanner') || 'Scanner'}
+                                    </button>
+                                )}
                                 {user && user.role === 'admin' && (
                                     <button
                                         className="dropdown-link"

@@ -10,6 +10,9 @@ import EventDetailModal from './components/EventDetailModal';
 import Profile from './pages/Profile';
 import CreateEvent from './pages/CreateEvent';
 import AdminPanel from './pages/AdminPanel';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import ScannerPage from './pages/ScannerPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import authService from './services/authService';
 import { getEvents } from './services/api';
@@ -17,6 +20,7 @@ import './App.css';
 
 function App() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [location, setLocation] = useState('Barcelona');
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
@@ -208,7 +212,7 @@ function App() {
     <Router>
       <div className="app">
         <Navbar
-          onLoginClick={() => setIsLoginOpen(true)}
+          onLoginClick={() => navigate('/login')}
           onCreateEventClick={() => setIsCreateEventOpen(true)}
           location={location}
           setLocation={setLocation}
@@ -218,8 +222,18 @@ function App() {
 
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/create-event" element={<CreateEvent />} />
+          <Route
+            path="/scanner"
+            element={
+              <ProtectedRoute user={user} requiredRole={['scanner', 'promotor', 'owner', 'admin']}>
+                <ScannerPage />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/admin"
             element={
