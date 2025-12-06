@@ -20,7 +20,6 @@ import './App.css';
 
 function App() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const [location, setLocation] = useState('Barcelona');
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
@@ -212,7 +211,7 @@ function App() {
     <Router>
       <div className="app">
         <Navbar
-          onLoginClick={() => navigate('/login')}
+          onLoginClick={() => setIsLoginOpen(true)}
           onCreateEventClick={() => setIsCreateEventOpen(true)}
           location={location}
           setLocation={setLocation}
