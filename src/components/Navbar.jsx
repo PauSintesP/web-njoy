@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import authService from '../services/authService';
 import './Navbar.css';
 
@@ -182,9 +182,9 @@ const Navbar = ({ onLoginClick, onCreateEventClick, location, setLocation }) => 
                             </div>
                         </div>
                     ) : (
-                        <button className="btn btn-primary" onClick={onLoginClick}>
+                        <Link to="/login" className="btn btn-primary">
                             {t('navbar.login')}
-                        </button>
+                        </Link>
                     )}
                 </div>
             </div>

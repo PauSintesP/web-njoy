@@ -103,7 +103,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, onShowRegister }) => {
                 </form>
 
                 <div className="modal-footer">
-                    <p>{t('login.noAccount')} <a href="#" onClick={(e) => { e.preventDefault(); onShowRegister && onShowRegister(); }}>{t('login.register')}</a></p>
+                    <p>{t('login.noAccount')} <a href="/register">{t('login.register')}</a></p>
                 </div>
             </div>
         </div>
