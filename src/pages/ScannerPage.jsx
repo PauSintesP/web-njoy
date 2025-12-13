@@ -161,7 +161,7 @@ export default function ScannerPage() {
             )}
 
             {/* --- VISUAL DEBUG LOGS (User Request) --- */}
-            <div className="debug-console-overlay">
+            <div className="debug-console-overlay" style={{ zIndex: 9999 }}>
                 <h3 style={{ fontSize: '10px', color: '#888', borderBottom: '1px solid #333', marginBottom: '5px' }}>📟 DEBUG LOGS</h3>
                 <div className="debug-logs-list">
                     {scanLogs.map((log, i) => (
