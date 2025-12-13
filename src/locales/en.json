@@ -62,24 +62,34 @@
     },
     "login": {
         "title": "Welcome Back",
+        "welcome": "Welcome Back",
         "email": "Email",
         "password": "Password",
         "submit": "Login",
+        "loggingIn": "Logging in...",
         "noAccount": "Don't have an account?",
-        "register": "Register"
+        "register": "Register",
+        "registerLink": "Register here",
+        "errorMessage": "Incorrect email or password"
     },
     "register": {
         "title": "Create Account",
+        "createAccount": "Create your account",
         "firstName": "First Name",
+        "name": "First Name",
         "lastName": "Last Name",
         "email": "Email",
         "password": "Password",
         "confirmPassword": "Confirm Password",
         "dateOfBirth": "Date of Birth",
+        "birthDate": "Date of Birth",
         "country": "Country",
         "submit": "Register",
+        "creating": "Creating account...",
         "hasAccount": "Already have an account?",
-        "login": "Login"
+        "login": "Login",
+        "loginLink": "Login here",
+        "errorMessage": "Error creating account. Please try again."
     },
     "eventDetail": {
         "back": "Back",

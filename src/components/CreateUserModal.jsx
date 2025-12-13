@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 
-const EditUserModal = ({ user, onSave, onClose }) => {
+const CreateUserModal = ({ onSave, onClose }) => {
     const [formData, setFormData] = useState({
-        nombre: user.nombre || '',
-        apellidos: user.apellidos || '',
-        email: user.email || '',
-        pais: user.pais || '',
-        role: user.role || 'user',
-        is_active: user.is_active ?? true,
-        is_banned: user.is_banned ?? false
+        nombre: '',
+        apellidos: '',
+        email: '',
+        password: '',
+        fecha_nacimiento: '',
+        pais: '',
+        role: 'user',
+        is_active: true,
+        is_banned: false
     });
 
     const handleChange = (e) => {
@@ -28,13 +30,13 @@ const EditUserModal = ({ user, onSave, onClose }) => {
         <div className="modal-overlay" onClick={onClose}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                 <div className="modal-header">
-                    <h2>Editar Usuario</h2>
+                    <h2>Crear Nuevo Usuario</h2>
                     <button className="modal-close" onClick={onClose}>×</button>
                 </div>
 
                 <form onSubmit={handleSubmit} className="p-4">
                     <div className="form-group mb-4">
-                        <label className="form-label">Nombre</label>
+                        <label className="form-label">Nombre *</label>
                         <input
                             type="text"
                             name="nombre"
@@ -46,7 +48,7 @@ const EditUserModal = ({ user, onSave, onClose }) => {
                     </div>
 
                     <div className="form-group mb-4">
-                        <label className="form-label">Apellidos</label>
+                        <label className="form-label">Apellidos *</label>
                         <input
                             type="text"
                             name="apellidos"
@@ -58,11 +60,36 @@ const EditUserModal = ({ user, onSave, onClose }) => {
                     </div>
 
                     <div className="form-group mb-4">
-                        <label className="form-label">Email</label>
+                        <label className="form-label">Email *</label>
                         <input
                             type="email"
                             name="email"
                             value={formData.email}
+                            onChange={handleChange}
+                            required
+                            className="form-input"
+                        />
+                    </div>
+
+                    <div className="form-group mb-4">
+                        <label className="form-label">Contraseña *</label>
+                        <input
+                            type="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            required
+                            minLength="6"
+                            className="form-input"
+                        />
+                    </div>
+
+                    <div className="form-group mb-4">
+                        <label className="form-label">Fecha de Nacimiento *</label>
+                        <input
+                            type="date"
+                            name="fecha_nacimiento"
+                            value={formData.fecha_nacimiento}
                             onChange={handleChange}
                             required
                             className="form-input"
@@ -81,7 +108,7 @@ const EditUserModal = ({ user, onSave, onClose }) => {
                     </div>
 
                     <div className="form-group mb-4">
-                        <label className="form-label">Rol</label>
+                        <label className="form-label">Rol *</label>
                         <select
                             name="role"
                             value={formData.role}
@@ -91,6 +118,7 @@ const EditUserModal = ({ user, onSave, onClose }) => {
                         >
                             <option value="user">User</option>
                             <option value="promotor">Promotor</option>
+                            <option value="scanner">Scanner</option>
                             <option value="owner">Owner</option>
                             <option value="admin">Admin</option>
                         </select>
@@ -123,7 +151,7 @@ const EditUserModal = ({ user, onSave, onClose }) => {
                             Cancelar
                         </button>
                         <button type="submit" className="btn btn-primary">
-                            Guardar Cambios
+                            Crear Usuario
                         </button>
                     </div>
                 </form>
@@ -132,4 +160,4 @@ const EditUserModal = ({ user, onSave, onClose }) => {
     );
 };
 
-export default EditUserModal;
+export default CreateUserModal;

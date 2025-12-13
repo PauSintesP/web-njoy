@@ -44,6 +44,23 @@
     color: white;
 }
 
+.sold-out-badge {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    background: rgba(220, 38, 38, 0.9);
+    color: white;
+    padding: 8px 16px;
+    font-weight: 800;
+    font-size: 1.2rem;
+    border: 2px solid white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    z-index: 10;
+    letter-spacing: 2px;
+}
+
 .event-content {
     padding: 20px;
     display: flex;

@@ -1,9 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import './EventDetailModal.css';
 
 const EventDetailModal = ({ event, isOpen, onClose }) => {
     const { t, i18n } = useTranslation();
+    const navigate = useNavigate();
+
     if (!isOpen || !event) return null;
 
     const formatDate = (dateString) => {
@@ -18,9 +21,14 @@ const EventDetailModal = ({ event, isOpen, onClose }) => {
         return new Date(dateString).toLocaleDateString(i18n.language, options);
     };
 
+    const handleBuyTickets = () => {
+        onClose();
+        navigate(`/tickets/purchase/${event.id}`);
+    };
+
     return (
         <div className="modal-overlay" onClick={onClose}>
-            <div className="event-detail-modal glass" onClick={(e) => e.stopPropagation()}>
+            <div className="event-detail-modal" onClick={(e) => e.stopPropagation()}>
                 <button className="close-btn" onClick={onClose}>&times;</button>
 
                 <div className="event-detail-header">
@@ -65,9 +73,29 @@ const EventDetailModal = ({ event, isOpen, onClose }) => {
                         <p>{event.description || 'Disfruta de este increíble evento. ¡No te lo pierdas!'}</p>
                     </div>
 
+                    {/* Availability Info */}
+                    <div className="availability-info" style={{ marginBottom: '20px', textAlign: 'center' }}>
+                        {event.ticketsAvailable <= 0 ? (
+                            <span style={{ color: '#ef4444', fontWeight: 'bold' }}>SOLD OUT</span>
+                        ) : event.ticketsAvailable < 20 ? (
+                            <span style={{ color: '#f59e0b', fontWeight: 'bold' }}>
+                                ¡Solo quedan {event.ticketsAvailable} entradas!
+                            </span>
+                        ) : (
+                            <span style={{ color: '#10b981' }}>
+                                Entradas disponibles: {event.ticketsAvailable}
+                            </span>
+                        )}
+                    </div>
+
                     <div className="event-detail-actions">
-                        <button className="btn btn-primary full-width">
-                            <i className="fa-solid fa-ticket"></i> {t('eventDetail.buyTickets')}
+                        <button
+                            className={`btn btn-primary full-width ${event.ticketsAvailable <= 0 ? 'disabled' : ''}`}
+                            onClick={handleBuyTickets}
+                            disabled={event.ticketsAvailable <= 0}
+                            style={event.ticketsAvailable <= 0 ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+                        >
+                            <i className="fa-solid fa-ticket"></i> {event.ticketsAvailable <= 0 ? 'SOLD OUT' : t('eventDetail.buyTickets')}
                         </button>
                     </div>
                 </div>

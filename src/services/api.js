@@ -2,8 +2,9 @@ import axios from 'axios';
 import { mapEventsFromAPI, mapEventFromAPI } from '../utils/dataMapper';
 
 // URL base de la API - usar variable de entorno o fallback a la URL de producción
-// IMPORTANTE: Si cambias esto, también actualiza VITE_API_URL en las variables de entorno de Vercel
-const API_URL = 'https://projecte-n-joy.vercel.app'; // Hardcoded para forzar la URL correcta
+// En desarrollo local: VITE_API_URL debe estar en .env
+// En producción (Vercel): usa el fallback
+const API_URL = import.meta.env.VITE_API_URL || 'https://projecte-n-joy.vercel.app';
 console.log('API URL configured:', API_URL); // Debug log
 
 const api = axios.create({
@@ -241,7 +242,7 @@ export const createOrGetLocation = async (ciudad, latitud = null, longitud = nul
         const params = { ciudad };
         if (latitud !== null) params.latitud = latitud;
         if (longitud !== null) params.longitud = longitud;
-        
+
         const response = await api.post('/localidad/auto', null, { params });
         return response.data;
     } catch (error) {

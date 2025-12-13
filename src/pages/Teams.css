@@ -1,0 +1,165 @@
+/* --- MAIN PAGE LAYOUT --- */
+/* Uses .page-container from index.css */
+
+/* --- HEADERS & TYPOGRAPHY --- */
+/* Uses .page-header from index.css */
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.section-header h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+/* --- CARDS & GRID --- */
+.teams-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.invitations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.team-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+.team-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-glow);
+    box-shadow: 0 10px 30px -10px var(--primary-glow);
+}
+
+.team-card h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.team-card p {
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* --- LISTS --- */
+.members-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+}
+
+.member-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    margin-bottom: 0.75rem;
+    border: 1px solid transparent;
+    transition: border-color 0.2s;
+}
+
+.member-item:hover {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.status-badge {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+}
+
+.status-badge.pending {
+    color: #fbbf24;
+    background: rgba(251, 191, 36, 0.1);
+}
+
+.status-badge.accepted {
+    color: #34d399;
+    background: rgba(52, 211, 153, 0.1);
+}
+
+.status-badge.rejected {
+    color: #f87171;
+    background: rgba(248, 113, 113, 0.1);
+}
+
+/* --- INVITATIONS --- */
+.invite-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    padding: 1.5rem;
+    border-radius: 16px;
+    height: 100%;
+}
+
+.invite-info p {
+    color: #e0e7ff;
+    font-size: 1.1rem;
+    margin: 0 0 0.25rem 0;
+}
+
+.invite-info small {
+    color: #a5b4fc;
+}
+
+.invite-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* --- MODAL SPECIFICS --- */
+/* Uses generic .modal-content but might need specifics for team details list */
+.team-details .members-list {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 2rem;
+    padding-right: 0.5rem;
+}
+
+.team-details .members-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.team-details .members-list::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.team-details .members-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}

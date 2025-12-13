@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import authService from '../services/authService';
 import { mapUserToAPI } from '../utils/dataMapper';
-import './RegisterModal.css';
+
 
 const RegisterModal = ({ isOpen, onClose, onRegisterSuccess, onShowLogin }) => {
     const { t } = useTranslation();
@@ -102,12 +102,14 @@ const RegisterModal = ({ isOpen, onClose, onRegisterSuccess, onShowLogin }) => {
             try {
                 await authService.login(savedEmail, savedPassword);
                 console.log('Auto-login successful after registration');
+
+                // Reload the page to ensure all components update with user privileges
+                window.location.reload();
             } catch (loginError) {
                 console.warn('Auto-login failed, user will need to login manually:', loginError);
+                // Still close the modal even if auto-login fails
+                onClose();
             }
-
-            // Close modal
-            onClose();
 
         } catch (err) {
             // Show specific error messages from the API
@@ -134,14 +136,17 @@ const RegisterModal = ({ isOpen, onClose, onRegisterSuccess, onShowLogin }) => {
 
     return (
         <div className="modal-overlay" onClick={handleClose}>
-            <div className="modal-content glass" onClick={(e) => e.stopPropagation()}>
-                <button className="close-btn" onClick={handleClose}>&times;</button>
-
-                <h2 className="modal-title">{t('register.title')}</h2>
-                <p className="modal-subtitle">Join njoy to experience the best events</p>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <div className="modal-header">
+                    <h2 className="card-title">{t('register.title')}</h2>
+                    <button className="modal-close" onClick={handleClose}>&times;</button>
+                </div>
+                <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem', marginTop: '-1rem' }}>
+                    Join njoy to experience the best events
+                </p>
 
                 {error && (
-                    <div className="error-message">
+                    <div className="badge badge-danger" style={{ display: 'flex', padding: '0.75rem', width: '100%', marginBottom: '1.5rem', gap: '0.5rem' }}>
                         <i className="fa-solid fa-circle-exclamation"></i>
                         <span>{error}</span>
                     </div>
@@ -149,8 +154,9 @@ const RegisterModal = ({ isOpen, onClose, onRegisterSuccess, onShowLogin }) => {
 
                 <form className="register-form" onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <label>{t('register.email')} *</label>
+                        <label className="form-label">{t('register.email')} *</label>
                         <input
+                            className="form-input"
                             type="email"
                             name="email"
                             placeholder="you@example.com"
@@ -163,8 +169,9 @@ const RegisterModal = ({ isOpen, onClose, onRegisterSuccess, onShowLogin }) => {
 
                     <div className="form-row">
                         <div className="form-group">
-                            <label>{t('register.name')} *</label>
+                            <label className="form-label">{t('register.name')} *</label>
                             <input
+                                className="form-input"
                                 type="text"
                                 name="firstName"
                                 placeholder="Juan"
@@ -176,8 +183,9 @@ const RegisterModal = ({ isOpen, onClose, onRegisterSuccess, onShowLogin }) => {
                         </div>
 
                         <div className="form-group">
-                            <label>Apellidos *</label>
+                            <label className="form-label">Apellidos *</label>
                             <input
+                                className="form-input"
                                 type="text"
                                 name="lastName"
                                 placeholder="García"
@@ -191,8 +199,9 @@ const RegisterModal = ({ isOpen, onClose, onRegisterSuccess, onShowLogin }) => {
 
                     <div className="form-row">
                         <div className="form-group">
-                            <label>Fecha de Nacimiento *</label>
+                            <label className="form-label">Fecha de Nacimiento *</label>
                             <input
+                                className="form-input"
                                 type="date"
                                 name="dateOfBirth"
                                 value={formData.dateOfBirth}
@@ -203,8 +212,9 @@ const RegisterModal = ({ isOpen, onClose, onRegisterSuccess, onShowLogin }) => {
                         </div>
 
                         <div className="form-group">
-                            <label>País</label>
+                            <label className="form-label">País</label>
                             <input
+                                className="form-input"
                                 type="text"
                                 name="country"
                                 placeholder="España"
@@ -216,22 +226,24 @@ const RegisterModal = ({ isOpen, onClose, onRegisterSuccess, onShowLogin }) => {
                     </div>
 
                     <div className="form-group">
-                        <label>Tipo de Cuenta *</label>
+                        <label className="form-label">Tipo de Cuenta *</label>
                         <select
+                            className="form-select"
                             name="role"
                             value={formData.role}
                             onChange={handleChange}
                             required
                             disabled={loading}
                         >
-                            <option value="user">Usuario (Asistir a eventos)</option>
-                            <option value="promotor">Promotor (Crear eventos)</option>
+                            <option style={{ background: 'var(--bg-card)' }} value="user">Usuario (Asistir a eventos)</option>
+                            <option style={{ background: 'var(--bg-card)' }} value="promotor">Promotor (Crear eventos)</option>
                         </select>
                     </div>
 
                     <div className="form-group">
-                        <label>{t('register.password')} *</label>
+                        <label className="form-label">{t('register.password')} *</label>
                         <input
+                            className="form-input"
                             type="password"
                             name="password"
                             placeholder="••••••••"
@@ -243,8 +255,9 @@ const RegisterModal = ({ isOpen, onClose, onRegisterSuccess, onShowLogin }) => {
                     </div>
 
                     <div className="form-group">
-                        <label>{t('register.confirmPassword')} *</label>
+                        <label className="form-label">{t('register.confirmPassword')} *</label>
                         <input
+                            className="form-input"
                             type="password"
                             name="confirmPassword"
                             placeholder="••••••••"
@@ -255,23 +268,28 @@ const RegisterModal = ({ isOpen, onClose, onRegisterSuccess, onShowLogin }) => {
                         />
                     </div>
 
-                    <button
-                        type="submit"
-                        className="btn btn-primary full-width"
-                        disabled={loading}
-                    >
-                        {loading ? (
-                            <>
-                                <i className="fa-solid fa-spinner fa-spin"></i> {t('common.loading')}
-                            </>
-                        ) : (
-                            t('register.submit')
-                        )}
-                    </button>
+                    <div style={{ marginTop: '1.5rem' }}>
+                        <button
+                            type="submit"
+                            className="btn btn-primary"
+                            style={{ width: '100%' }}
+                            disabled={loading}
+                        >
+                            {loading ? (
+                                <>
+                                    <i className="fa-solid fa-spinner fa-spin"></i> {t('common.loading')}
+                                </>
+                            ) : (
+                                t('register.submit')
+                            )}
+                        </button>
+                    </div>
                 </form>
 
-                <div className="modal-footer">
-                    <p>{t('register.hasAccount')} <a href="#" onClick={(e) => { e.preventDefault(); onShowLogin && onShowLogin(); }}>{t('register.login')}</a></p>
+                <div style={{ marginTop: '2rem', textAlign: 'center', borderTop: '1px solid var(--border)', paddingTop: '1rem' }}>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+                        {t('register.hasAccount')} <a href="#" style={{ color: 'var(--primary)', fontWeight: 'bold' }} onClick={(e) => { e.preventDefault(); onShowLogin && onShowLogin(); }}>{t('register.login')}</a>
+                    </p>
                 </div>
             </div>
         </div>

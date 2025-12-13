@@ -22,9 +22,13 @@ export const mapEventFromAPI = (apiEvent, locationsMap = {}) => {
             city: cityName,
             venue: apiEvent.recinto || ''
         },
-        price: apiEvent.categoria_precio || 'Free',
+        price: apiEvent.precio != null ? apiEvent.precio : 'Free',
         category: apiEvent.tipo || 'Other',
-        image: apiEvent.imagen || ''
+        image: apiEvent.imagen || '',
+        // Availability Logic
+        capacity: apiEvent.plazas || 0,
+        ticketsSold: apiEvent.tickets_vendidos || 0,
+        ticketsAvailable: (apiEvent.plazas || 0) - (apiEvent.tickets_vendidos || 0)
     };
 };
 
@@ -39,13 +43,7 @@ export const mapEventsFromAPI = (apiEvents, locationsMap = {}) => {
     return apiEvents.map(event => mapEventFromAPI(event, locationsMap)).filter(event => event !== null);
 };
 
-/**
- * Parses the location field from the API
- * @deprecated Since API v3 uses localidad_id and separate endpoint
- */
-const parseLocation = (ubicacion) => {
-    return { city: '', venue: '' };
-};
+
 
 /**
  * Maps user data from API format to frontend format
@@ -79,7 +77,7 @@ export const mapUserToAPI = (userData) => {
         apellidos: userData.lastName || userData.apellidos,
         fecha_nacimiento: userData.dateOfBirth || userData.fecha_nacimiento
     };
-    
+
     // Only include pais if it has a value (it's optional)
     if (userData.country || userData.pais) {
         apiData.pais = userData.country || userData.pais;
@@ -89,6 +87,6 @@ export const mapUserToAPI = (userData) => {
     if (userData.role) {
         apiData.role = userData.role;
     }
-    
+
     return apiData;
 };

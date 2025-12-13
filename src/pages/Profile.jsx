@@ -14,7 +14,7 @@ const Profile = () => {
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState(null);
-    
+
     const [formData, setFormData] = useState({
         nombre: '',
         apellidos: '',
@@ -39,7 +39,7 @@ const Profile = () => {
             setError(null);
             const userData = await getCurrentUser();
             setUser(userData);
-            
+
             // Initialize form data
             setFormData({
                 nombre: userData.nombre || '',
@@ -51,7 +51,7 @@ const Profile = () => {
         } catch (err) {
             console.error('Error fetching user data:', err);
             setError(t('profile.errorLoading'));
-            
+
             if (err.response?.status === 401) {
                 authService.logout();
                 navigate('/');
@@ -71,7 +71,7 @@ const Profile = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         // Validation
         if (!formData.nombre.trim() || !formData.apellidos.trim()) {
             setError(t('profile.nameRequired'));
@@ -90,14 +90,14 @@ const Profile = () => {
 
             // Update user data
             const updatedUser = await updateUser(user.id, formData);
-            
+
             // Update local state and localStorage
             setUser(updatedUser);
             authService.setUser(updatedUser);
-            
+
             setSuccessMessage(t('profile.updateSuccess'));
             setIsEditing(false);
-            
+
             // Clear success message after 3 seconds
             setTimeout(() => setSuccessMessage(null), 3000);
         } catch (err) {
@@ -129,7 +129,7 @@ const Profile = () => {
 
     if (loading) {
         return (
-            <div className="profile-container">
+            <div className="page-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <div className="profile-loading">
                     <i className="fa-solid fa-spinner fa-spin"></i>
                     <p>{t('common.loading')}</p>
@@ -139,203 +139,212 @@ const Profile = () => {
     }
 
     return (
-        <div className="profile-container">
-            <div className="profile-card glass">
-                <div className="profile-header">
-                    <div className="profile-avatar">
-                        <i className="fa-solid fa-user-circle"></i>
+        <div className="page-container">
+            <div className="container" style={{ maxWidth: '800px' }}>
+                <div className="card profile-card-custom">
+                    <div className="profile-header">
+                        <div className="profile-avatar">
+                            <i className="fa-solid fa-user-circle"></i>
+                        </div>
+                        <h1 className="profile-name">
+                            {user?.nombre} {user?.apellidos}
+                        </h1>
+                        <p className="profile-email">{user?.email}</p>
+                        <p className="profile-member-since">
+                            <i className="fa-regular fa-calendar" style={{ marginRight: '8px' }}></i>
+                            {t('profile.memberSince')} {formatDate(user?.created_at)}
+                        </p>
                     </div>
-                    <h1 className="profile-name">
-                        {user?.nombre} {user?.apellidos}
-                    </h1>
-                    <p className="profile-email">{user?.email}</p>
-                    <p className="profile-member-since">
-                        {t('profile.memberSince')} {formatDate(user?.created_at)}
-                    </p>
-                </div>
 
-                {successMessage && (
-                    <div className="alert alert-success">
-                        <i className="fa-solid fa-check-circle"></i>
-                        {successMessage}
-                    </div>
-                )}
+                    <div className="profile-content">
+                        {successMessage && (
+                            <div className="alert alert-success">
+                                <i className="fa-solid fa-check-circle"></i>
+                                {successMessage}
+                            </div>
+                        )}
 
-                {error && (
-                    <div className="alert alert-error">
-                        <i className="fa-solid fa-exclamation-circle"></i>
-                        {error}
-                    </div>
-                )}
+                        {error && (
+                            <div className="alert alert-error">
+                                <i className="fa-solid fa-circle-exclamation"></i>
+                                {error}
+                            </div>
+                        )}
 
-                <div className="profile-content">
-                    <div className="profile-section-header">
-                        <h2>{t('profile.personalInfo')}</h2>
-                        {!isEditing && (
-                            <button
-                                className="btn btn-secondary"
-                                onClick={() => setIsEditing(true)}
-                            >
-                                <i className="fa-solid fa-pen"></i>
-                                {t('profile.edit')}
-                            </button>
+                        <div className="profile-section-header">
+                            <h2 className="card-title" style={{ margin: 0 }}>{t('profile.personalInfo')}</h2>
+                            {!isEditing && (
+                                <button
+                                    className="btn btn-secondary"
+                                    onClick={() => setIsEditing(true)}
+                                >
+                                    <i className="fa-solid fa-pen"></i>
+                                    {t('profile.edit')}
+                                </button>
+                            )}
+                        </div>
+
+                        {isEditing ? (
+                            <form onSubmit={handleSubmit} className="profile-form">
+                                <div className="form-row">
+                                    <div className="form-group">
+                                        <label htmlFor="nombre" className="form-label">
+                                            {t('profile.firstName')} *
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="nombre"
+                                            name="nombre"
+                                            className="form-input"
+                                            value={formData.nombre}
+                                            onChange={handleInputChange}
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label htmlFor="apellidos" className="form-label">
+                                            {t('profile.lastName')} *
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="apellidos"
+                                            name="apellidos"
+                                            className="form-input"
+                                            value={formData.apellidos}
+                                            onChange={handleInputChange}
+                                            required
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="email" className="form-label">
+                                        {t('profile.email')}
+                                    </label>
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        name="email"
+                                        className="form-input"
+                                        value={formData.email}
+                                        onChange={handleInputChange}
+                                        disabled
+                                        style={{ opacity: 0.7, cursor: 'not-allowed' }}
+                                    />
+                                    <small className="form-hint">
+                                        <i className="fa-solid fa-info-circle" style={{ marginRight: '4px' }}></i>
+                                        {t('profile.emailNotEditable')}
+                                    </small>
+                                </div>
+
+                                <div className="form-row">
+                                    <div className="form-group">
+                                        <label htmlFor="fecha_nacimiento" className="form-label">
+                                            {t('profile.birthDate')}
+                                        </label>
+                                        <input
+                                            type="date"
+                                            id="fecha_nacimiento"
+                                            name="fecha_nacimiento"
+                                            className="form-input"
+                                            value={formData.fecha_nacimiento}
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label htmlFor="pais" className="form-label">
+                                            {t('profile.country')}
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="pais"
+                                            name="pais"
+                                            className="form-input"
+                                            value={formData.pais}
+                                            onChange={handleInputChange}
+                                            placeholder={t('profile.countryPlaceholder')}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="form-actions" style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--border)' }}>
+                                    <button
+                                        type="button"
+                                        className="btn btn-secondary"
+                                        onClick={handleCancel}
+                                        disabled={saving}
+                                    >
+                                        {t('common.cancel')}
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="btn btn-primary"
+                                        disabled={saving}
+                                    >
+                                        {saving ? (
+                                            <>
+                                                <i className="fa-solid fa-spinner fa-spin"></i>
+                                                {t('common.saving')}
+                                            </>
+                                        ) : (
+                                            <>
+                                                <i className="fa-solid fa-save"></i>
+                                                {t('common.save')}
+                                            </>
+                                        )}
+                                    </button>
+                                </div>
+                            </form>
+                        ) : (
+                            <div className="profile-info">
+                                <div className="form-row">
+                                    <div className="info-item">
+                                        <label className="form-label" style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{t('profile.firstName')}</label>
+                                        <p className="info-value">{user?.nombre || t('profile.notProvided')}</p>
+                                    </div>
+                                    <div className="info-item">
+                                        <label className="form-label" style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{t('profile.lastName')}</label>
+                                        <p className="info-value">{user?.apellidos || t('profile.notProvided')}</p>
+                                    </div>
+                                </div>
+
+                                <div className="info-item" style={{ marginTop: '1rem' }}>
+                                    <label className="form-label" style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{t('profile.email')}</label>
+                                    <p className="info-value">{user?.email || t('profile.notProvided')}</p>
+                                </div>
+
+                                <div className="form-row" style={{ marginTop: '1rem' }}>
+                                    <div className="info-item">
+                                        <label className="form-label" style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{t('profile.birthDate')}</label>
+                                        <p className="info-value">{formatDate(user?.fecha_nacimiento)}</p>
+                                    </div>
+                                    <div className="info-item">
+                                        <label className="form-label" style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{t('profile.country')}</label>
+                                        <p className="info-value">{user?.pais || t('profile.notProvided')}</p>
+                                    </div>
+                                </div>
+
+                                <div className="info-item" style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px dashed var(--border)' }}>
+                                    <label className="form-label" style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{t('profile.accountStatus')}</label>
+                                    <p>
+                                        {user?.is_active ? (
+                                            <span className="badge badge-success">
+                                                <i className="fa-solid fa-check-circle" style={{ marginRight: '5px' }}></i>
+                                                {t('profile.active')}
+                                            </span>
+                                        ) : (
+                                            <span className="badge badge-danger">
+                                                <i className="fa-solid fa-times-circle" style={{ marginRight: '5px' }}></i>
+                                                {t('profile.inactive')}
+                                            </span>
+                                        )}
+                                    </p>
+                                </div>
+                            </div>
                         )}
                     </div>
-
-                    {isEditing ? (
-                        <form onSubmit={handleSubmit} className="profile-form">
-                            <div className="form-row">
-                                <div className="form-group">
-                                    <label htmlFor="nombre">
-                                        {t('profile.firstName')} *
-                                    </label>
-                                    <input
-                                        type="text"
-                                        id="nombre"
-                                        name="nombre"
-                                        value={formData.nombre}
-                                        onChange={handleInputChange}
-                                        required
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="apellidos">
-                                        {t('profile.lastName')} *
-                                    </label>
-                                    <input
-                                        type="text"
-                                        id="apellidos"
-                                        name="apellidos"
-                                        value={formData.apellidos}
-                                        onChange={handleInputChange}
-                                        required
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="form-group">
-                                <label htmlFor="email">
-                                    {t('profile.email')}
-                                </label>
-                                <input
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleInputChange}
-                                    disabled
-                                    title={t('profile.emailNotEditable')}
-                                />
-                                <small className="form-hint">
-                                    {t('profile.emailNotEditable')}
-                                </small>
-                            </div>
-
-                            <div className="form-row">
-                                <div className="form-group">
-                                    <label htmlFor="fecha_nacimiento">
-                                        {t('profile.birthDate')}
-                                    </label>
-                                    <input
-                                        type="date"
-                                        id="fecha_nacimiento"
-                                        name="fecha_nacimiento"
-                                        value={formData.fecha_nacimiento}
-                                        onChange={handleInputChange}
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="pais">
-                                        {t('profile.country')}
-                                    </label>
-                                    <input
-                                        type="text"
-                                        id="pais"
-                                        name="pais"
-                                        value={formData.pais}
-                                        onChange={handleInputChange}
-                                        placeholder={t('profile.countryPlaceholder')}
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="form-actions">
-                                <button
-                                    type="button"
-                                    className="btn btn-secondary"
-                                    onClick={handleCancel}
-                                    disabled={saving}
-                                >
-                                    {t('common.cancel')}
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="btn btn-primary"
-                                    disabled={saving}
-                                >
-                                    {saving ? (
-                                        <>
-                                            <i className="fa-solid fa-spinner fa-spin"></i>
-                                            {t('common.saving')}
-                                        </>
-                                    ) : (
-                                        <>
-                                            <i className="fa-solid fa-save"></i>
-                                            {t('common.save')}
-                                        </>
-                                    )}
-                                </button>
-                            </div>
-                        </form>
-                    ) : (
-                        <div className="profile-info">
-                            <div className="info-row">
-                                <div className="info-item">
-                                    <label>{t('profile.firstName')}</label>
-                                    <p>{user?.nombre || t('profile.notProvided')}</p>
-                                </div>
-                                <div className="info-item">
-                                    <label>{t('profile.lastName')}</label>
-                                    <p>{user?.apellidos || t('profile.notProvided')}</p>
-                                </div>
-                            </div>
-
-                            <div className="info-item">
-                                <label>{t('profile.email')}</label>
-                                <p>{user?.email || t('profile.notProvided')}</p>
-                            </div>
-
-                            <div className="info-row">
-                                <div className="info-item">
-                                    <label>{t('profile.birthDate')}</label>
-                                    <p>{formatDate(user?.fecha_nacimiento)}</p>
-                                </div>
-                                <div className="info-item">
-                                    <label>{t('profile.country')}</label>
-                                    <p>{user?.pais || t('profile.notProvided')}</p>
-                                </div>
-                            </div>
-
-                            <div className="info-item">
-                                <label>{t('profile.accountStatus')}</label>
-                                <p>
-                                    {user?.is_active ? (
-                                        <span className="status-badge active">
-                                            <i className="fa-solid fa-check-circle"></i>
-                                            {t('profile.active')}
-                                        </span>
-                                    ) : (
-                                        <span className="status-badge inactive">
-                                            <i className="fa-solid fa-times-circle"></i>
-                                            {t('profile.inactive')}
-                                        </span>
-                                    )}
-                                </p>
-                            </div>
-                        </div>
-                    )}
                 </div>
             </div>
         </div>

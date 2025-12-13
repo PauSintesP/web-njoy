@@ -22,14 +22,19 @@
     },
     "login": {
         "title": "Bienvenido de nuevo",
+        "welcome": "Bienvenido de nuevo",
         "email": "Correo electrónico",
         "password": "Contraseña",
         "submit": "Iniciar Sesión",
+        "loggingIn": "Iniciando sesión...",
         "noAccount": "¿No tienes una cuenta?",
-        "register": "Regístrate"
+        "register": "Regístrate",
+        "registerLink": "Regístrate aquí",
+        "errorMessage": "Email o contraseña incorrectos"
     },
     "register": {
         "title": "Crear Cuenta",
+        "createAccount": "Crea tu cuenta",
         "firstName": "Nombre",
         "name": "Nombre",
         "lastName": "Apellidos",
@@ -37,10 +42,14 @@
         "password": "Contraseña",
         "confirmPassword": "Confirmar Contraseña",
         "dateOfBirth": "Fecha de Nacimiento",
+        "birthDate": "Fecha de Nacimiento",
         "country": "País",
         "submit": "Registrarse",
+        "creating": "Creando cuenta...",
         "hasAccount": "¿Ya tienes una cuenta?",
-        "login": "Inicia Sesión"
+        "login": "Inicia Sesión",
+        "loginLink": "Inicia sesión aquí",
+        "errorMessage": "Error al crear la cuenta. Por favor, intenta de nuevo."
     },
     "navbar": {
         "login": "Iniciar Sesión",

@@ -1,0 +1,640 @@
+.ticket-card-wrapper {
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.ticket-card {
+    position: relative;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.ticket-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+    border-color: var(--primary);
+}
+
+/* Background */
+.ticket-background {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.ticket-bg-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.8);
+}
+
+.ticket-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg,
+            rgba(124, 58, 237, 0.8) 0%,
+            /* primary */
+            rgba(236, 72, 153, 0.8) 100%);
+    /* accent */
+}
+
+/* Content */
+.ticket-content {
+    position: relative;
+    padding: 1.5rem;
+}
+
+/* Header */
+.ticket-header {
+    margin-bottom: 1rem;
+}
+
+.event-genre-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.event-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 0;
+    line-height: 1.3;
+}
+
+.ticket-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    margin: 1rem 0;
+    opacity: 0.3;
+}
+
+/* Event Details */
+.event-details-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.detail-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.detail-row i {
+    color: var(--primary);
+    font-size: 1rem;
+    width: 20px;
+}
+
+/* QR Code */
+.qr-section {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.qr-section:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--primary);
+    transform: scale(1.02);
+}
+
+.qr-section:hover .qr-overlay {
+    opacity: 1;
+}
+
+.qr-container {
+    position: relative;
+    background: white;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.qr-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 10px;
+}
+
+.qr-overlay i {
+    font-size: 2rem;
+}
+
+.qr-overlay span {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.qr-code {
+    display: block;
+}
+
+/* Ticket Info */
+.ticket-info-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px dashed var(--border);
+}
+
+.ticket-number {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-family: monospace;
+}
+
+.ticket-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.ticket-status.valid {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.ticket-status.used {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* Price */
+.ticket-price {
+    text-align: center;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-top: 1rem;
+}
+
+/* Action Buttons */
+.ticket-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.action-btn {
+    padding: 0.75rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+    background: transparent;
+    color: var(--text-muted);
+}
+
+.action-btn i {
+    font-size: 1.2rem;
+}
+
+.action-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    border-color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.download-btn {
+    border-color: var(--primary);
+    color: var(--text-main);
+}
+
+.download-btn:hover {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 4px 12px var(--primary-glow);
+}
+
+.wallet-btn:hover {
+    border-color: white;
+}
+
+.google-wallet:hover {
+    border-color: #4285f4;
+    color: #4285f4;
+}
+
+.apple-wallet:hover {
+    border-color: white;
+    color: white;
+}
+
+
+/* QR Modal */
+.qr-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 2rem;
+    backdrop-filter: blur(5px);
+    animation: fadeIn 0.3s ease;
+}
+
+.qr-modal {
+    position: relative;
+    background: white;
+    border-radius: 24px;
+    padding: 2.5rem;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    animation: slideUp 0.3s ease;
+}
+
+.qr-modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: #f8f9fa;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.qr-modal-close:hover {
+    background: #667eea;
+    color: white;
+    transform: rotate(90deg);
+}
+
+.qr-modal h3 {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #333;
+    margin: 0 0 2rem 0;
+}
+
+.qr-modal-content {
+    display: flex;
+    justify-content: center;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 15px;
+    margin-bottom: 1.5rem;
+}
+
+.qr-modal-info {
+    text-align: center;
+}
+
+.qr-code-text {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #667eea;
+    margin: 0 0 0.5rem 0;
+    font-family: 'Courier New', monospace;
+}
+
+.qr-event-name {
+    font-size: 0.95rem;
+    color: #666;
+    margin: 0;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .ticket-background {
+        height: 150px;
+    }
+
+    .event-name {
+        font-size: 1.25rem;
+    }
+
+    .qr-section {
+        padding: 1rem;
+    }
+
+    .qr-container {
+        padding: 0.75rem;
+    }
+
+    .detail-row {
+        font-size: 0.9rem;
+    }
+
+    .ticket-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .qr-modal {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+
+    .qr-modal-content canvas {
+        width: 280px !important;
+        height: 280px !important;
+    }
+}
+
+/* Print Styles */
+@media print {
+
+    .ticket-actions,
+    .qr-overlay {
+        display: none;
+    }
+
+    .ticket-card {
+        box-shadow: none;
+        page-break-inside: avoid;
+    }
+}
+
+/* =========================================
+   PDF GENERATOR HIDDEN STYLES
+   ========================================= */
+
+/* 
+   Hide the container from the user's view but keep it in the DOM 
+   so html2canvas can render it. display: none WON'T work.
+*/
+.pdf-generator-container {
+    position: fixed;
+    left: -10000px;
+    /* Move way off-screen */
+    top: 0;
+    width: 800px;
+    /* Fixed width for consistent PDF output */
+    z-index: -9999;
+}
+
+.ticket-pdf-modern {
+    width: 800px;
+    min-height: 1000px;
+    /* Approx A4 aspect or long enough */
+    background: white;
+    font-family: 'Inter', 'Roboto', sans-serif;
+    color: #333;
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+    /* Ensure a clean white slate */
+    border: 1px solid #eee;
+}
+
+/* Header */
+.pdf-header {
+    position: relative;
+    height: 350px;
+    background: #2a2a72;
+    overflow: hidden;
+}
+
+.pdf-header-bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.9;
+}
+
+.pdf-overlay-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 3rem;
+}
+
+.pdf-event-badge {
+    background: #667eea;
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    align-self: flex-start;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.pdf-event-title-large {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: white;
+    margin: 0;
+    line-height: 1.1;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Body */
+.pdf-body {
+    padding: 3rem;
+    background: white;
+}
+
+.pdf-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+    margin-bottom: 3rem;
+}
+
+.pdf-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.pdf-label {
+    font-size: 1rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+
+.pdf-value {
+    font-size: 1.4rem;
+    color: #333;
+    font-weight: 600;
+}
+
+.pdf-divider {
+    height: 2px;
+    background: #f0f0f0;
+    margin: 2rem 0;
+    width: 100%;
+}
+
+/* QR Section PDF */
+.pdf-qr-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 3px dashed #e0e0e0;
+    border-radius: 20px;
+    padding: 3rem;
+    background: #fafafa;
+    margin-bottom: 3rem;
+}
+
+.pdf-qr-box {
+    padding: 1.5rem;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    margin-bottom: 1.5rem;
+}
+
+.pdf-ticket-code {
+    font-family: 'Courier New', monospace;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #333;
+    margin-bottom: 1rem;
+    letter-spacing: 3px;
+}
+
+.pdf-status-valid {
+    color: #28a745;
+    font-size: 1.5rem;
+    font-weight: 800;
+    border: 4px solid #28a745;
+    padding: 0.5rem 3rem;
+    border-radius: 12px;
+    transform: rotate(-3deg);
+    opacity: 0.9;
+    text-transform: uppercase;
+}
+
+.pdf-status-used {
+    color: #dc3545;
+    font-size: 1.5rem;
+    font-weight: 800;
+    border: 4px solid #dc3545;
+    padding: 0.5rem 3rem;
+    border-radius: 12px;
+    transform: rotate(-3deg);
+    opacity: 0.9;
+    text-transform: uppercase;
+}
+
+/* Footer Price */
+.pdf-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 2rem;
+}
+
+.pdf-price-huge {
+    font-size: 4.5rem;
+    font-weight: 800;
+    color: #667eea;
+    line-height: 1;
+}
+
+.pdf-brand {
+    text-align: right;
+    color: #aaa;
+    font-size: 1.1rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    font-weight: 500;
+}

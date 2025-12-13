@@ -42,16 +42,8 @@ const LoginPage = () => {
             // Emit login event for navbar to update
             window.dispatchEvent(new CustomEvent('auth-login', { detail: response.user }));
 
-            // Redirect based on user role
-            if (response.user.role === 'admin') {
-                navigate('/admin');
-            } else if (response.user.role === 'promotor') {
-                navigate('/create-event');
-            } else if (response.user.role === 'scanner') {
-                navigate('/scanner');
-            } else {
-                navigate('/');
-            }
+            // Reload the page to ensure all components update with user privileges
+            window.location.reload();
         } catch (err) {
             console.error('Login error:', err);
             setError(err.response?.data?.detail || t('login.errorMessage') || 'Email o contraseña incorrectos');
@@ -62,31 +54,31 @@ const LoginPage = () => {
 
     return (
         <div className="login-page">
-            <div className="login-container glass">
+            <div className="login-container card">
                 <div className="login-header">
                     <h1>
-                        <span className="logo-n">n</span>joy
+                        <span className="text-gradient-primary">njoy</span>
                     </h1>
                     <p>{t('login.welcome') || 'Bienvenido de nuevo'}</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="login-form">
                     {error && (
-                        <div className="error-message">
-                            <i className="fa-solid fa-circle-exclamation"></i>
+                        <div className="badge badge-danger" style={{ padding: '1rem', width: '100%', marginBottom: '1rem', justifyContent: 'center' }}>
+                            <i className="fa-solid fa-circle-exclamation" style={{ marginRight: '0.5rem' }}></i>
                             {error}
                         </div>
                     )}
 
                     <div className="form-group">
-                        <label htmlFor="email">
-                            <i className="fa-solid fa-envelope"></i>
+                        <label htmlFor="email" className="form-label">
                             {t('login.email') || 'Email'}
                         </label>
                         <input
                             type="email"
                             id="email"
                             name="email"
+                            className="form-input"
                             value={formData.email}
                             onChange={handleChange}
                             required
@@ -96,14 +88,14 @@ const LoginPage = () => {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="password">
-                            <i className="fa-solid fa-lock"></i>
+                        <label htmlFor="password" className="form-label">
                             {t('login.password') || 'Contraseña'}
                         </label>
                         <input
                             type="password"
                             id="password"
                             name="password"
+                            className="form-input"
                             value={formData.password}
                             onChange={handleChange}
                             required
@@ -114,7 +106,8 @@ const LoginPage = () => {
 
                     <button
                         type="submit"
-                        className="btn btn-primary btn-block"
+                        className="btn btn-primary"
+                        style={{ width: '100%' }}
                         disabled={loading}
                     >
                         {loading ? (
@@ -135,7 +128,7 @@ const LoginPage = () => {
                     <p>
                         {t('login.noAccount') || '¿No tienes cuenta?'}
                         {' '}
-                        <Link to="/register" className="link-primary">
+                        <Link to="/register" style={{ color: 'var(--primary)', fontWeight: 'bold' }}>
                             {t('login.registerLink') || 'Regístrate aquí'}
                         </Link>
                     </p>

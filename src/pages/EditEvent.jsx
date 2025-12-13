@@ -1,15 +1,21 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { createEvent, getOrganizers, createOrGetGenre, createOrGetLocation } from '../services/api';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getEventById } from '../services/api';
+import eventService from '../services/eventService';
+import { createOrGetGenre, createOrGetLocation, getOrganizers } from '../services/api';
 import authService from '../services/authService';
 import LocationPicker from '../components/LocationPicker';
 
-export default function CreateEvent() {
-    const { t } = useTranslation();
+export default function EditEvent() {
+    const { eventId } = useParams();
     const navigate = useNavigate();
 
     const [currentUser, setCurrentUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
+
     const [formData, setFormData] = useState({
         nombre: '',
         descripcion: '',
@@ -17,7 +23,7 @@ export default function CreateEvent() {
         plazas: '',
         fechayhora: '',
         tipo: '',
-        precio: '', // Changed from categoria_precio to precio
+        precio: '',
         organizador_dni: null,
         imagen: ''
     });
@@ -28,16 +34,13 @@ export default function CreateEvent() {
         longitud: null
     });
     const [genreText, setGenreText] = useState('');
-
     const [organizers, setOrganizers] = useState([]);
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
-    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         checkAuth();
+        loadEvent();
         loadOrganizers();
-    }, []);
+    }, [eventId]);
 
     const checkAuth = async () => {
         try {
@@ -45,12 +48,51 @@ export default function CreateEvent() {
             setCurrentUser(user);
 
             if (user.role !== 'promotor' && user.role !== 'admin') {
-                setError('Solo los promotores y administradores pueden crear eventos');
+                setError('Solo los promotores y administradores pueden editar eventos');
                 setTimeout(() => navigate('/'), 3000);
             }
         } catch (err) {
             setError('Debes iniciar sesión para acceder a esta página');
-            setTimeout(() => navigate('/'), 3000);
+            setTimeout(() => navigate('/login'), 3000);
+        }
+    };
+
+    const loadEvent = async () => {
+        try {
+            setLoading(true);
+            const event = await getEventById(eventId);
+
+            // Format datetime for input
+            let formattedDate = '';
+            if (event.date) {
+                const date = new Date(event.date);
+                formattedDate = date.toISOString().slice(0, 16);
+            }
+
+            setFormData({
+                nombre: event.name || '',
+                descripcion: event.description || '',
+                recinto: event.venue || '',
+                plazas: event.capacity || '',
+                fechayhora: formattedDate,
+                tipo: event.type || '',
+                precio: event.price || '',
+                organizador_dni: event.organizador_dni || null,
+                imagen: event.image || ''
+            });
+
+            if (event.location) {
+                setLocationData({
+                    ciudad: event.location,
+                    latitud: null,
+                    longitud: null
+                });
+            }
+        } catch (err) {
+            console.error('Error loading event:', err);
+            setError('Error cargando el evento');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -74,7 +116,7 @@ export default function CreateEvent() {
         e.preventDefault();
         setError('');
         setSuccess('');
-        setLoading(true);
+        setSaving(true);
 
         try {
             // Crear género automáticamente si se especifica
@@ -95,53 +137,36 @@ export default function CreateEvent() {
                 locationId = location.id;
             }
 
-            // Format data for API - solo campos con valores
+            // Format data for API
             const eventData = {
                 nombre: formData.nombre,
-                descripcion: formData.descripcion
+                descripcion: formData.descripcion,
+                recinto: formData.recinto,
+                plazas: parseInt(formData.plazas),
+                fechayhora: new Date(formData.fechayhora).toISOString(),
+                tipo: formData.tipo
             };
 
-            // Agregar campos opcionales solo si tienen valor
+            // Add optional fields
             if (locationId) eventData.localidad_id = locationId;
-            if (formData.recinto) eventData.recinto = formData.recinto;
-            if (formData.plazas) eventData.plazas = parseInt(formData.plazas);
-            if (formData.fechayhora) eventData.fechayhora = new Date(formData.fechayhora).toISOString();
-            if (formData.tipo) eventData.tipo = formData.tipo;
-            if (formData.precio) eventData.precio = parseFloat(formData.precio); // Changed to precio as number
+            if (formData.precio) eventData.precio = parseFloat(formData.precio);
             if (formData.organizador_dni) eventData.organizador_dni = formData.organizador_dni;
             if (genreId) eventData.genero_id = genreId;
             if (formData.imagen) eventData.imagen = formData.imagen;
 
-            await createEvent(eventData);
+            await eventService.updateEvent(eventId, eventData);
 
-            setSuccess('¡Evento creado exitosamente!');
-
-            // Clear form
-            setFormData({
-                nombre: '',
-                descripcion: '',
-                recinto: '',
-                plazas: '',
-                fechayhora: '',
-                tipo: '',
-                precio: '', // Changed from categoria_precio
-                organizador_dni: null,
-                imagen: ''
-            });
-            setLocationData({ ciudad: '', latitud: null, longitud: null });
-            setGenreText('');
-
+            setSuccess('¡Evento actualizado exitosamente!');
 
             // Redirect after success
-            setTimeout(() => navigate('/'), 2000);
+            setTimeout(() => navigate('/my-events'), 2000);
         } catch (err) {
-            console.error('Error creating event:', err);
+            console.error('Error updating event:', err);
 
             // Handle validation errors (422)
             if (err.response?.status === 422 && err.response?.data?.detail) {
                 const details = err.response.data.detail;
                 if (Array.isArray(details)) {
-                    // Format Pydantic validation errors
                     const errorMessages = details.map(error => {
                         const field = error.loc?.slice(1).join('.') || 'Campo';
                         const msg = error.msg || 'Error de validación';
@@ -153,13 +178,26 @@ export default function CreateEvent() {
                 } else {
                     setError('Error de validación. Por favor verifica los datos.');
                 }
+            } else if (err.response?.status === 403) {
+                setError('No tienes permiso para editar este evento');
             } else {
-                setError(err.response?.data?.detail || err.message || 'Error al crear el evento');
+                setError(err.response?.data?.detail || err.message || 'Error al actualizar el evento');
             }
         } finally {
-            setLoading(false);
+            setSaving(false);
         }
     };
+
+    if (loading) {
+        return (
+            <div className="create-event-page">
+                <div className="loading-container">
+                    <div className="loader"></div>
+                    <p>Cargando evento...</p>
+                </div>
+            </div>
+        );
+    }
 
     if (!currentUser || (currentUser.role !== 'promotor' && currentUser.role !== 'admin')) {
         return (
@@ -167,7 +205,7 @@ export default function CreateEvent() {
                 <div className="card" style={{ textAlign: 'center', maxWidth: '500px' }}>
                     <i className="fa-solid fa-lock" style={{ fontSize: '3rem', color: 'var(--error)', marginBottom: '1rem' }}></i>
                     <h2 className="card-title" style={{ justifyContent: 'center' }}>Acceso Denegado</h2>
-                    <p>{error || 'Solo los promotores y administradores pueden acceder a esta página'}</p>
+                    <p>{error || 'Solo los promotores y administradores pueden editar eventos'}</p>
                     <button className="btn btn-secondary" onClick={() => navigate('/')} style={{ marginTop: '1rem' }}>
                         Volver al Inicio
                     </button>
@@ -180,14 +218,14 @@ export default function CreateEvent() {
         <div className="page-container">
             <div className="container" style={{ maxWidth: '900px' }}>
                 <div className="page-header center">
-                    <button onClick={() => navigate('/')} className="btn btn-text back-button-floating">
-                        <i className="fa-solid fa-arrow-left"></i> Volver
+                    <button onClick={() => navigate('/my-events')} className="btn btn-text back-button-floating">
+                        <i className="fa-solid fa-arrow-left"></i> Volver a Mis Eventos
                     </button>
                     <h1>
-                        <i className="fa-solid fa-calendar-plus" style={{ marginRight: '10px' }}></i>
-                        Crear Nuevo Evento
+                        <i className="fa-solid fa-pen" style={{ marginRight: '10px' }}></i>
+                        Editar Evento
                     </h1>
-                    <p className="subtitle">Complete los detalles para publicar su evento</p>
+                    <p className="subtitle">Modifica los detalles del evento</p>
                 </div>
 
                 {error && (
@@ -223,7 +261,7 @@ export default function CreateEvent() {
                                     value={formData.nombre}
                                     onChange={handleChange}
                                     required
-                                    disabled={loading}
+                                    disabled={saving}
                                 />
                             </div>
 
@@ -236,7 +274,7 @@ export default function CreateEvent() {
                                     value={formData.descripcion}
                                     onChange={handleChange}
                                     required
-                                    disabled={loading}
+                                    disabled={saving}
                                     rows="4"
                                     style={{ resize: 'vertical' }}
                                 />
@@ -254,11 +292,12 @@ export default function CreateEvent() {
                                 <label className="form-label">Localidad (opcional)</label>
                                 <LocationPicker
                                     onLocationChange={(loc) => setLocationData(loc)}
+                                    initialCity={locationData.ciudad}
                                 />
                             </div>
 
                             <div className="form-group">
-                                <label className="form-label">Recinto (opcional)</label>
+                                <label className="form-label">Recinto *</label>
                                 <input
                                     className="form-input"
                                     type="text"
@@ -266,7 +305,8 @@ export default function CreateEvent() {
                                     placeholder="ej. Estadio Nacional, Club XYZ..."
                                     value={formData.recinto}
                                     onChange={handleChange}
-                                    disabled={loading}
+                                    required
+                                    disabled={saving}
                                 />
                             </div>
                         </div>
@@ -280,19 +320,20 @@ export default function CreateEvent() {
 
                             <div className="form-row">
                                 <div className="form-group">
-                                    <label className="form-label">Fecha y Hora (opcional)</label>
+                                    <label className="form-label">Fecha y Hora *</label>
                                     <input
                                         className="form-input"
                                         type="datetime-local"
                                         name="fechayhora"
                                         value={formData.fechayhora}
                                         onChange={handleChange}
-                                        disabled={loading}
+                                        required
+                                        disabled={saving}
                                     />
                                 </div>
 
                                 <div className="form-group">
-                                    <label className="form-label">Capacidad (opcional)</label>
+                                    <label className="form-label">Capacidad *</label>
                                     <input
                                         className="form-input"
                                         type="number"
@@ -301,14 +342,15 @@ export default function CreateEvent() {
                                         value={formData.plazas}
                                         onChange={handleChange}
                                         min="1"
-                                        disabled={loading}
+                                        required
+                                        disabled={saving}
                                     />
                                 </div>
                             </div>
 
                             <div className="form-row">
                                 <div className="form-group">
-                                    <label className="form-label">Tipo de Evento (opcional)</label>
+                                    <label className="form-label">Tipo de Evento *</label>
                                     <input
                                         className="form-input"
                                         type="text"
@@ -316,7 +358,8 @@ export default function CreateEvent() {
                                         placeholder="ej. Concierto, Festival..."
                                         value={formData.tipo}
                                         onChange={handleChange}
-                                        disabled={loading}
+                                        required
+                                        disabled={saving}
                                     />
                                 </div>
 
@@ -331,7 +374,7 @@ export default function CreateEvent() {
                                         onChange={handleChange}
                                         min="0"
                                         step="0.01"
-                                        disabled={loading}
+                                        disabled={saving}
                                     />
                                 </div>
                             </div>
@@ -346,7 +389,7 @@ export default function CreateEvent() {
                                         placeholder="ej. Rock, Pop, Jazz..."
                                         value={genreText}
                                         onChange={(e) => setGenreText(e.target.value)}
-                                        disabled={loading}
+                                        disabled={saving}
                                     />
                                     <small className="form-hint">Escribe para crear uno nuevo si no existe</small>
                                 </div>
@@ -358,7 +401,7 @@ export default function CreateEvent() {
                                         name="organizador_dni"
                                         value={formData.organizador_dni || ''}
                                         onChange={handleChange}
-                                        disabled={loading}
+                                        disabled={saving}
                                     >
                                         <option value="">Seleccionar organizador</option>
                                         {organizers.map(org => (
@@ -377,7 +420,7 @@ export default function CreateEvent() {
                                     placeholder="https://ejemplo.com/imagen.jpg"
                                     value={formData.imagen}
                                     onChange={handleChange}
-                                    disabled={loading}
+                                    disabled={saving}
                                 />
                             </div>
                         </div>
@@ -387,23 +430,23 @@ export default function CreateEvent() {
                             <button
                                 type="button"
                                 className="btn btn-secondary"
-                                onClick={() => navigate('/')}
-                                disabled={loading}
+                                onClick={() => navigate('/my-events')}
+                                disabled={saving}
                             >
                                 Cancelar
                             </button>
                             <button
                                 type="submit"
                                 className="btn btn-primary"
-                                disabled={loading}
+                                disabled={saving}
                             >
-                                {loading ? (
+                                {saving ? (
                                     <>
-                                        <i className="fa-solid fa-spinner fa-spin"></i> Creando...
+                                        <i className="fa-solid fa-spinner fa-spin"></i> Guardando...
                                     </>
                                 ) : (
                                     <>
-                                        <i className="fa-solid fa-check"></i> Crear Evento
+                                        <i className="fa-solid fa-check"></i> Guardar Cambios
                                     </>
                                 )}
                             </button>

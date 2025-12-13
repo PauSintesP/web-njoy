@@ -1,191 +1,144 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { Html5QrcodeScanner } from 'html5-qrcode';
+import axios from 'axios';
 import authService from '../services/authService';
-import api from '../services/api';
 import './ScannerPage.css';
 
-const ScannerPage = () => {
-    const { t } = useTranslation();
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+export default function ScannerPage() {
     const navigate = useNavigate();
-    const [user, setUser] = useState(null);
-    const [ticketId, setTicketId] = useState('');
     const [scanResult, setScanResult] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [events, setEvents] = useState([]);
+    const scannerRef = useRef(null);
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
         const currentUser = authService.getUser();
-        if (!currentUser) {
-            navigate('/login');
-            return;
-        }
-
-        // Check if user has scanner permissions
-        if (!['scanner', 'promotor', 'owner', 'admin'].includes(currentUser.role)) {
-            navigate('/');
-            return;
-        }
-
         setUser(currentUser);
-        loadEvents();
-    }, [navigate]);
 
-    const loadEvents = async () => {
-        try {
-            const response = await api.get('/scanner/my-events');
-            setEvents(Array.isArray(response.data) ? response.data : []);
-        } catch (error) {
-            console.error('Error loading events:', error);
-        }
-    };
+        // Initialize QR scanner
+        const scanner = new Html5QrcodeScanner(
+            "qr-reader",
+            {
+                fps: 10,
+                qrbox: { width: 250, height: 250 },
+                aspectRatio: 1.0
+            },
+            false
+        );
 
-    const handleScan = async () => {
-        if (!ticketId) {
-            alert('Por favor ingresa un ID de ticket');
-            return;
-        }
+        scanner.render(onScanSuccess, onScanError);
+        scannerRef.current = scanner;
 
-        setLoading(true);
-        setScanResult(null);
-
-        try {
-            // Validate ticket first
-            const validateResponse = await api.post('/scanner/validate-ticket', {
-                ticket_id: parseInt(ticketId)
+        return () => {
+            scanner.clear().catch(error => {
+                console.error("Failed to clear scanner", error);
             });
+        };
+    }, []);
 
-            if (validateResponse.data.success && validateResponse.data.ticket?.activado) {
-                // If ticket is valid and not used, mark it as scanned
-                const scanResponse = await api.post(`/scanner/activate-ticket/${ticketId}`);
-                setScanResult(scanResponse.data);
-            } else {
-                // Ticket is invalid or already used
-                setScanResult(validateResponse.data);
-            }
+    const onScanSuccess = async (decodedText) => {
+        setLoading(true);
+
+        try {
+            // Parse QR code data
+            const qrData = JSON.parse(decodedText);
+            const codigo = qrData.codigo;
+
+            // Call API to validate ticket
+            const token = authService.getToken();
+            const response = await axios.post(
+                `${API_URL}/tickets/scan/${codigo}`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            setScanResult(response.data);
+
+            // Auto-clear result after 5 seconds
+            setTimeout(() => {
+                setScanResult(null);
+            }, 5000);
+
         } catch (error) {
-            console.error('Error scanning ticket:', error);
+            console.error('Error scanning:', error);
             setScanResult({
-                success: false,
-                message: 'Error al escanear el ticket. Inténtalo de nuevo.'
+                status: 'error',
+                message: 'ERROR AL ESCANEAR',
+                color: 'red'
             });
         } finally {
             setLoading(false);
-            setTicketId('');
         }
     };
 
-    const handleKeyPress = (e) => {
-        if (e.key === 'Enter') {
-            handleScan();
-        }
+    const onScanError = (error) => {
+        // Silently handle scan errors (continuous scanning)
     };
 
     return (
-        <div className="scanner-page">
-            <div className="scanner-container">
-                <div className="scanner-header">
-                    <h1>
-                        <i className="fa-solid fa-qrcode"></i>
-                        Escaneo de Tickets
-                    </h1>
-                    <p>Validar y activar tickets de eventos</p>
-                    {user && (
-                        <div className="scanner-user-info">
-                            <span>👤 {user.nombre} {user.apellidos}</span>
-                            <span className="role-badge">{user.role}</span>
+        <div className="scanner-page-mobile">
+            <div className="scanner-header-mobile">
+                <button onClick={() => navigate(-1)} className="back-btn-simple" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'white', fontSize: '1.2rem' }}>
+                    <i className="fa-solid fa-arrow-left"></i>
+                </button>
+                <h1>🎫 Escaneo QR</h1>
+                {user && <p className="scanner-user">Inspector: {user.nombre}</p>}
+            </div>
+
+            {/* QR Scanner Camera */}
+            <div className="qr-scanner-container">
+                <div id="qr-reader"></div>
+            </div>
+
+            {/* Scan Result - Full Screen Overlay */}
+            {scanResult && (
+                <div className={`scan-result-overlay ${scanResult.color}`}>
+                    <div className="result-content">
+                        <div className="result-icon">
+                            {scanResult.color === 'green' ? '✓' : '✗'}
                         </div>
-                    )}
-                </div>
+                        <h2 className="result-message">{scanResult.message}</h2>
 
-                <div className="scanner-input-section glass">
-                    <div className="input-group">
-                        <i className="fa-solid fa-ticket"></i>
-                        <input
-                            type="number"
-                            placeholder="Ingresa ID del ticket..."
-                            value={ticketId}
-                            onChange={(e) => setTicketId(e.target.value)}
-                            onKeyPress={handleKeyPress}
-                            disabled={loading}
-                            autoFocus
-                        />
-                        <button
-                            onClick={handleScan}
-                            disabled={loading || !ticketId}
-                            className="btn btn-scan"
-                        >
-                            {loading ? (
-                                <>
-                                    <i className="fa-solid fa-spinner fa-spin"></i>
-                                    Escaneando...
-                                </>
-                            ) : (
-                                <>
-                                    <i className="fa-solid fa-barcode"></i>
-                                    Escanear
-                                </>
-                            )}
-                        </button>
-                    </div>
-                </div>
-
-                {scanResult && (
-                    <div className={`scan-result glass ${scanResult.success ? 'success' : 'error'}`}>
-                        <div className="result-header">
-                            <i className={`fa-solid ${scanResult.success ? 'fa-circle-check' : 'fa-circle-xmark'}`}></i>
-                            <h3>{scanResult.message}</h3>
-                        </div>
-
-                        {scanResult.ticket && (
+                        {scanResult.nombre_asistente && (
                             <div className="result-details">
-                                <div className="detail-item">
-                                    <span className="label">Evento:</span>
-                                    <span className="value">{scanResult.event_name}</span>
+                                <div className="detail-line">
+                                    <strong>Asistente:</strong>
+                                    <span>{scanResult.nombre_asistente}</span>
                                 </div>
-                                <div className="detail-item">
-                                    <span className="label">Usuario:</span>
-                                    <span className="value">{scanResult.user_name}</span>
+                                <div className="detail-line">
+                                    <strong>Evento:</strong>
+                                    <span>{scanResult.evento}</span>
                                 </div>
-                                <div className="detail-item">
-                                    <span className="label">ID Ticket:</span>
-                                    <span className="value">#{scanResult.ticket.id}</span>
-                                </div>
-                                <div className="detail-item">
-                                    <span className="label">Estado:</span>
-                                    <span className="badge ${scanResult.ticket.activado ? 'badge-success' : 'badge-used'}">
-                                        {scanResult.ticket.activado ? 'Válido' : 'Utilizado'}
-                                    </span>
+                                <div className="detail-line">
+                                    <strong>Código:</strong>
+                                    <span>{scanResult.codigo}</span>
                                 </div>
                             </div>
                         )}
-                    </div>
-                )}
 
-                {events.length > 0 && (
-                    <div className="events-list glass">
-                        <h3>
-                            <i className="fa-solid fa-calendar-days"></i>
-                            Eventos disponibles ({events.length})
-                        </h3>
-                        <div className="events-grid-scanner">
-                            {events.map(event => (
-                                <div key={event.id} className="event-card-scanner">
-                                    <div className="event-info">
-                                        <h4>{event.nombre}</h4>
-                                        <p>
-                                            <i className="fa-solid fa-calendar"></i>
-                                            {new Date(event.fechayhora).toLocaleDateString()}
-                                        </p>
-                                    </div>
-                                </div>
-                            ))}
+                        <div className="result-footer">
+                            {scanResult.color === 'green'
+                                ? 'Acceso permitido ✓'
+                                : 'Acceso denegado ✗'
+                            }
                         </div>
                     </div>
-                )}
-            </div>
+                </div>
+            )}
+
+            {loading && (
+                <div className="loading-overlay">
+                    <div className="spinner"></div>
+                    <p>Validando...</p>
+                </div>
+            )}
         </div>
     );
-};
-
-export default ScannerPage;
+}

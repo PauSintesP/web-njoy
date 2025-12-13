@@ -26,6 +26,9 @@ const EventCard = ({ event, onClick }) => {
             <div className="event-image-container">
                 <img src={event.image} alt={event.title} className="event-image" />
                 <div className="event-category">{getCategoryLabel(event.category)}</div>
+                {event.ticketsAvailable <= 0 && (
+                    <div className="sold-out-badge">SOLD OUT</div>
+                )}
             </div>
             <div className="event-content">
                 <div className="event-date">{formatDate(event.date)}</div>

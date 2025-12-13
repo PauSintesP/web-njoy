@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import authService from '../services/authService';
+import Navbar from '../components/Navbar';
 import './RegisterPage.css';
 
 const RegisterPage = () => {
@@ -96,8 +97,8 @@ const RegisterPage = () => {
             // Emit login event
             window.dispatchEvent(new CustomEvent('auth-login', { detail: response.user }));
 
-            // Redirect to home
-            navigate('/');
+            // Reload the page to ensure all components update with user privileges
+            window.location.reload();
         } catch (err) {
             console.error('Registration error:', err);
             setError(err.response?.data?.detail || 'Error al crear la cuenta. Por favor, intenta de nuevo.');
@@ -117,183 +118,191 @@ const RegisterPage = () => {
     };
 
     return (
-        <div className="register-page">
-            <div className="register-container glass">
-                <div className="register-header">
-                    <h1>
-                        <span className="logo-n">n</span>joy
-                    </h1>
-                    <p>{t('register.createAccount') || 'Crea tu cuenta'}</p>
-                </div>
-
-                <form onSubmit={handleSubmit} className="register-form">
-                    {error && (
-                        <div className="error-message">
-                            <i className="fa-solid fa-circle-exclamation"></i>
-                            {error}
-                        </div>
-                    )}
-
-                    <div className="form-row">
-                        <div className="form-group">
-                            <label htmlFor="nombre">
-                                <i className="fa-solid fa-user"></i>
-                                {t('register.firstName') || 'Nombre'}
-                            </label>
-                            <input
-                                type="text"
-                                id="nombre"
-                                name="nombre"
-                                value={formData.nombre}
-                                onChange={handleChange}
-                                required
-                                disabled={loading}
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label htmlFor="apellidos">
-                                <i className="fa-solid fa-user"></i>
-                                {t('register.lastName') || 'Apellidos'}
-                            </label>
-                            <input
-                                type="text"
-                                id="apellidos"
-                                name="apellidos"
-                                value={formData.apellidos}
-                                onChange={handleChange}
-                                required
-                                disabled={loading}
-                            />
-                        </div>
+        <>
+            <Navbar />
+            <div className="register-page">
+                <div className="register-container card">
+                    <div className="register-header">
+                        <h1>
+                            <span className="text-gradient-primary">njoy</span>
+                        </h1>
+                        <p>{t('register.createAccount') || 'Crea tu cuenta'}</p>
                     </div>
 
-                    <div className="form-group">
-                        <label htmlFor="email">
-                            <i className="fa-solid fa-envelope"></i>
-                            {t('register.email') || 'Email'}
-                        </label>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            required
-                            disabled={loading}
-                        />
-                    </div>
-
-                    <div className="form-row">
-                        <div className="form-group">
-                            <label htmlFor="fecha_nacimiento">
-                                <i className="fa-solid fa-calendar"></i>
-                                {t('register.birthDate') || 'Fecha de Nacimiento'}
-                            </label>
-                            <input
-                                type="date"
-                                id="fecha_nacimiento"
-                                name="fecha_nacimiento"
-                                value={formData.fecha_nacimiento}
-                                onChange={handleChange}
-                                required
-                                disabled={loading}
-                                max={new Date().toISOString().split('T')[0]}
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label htmlFor="pais">
-                                <i className="fa-solid fa-globe"></i>
-                                {t('register.country') || 'País'} (opcional)
-                            </label>
-                            <input
-                                type="text"
-                                id="pais"
-                                name="pais"
-                                value={formData.pais}
-                                onChange={handleChange}
-                                disabled={loading}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="password">
-                            <i className="fa-solid fa-lock"></i>
-                            {t('register.password') || 'Contraseña'}
-                        </label>
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            required
-                            disabled={loading}
-                        />
-                        {formData.password && (
-                            <div className="password-strength">
-                                <div
-                                    className="strength-bar"
-                                    style={{
-                                        width: `${(passwordStrength + 1) * 20}%`,
-                                        backgroundColor: getPasswordStrengthColor()
-                                    }}
-                                ></div>
-                                <span style={{ color: getPasswordStrengthColor() }}>
-                                    {getPasswordStrengthLabel()}
-                                </span>
+                    <form onSubmit={handleSubmit} className="register-form">
+                        {error && (
+                            <div className="badge badge-danger" style={{ display: 'flex', padding: '1rem', width: '100%', marginBottom: '1rem', justifyContent: 'center' }}>
+                                <i className="fa-solid fa-circle-exclamation" style={{ marginRight: '0.5rem' }}></i>
+                                {error}
                             </div>
                         )}
-                    </div>
 
-                    <div className="form-group">
-                        <label htmlFor="confirmPassword">
-                            <i className="fa-solid fa-lock"></i>
-                            {t('register.confirmPassword') || 'Confirmar Contraseña'}
-                        </label>
-                        <input
-                            type="password"
-                            id="confirmPassword"
-                            name="confirmPassword"
-                            value={formData.confirmPassword}
-                            onChange={handleChange}
-                            required
+                        <div className="form-row">
+                            <div className="form-group">
+                                <label htmlFor="nombre" className="form-label">
+                                    {t('register.firstName') || 'Nombre'}
+                                </label>
+                                <input
+                                    type="text"
+                                    id="nombre"
+                                    name="nombre"
+                                    className="form-input"
+                                    value={formData.nombre}
+                                    onChange={handleChange}
+                                    required
+                                    disabled={loading}
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="apellidos" className="form-label">
+                                    {t('register.lastName') || 'Apellidos'}
+                                </label>
+                                <input
+                                    type="text"
+                                    id="apellidos"
+                                    name="apellidos"
+                                    className="form-input"
+                                    value={formData.apellidos}
+                                    onChange={handleChange}
+                                    required
+                                    disabled={loading}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="email" className="form-label">
+                                {t('register.email') || 'Email'}
+                            </label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                className="form-input"
+                                value={formData.email}
+                                onChange={handleChange}
+                                required
+                                disabled={loading}
+                            />
+                        </div>
+
+                        <div className="form-row">
+                            <div className="form-group">
+                                <label htmlFor="fecha_nacimiento" className="form-label">
+                                    {t('register.birthDate') || 'Fecha de Nacimiento'}
+                                </label>
+                                <input
+                                    type="date"
+                                    id="fecha_nacimiento"
+                                    name="fecha_nacimiento"
+                                    className="form-input"
+                                    value={formData.fecha_nacimiento}
+                                    onChange={handleChange}
+                                    required
+                                    disabled={loading}
+                                    max={new Date().toISOString().split('T')[0]}
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="pais" className="form-label">
+                                    {t('register.country') || 'País'} (opcional)
+                                </label>
+                                <input
+                                    type="text"
+                                    id="pais"
+                                    name="pais"
+                                    className="form-input"
+                                    value={formData.pais}
+                                    onChange={handleChange}
+                                    disabled={loading}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="password" className="form-label">
+                                {t('register.password') || 'Contraseña'}
+                            </label>
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                className="form-input"
+                                value={formData.password}
+                                onChange={handleChange}
+                                required
+                                disabled={loading}
+                            />
+                            {formData.password && (
+                                <div className="password-strength" style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                    <div
+                                        className="strength-bar"
+                                        style={{
+                                            width: `${(passwordStrength + 1) * 20}%`,
+                                            backgroundColor: getPasswordStrengthColor(),
+                                            height: '4px',
+                                            borderRadius: '2px',
+                                            transition: 'all 0.3s ease',
+                                            flexGrow: 1
+                                        }}
+                                    ></div>
+                                    <span style={{ color: getPasswordStrengthColor(), fontSize: '0.8rem', fontWeight: 'bold' }}>
+                                        {getPasswordStrengthLabel()}
+                                    </span>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="confirmPassword" className="form-label">
+                                {t('register.confirmPassword') || 'Confirmar Contraseña'}
+                            </label>
+                            <input
+                                type="password"
+                                id="confirmPassword"
+                                name="confirmPassword"
+                                className="form-input"
+                                value={formData.confirmPassword}
+                                onChange={handleChange}
+                                required
+                                disabled={loading}
+                            />
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="btn btn-primary"
+                            style={{ width: '100%' }}
                             disabled={loading}
-                        />
+                        >
+                            {loading ? (
+                                <>
+                                    <i className="fa-solid fa-spinner fa-spin"></i>
+                                    {t('register.creating') || 'Creando cuenta...'}
+                                </>
+                            ) : (
+                                <>
+                                    <i className="fa-solid fa-user-plus"></i>
+                                    {t('register.submit') || 'Crear Cuenta'}
+                                </>
+                            )}
+                        </button>
+                    </form>
+
+                    <div className="register-footer">
+                        <p>
+                            {t('register.hasAccount') || '¿Ya tienes cuenta?'}
+                            {' '}
+                            <Link to="/login" style={{ color: 'var(--primary)', fontWeight: 'bold' }}>
+                                {t('register.loginLink') || 'Inicia sesión aquí'}
+                            </Link>
+                        </p>
                     </div>
-
-                    <button
-                        type="submit"
-                        className="btn btn-primary btn-block"
-                        disabled={loading}
-                    >
-                        {loading ? (
-                            <>
-                                <i className="fa-solid fa-spinner fa-spin"></i>
-                                {t('register.creating') || 'Creando cuenta...'}
-                            </>
-                        ) : (
-                            <>
-                                <i className="fa-solid fa-user-plus"></i>
-                                {t('register.submit') || 'Crear Cuenta'}
-                            </>
-                        )}
-                    </button>
-                </form>
-
-                <div className="register-footer">
-                    <p>
-                        {t('register.hasAccount') || '¿Ya tienes cuenta?'}
-                        {' '}
-                        <Link to="/login" className="link-primary">
-                            {t('register.loginLink') || 'Inicia sesión aquí'}
-                        </Link>
-                    </p>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

@@ -22,10 +22,11 @@ export const getAllUsers = async (filters = {}) => {
         const url = `/admin/users${queryString ? `?${queryString}` : ''}`;
 
         const response = await api.get(url);
-        return response;
+        // Ensure we return an array - handle different response formats
+        return Array.isArray(response) ? response : (response.data || response.users || []);
     } catch (error) {
         console.error('Error fetching users:', error);
-        throw error;
+        return []; // Return empty array instead of throwing
     }
 };
 
@@ -38,6 +39,19 @@ export const getUserById = async (userId) => {
         return response;
     } catch (error) {
         console.error(`Error fetching user ${userId}:`, error);
+        throw error;
+    }
+};
+
+/**
+ * Create new user (admin)
+ */
+export const createUser = async (userData) => {
+    try {
+        const response = await api.post('/admin/users', userData);
+        return response;
+    } catch (error) {
+        console.error('Error creating user:', error);
         throw error;
     }
 };
@@ -113,16 +127,18 @@ export const promoteToOwner = async (userId) => {
 export const getStatistics = async () => {
     try {
         const response = await api.get('/admin/statistics');
-        return response;
+        // Handle different response formats
+        return response.data || response;
     } catch (error) {
         console.error('Error fetching statistics:', error);
-        throw error;
+        return null; // Return null instead of throwing
     }
 };
 
 export default {
     getAllUsers,
     getUserById,
+    createUser,
     updateUser,
     deleteUser,
     banUser,

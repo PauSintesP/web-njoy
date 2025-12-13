@@ -1,0 +1,103 @@
+/* TicketPurchase.css */
+/* Specific layout requiring grid */
+.purchase-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+.event-image-large {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.event-details-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.info-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    color: var(--text-muted);
+}
+
+.info-row i {
+    color: var(--primary);
+    font-size: 1.2rem;
+    width: 24px;
+    text-align: center;
+}
+
+/* Quantity Selector Override/Customization */
+.qty-control {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    justify-content: space-between;
+}
+
+.qty-btn-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+    transition: all 0.2s;
+}
+
+.qty-btn-icon:hover:not(:disabled) {
+    background: var(--primary);
+    transform: scale(1.05);
+}
+
+.qty-btn-icon:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.qty-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+    min-width: 40px;
+    text-align: center;
+}
+
+/* Summary Box */
+.summary-box {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    font-size: 1.5rem;
+}
+
+@media (max-width: 900px) {
+    .purchase-grid {
+        grid-template-columns: 1fr;
+    }
+}

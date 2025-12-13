@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, Link } from 'react-router-dom';
 import authService from '../services/authService';
+import { getLocations } from '../services/api';
 import './Navbar.css';
 
 const Navbar = ({ onLoginClick, onCreateEventClick, location, setLocation }) => {
@@ -10,11 +11,32 @@ const Navbar = ({ onLoginClick, onCreateEventClick, location, setLocation }) => 
     const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const [user, setUser] = useState(null);
+    const [availableLocations, setAvailableLocations] = useState([]);
 
-    // Check if user is authenticated on mount
+    // Check if user is authenticated on mount and fetch locations
     useEffect(() => {
         const currentUser = authService.getUser();
         setUser(currentUser);
+
+        // Fetch available locations
+        const fetchLocations = async () => {
+            try {
+                const locations = await getLocations();
+                if (locations && locations.length > 0) {
+                    // Remove duplicates based on city name
+                    const uniqueLocations = Array.from(new Set(locations.map(l => l.ciudad)))
+                        .map(city => locations.find(l => l.ciudad === city));
+                    setAvailableLocations(uniqueLocations);
+
+                    // If current location is not in list, set to first available or keep generic
+                    // Use default 'Barcelona' if list is empty or current selection invalid?
+                    // No, keep current logic: app handles default. 
+                }
+            } catch (err) {
+                console.error("Failed to load locations", err);
+            }
+        };
+        fetchLocations();
 
         // Listen for login events
         const handleLogin = (event) => {
@@ -44,27 +66,19 @@ const Navbar = ({ onLoginClick, onCreateEventClick, location, setLocation }) => 
     const handleLogout = () => {
         authService.logout();
         setIsUserMenuOpen(false);
+        // Redirect to home and force reload to clear all state
+        window.location.href = '/';
     };
 
     return (
         <nav className="navbar glass">
             <div className="container navbar-content">
-                <a href="#" className="logo" onClick={(e) => e.preventDefault()}>
+                <Link to="/" className="logo">
                     <span className="logo-n">n</span>joy
-                </a>
+                </Link>
 
                 <div className="nav-actions">
-                    <div className="location-selector">
-                        <i className="fa-solid fa-location-dot"></i>
-                        <select
-                            value={location}
-                            onChange={(e) => setLocation(e.target.value)}
-                            className="location-select"
-                        >
-                            <option value="Barcelona">Barcelona</option>
-                            <option value="Bilbao">Bilbao</option>
-                        </select>
-                    </div>
+
 
                     <div className="language-selector-container">
                         <button
@@ -72,7 +86,7 @@ const Navbar = ({ onLoginClick, onCreateEventClick, location, setLocation }) => 
                             onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
                             onBlur={() => setTimeout(() => setIsLangMenuOpen(false), 200)}
                         >
-                            <span className="lang-flag" style={{ fontSize: '1.2rem' }}>
+                            <span className="lang-flag">
                                 {{
                                     en: '🇬🇧',
                                     es: '🇪🇸',
@@ -82,11 +96,10 @@ const Navbar = ({ onLoginClick, onCreateEventClick, location, setLocation }) => 
                                     de: '🇩🇪'
                                 }[i18n.language.split('-')[0]] || '🌐'}
                             </span>
-                            <span className="current-lang">{i18n.language.split('-')[0].toUpperCase()}</span>
                             <i className={`fa-solid fa-chevron-down ${isLangMenuOpen ? 'rotate' : ''}`}></i>
                         </button>
 
-                        <div className={`language-menu glass ${isLangMenuOpen ? 'show' : ''}`}>
+                        <div className={`language-menu ${isLangMenuOpen ? 'show' : ''}`}>
                             <button onClick={() => changeLanguage('en')} className={i18n.language === 'en' ? 'active' : ''}>
                                 🇬🇧 English
                             </button>
@@ -120,7 +133,7 @@ const Navbar = ({ onLoginClick, onCreateEventClick, location, setLocation }) => 
                                 <i className={`fa-solid fa-chevron-down ${isUserMenuOpen ? 'rotate' : ''}`}></i>
                             </button>
 
-                            <div className={`user-dropdown glass ${isUserMenuOpen ? 'show' : ''}`}>
+                            <div className={`user-dropdown ${isUserMenuOpen ? 'show' : ''}`}>
                                 <div className="user-info">
                                     <strong>{user.nombre} {user.apellidos}</strong>
                                     <span>{user.email}</span>
@@ -136,8 +149,38 @@ const Navbar = ({ onLoginClick, onCreateEventClick, location, setLocation }) => 
                                     <i className="fa-solid fa-user"></i>
                                     {t('navbar.profile')}
                                 </button>
-                                {user && user.role === 'promotor' && (
+                                <button
+                                    className="dropdown-link"
+                                    onClick={() => {
+                                        setIsUserMenuOpen(false);
+                                        navigate('/my-tickets');
+                                    }}
+                                >
+                                    <i className="fa-solid fa-ticket"></i>
+                                    Mis Entradas
+                                </button>
+                                <button
+                                    className="dropdown-link"
+                                    onClick={() => {
+                                        setIsUserMenuOpen(false);
+                                        navigate('/teams');
+                                    }}
+                                >
+                                    <i className="fa-solid fa-users-gear"></i>
+                                    Equipos
+                                </button>
+                                {user && (user.role === 'promotor' || user.role === 'admin') && (
                                     <>
+                                        <button
+                                            className="dropdown-link"
+                                            onClick={() => {
+                                                setIsUserMenuOpen(false);
+                                                navigate('/my-events');
+                                            }}
+                                        >
+                                            <i className="fa-solid fa-calendar-days"></i>
+                                            Mis Eventos
+                                        </button>
                                         <button
                                             className="dropdown-link"
                                             onClick={() => {

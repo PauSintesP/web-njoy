@@ -1,0 +1,24 @@
+.tickets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+    padding: 1rem 0;
+}
+
+.back-button-floating {
+    position: absolute;
+    left: 2rem;
+    top: 6rem;
+    /* Adjust based on navbar */
+}
+
+@media (max-width: 768px) {
+    .back-button-floating {
+        position: static;
+        margin-bottom: 1rem;
+    }
+
+    .tickets-grid {
+        grid-template-columns: 1fr;
+    }
+}
