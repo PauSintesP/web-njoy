@@ -45,13 +45,12 @@ export default function ScannerPage() {
 
         try {
             // Parse QR code data (Try JSON, fallback to string)
-            let codigo;
+            let codigo = decodedText; // Default to raw text
             try {
                 const qrData = JSON.parse(decodedText);
-                codigo = qrData.codigo;
+                if (qrData.codigo) codigo = qrData.codigo;
             } catch (e) {
-                // Not JSON, assume raw string
-                codigo = decodedText;
+                // Not JSON, keep raw string
             }
 
             // Call API to validate ticket
@@ -84,11 +83,21 @@ export default function ScannerPage() {
 
         } catch (error) {
             console.error('Error scanning:', error);
+            const errorMsg = error.response?.data?.detail || error.message || "Error desconocido";
             setScanResult({
                 status: 'error',
-                message: 'ERROR AL ESCANEAR',
+                message: `ERROR: ${errorMsg}`,
                 color: 'red'
             });
+
+            // Log failure to debug console
+            const newLog = {
+                time: new Date().toLocaleTimeString().split(' ')[0],
+                success: false,
+                code: decodedText, // Use original text if parsing failed
+                message: `API ERROR: ${errorMsg}`
+            };
+            setScanLogs(prev => [newLog, ...prev]);
         } finally {
             setLoading(false);
         }
