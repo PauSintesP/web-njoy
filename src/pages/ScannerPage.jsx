@@ -110,11 +110,11 @@ export default function ScannerPage() {
                             <div className="result-details">
                                 <div className="detail-line">
                                     <strong>Asistente:</strong>
-                                    <span>{scanResult.nombre_asistente}</span>
+                                    <span>{scanResult.user_name || scanResult.nombre_asistente}</span>
                                 </div>
                                 <div className="detail-line">
                                     <strong>Evento:</strong>
-                                    <span>{scanResult.evento}</span>
+                                    <span>{scanResult.event_name || scanResult.evento}</span>
                                 </div>
                                 <div className="detail-line">
                                     <strong>Código:</strong>
