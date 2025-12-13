@@ -43,9 +43,15 @@ export default function ScannerPage() {
         setLoading(true);
 
         try {
-            // Parse QR code data
-            const qrData = JSON.parse(decodedText);
-            const codigo = qrData.codigo;
+            // Parse QR code data (Try JSON, fallback to string)
+            let codigo;
+            try {
+                const qrData = JSON.parse(decodedText);
+                codigo = qrData.codigo;
+            } catch (e) {
+                // Not JSON, assume raw string
+                codigo = decodedText;
+            }
 
             // Call API to validate ticket
             const token = authService.getToken();
