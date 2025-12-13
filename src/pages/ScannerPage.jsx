@@ -13,6 +13,7 @@ export default function ScannerPage() {
     const [loading, setLoading] = useState(false);
     const scannerRef = useRef(null);
     const [user, setUser] = useState(null);
+    const [scanLogs, setScanLogs] = useState([]); // Visual logs state
 
     useEffect(() => {
         const currentUser = authService.getUser();
@@ -71,6 +72,15 @@ export default function ScannerPage() {
             setTimeout(() => {
                 setScanResult(null);
             }, 5000);
+
+            // Add to Visual Log
+            const newLog = {
+                time: new Date().toLocaleTimeString().split(' ')[0],
+                success: response.data.success,
+                code: codigo,
+                message: response.data.message
+            };
+            setScanLogs(prev => [newLog, ...prev]);
 
         } catch (error) {
             console.error('Error scanning:', error);
@@ -145,6 +155,23 @@ export default function ScannerPage() {
                     <p>Validando...</p>
                 </div>
             )}
+
+            {/* --- VISUAL DEBUG LOGS (User Request) --- */}
+            <div className="debug-console-overlay">
+                <h3 style={{ fontSize: '10px', color: '#888', borderBottom: '1px solid #333', marginBottom: '5px' }}>📟 DEBUG LOGS</h3>
+                <div className="debug-logs-list">
+                    {scanLogs.map((log, i) => (
+                        <div key={i} className="debug-log-entry">
+                            <span className="log-time">{log.time}</span>
+                            <span className={log.success ? "log-status success" : "log-status fail"}>
+                                {log.success ? "OK" : "FAIL"}
+                            </span>
+                            <span className="log-msg">{log.message}</span>
+                        </div>
+                    ))}
+                    {scanLogs.length === 0 && <span style={{ color: '#444' }}>No logs yet...</span>}
+                </div>
+            </div>
         </div>
     );
 }
