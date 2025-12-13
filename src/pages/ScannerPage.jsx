@@ -115,7 +115,11 @@ export default function ScannerPage() {
 
             {/* Scan Result - Full Screen Overlay */}
             {scanResult && (
-                <div className={`scan-result-overlay ${scanResult.color}`}>
+                <div
+                    className={`scan-result-overlay ${scanResult.color}`}
+                    onClick={() => setScanResult(null)} // Click to dismiss
+                    style={{ cursor: 'pointer' }}
+                >
                     <div className="result-content">
                         <div className="result-icon">
                             {scanResult.color === 'green' ? '✓' : '✗'}
