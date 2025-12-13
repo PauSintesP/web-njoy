@@ -179,6 +179,9 @@ export default function ScannerPage() {
                             <span className={log.success ? "log-status success" : "log-status fail"}>
                                 {log.success ? "OK" : "FAIL"}
                             </span>
+                            <span style={{ fontSize: '9px', bg: '#222', padding: '2px', borderRadius: '3px', fontFamily: 'monospace', color: '#8ac' }}>
+                                [{log.code ? log.code.substring(0, 15) : '?'}]
+                            </span>
                             <span className="log-msg">{log.message}</span>
                         </div>
                     ))}
