@@ -13,7 +13,7 @@ export default function ScannerPage() {
     const [loading, setLoading] = useState(false);
     const scannerRef = useRef(null);
     const [user, setUser] = useState(null);
-    const [scanLogs, setScanLogs] = useState([]); // Visual logs state
+    const [isScanning, setIsScanning] = useState(true); // Cooldown control
 
     useEffect(() => {
         const currentUser = authService.getUser();
@@ -41,11 +41,19 @@ export default function ScannerPage() {
     }, []);
 
     const onScanSuccess = async (decodedText) => {
+        // Prevent scanning if in cooldown
+        if (!isScanning) {
+            console.log('Scan blocked - cooldown active');
+            return;
+        }
+
+        // Disable scanning immediately
+        setIsScanning(false);
         setLoading(true);
 
         try {
             // Parse QR code data (Try JSON, fallback to string)
-            let codigo = decodedText; // Default to raw text
+            let codigo = decodedText;
             try {
                 const qrData = JSON.parse(decodedText);
                 if (qrData.codigo) codigo = qrData.codigo;
@@ -67,37 +75,27 @@ export default function ScannerPage() {
 
             setScanResult(response.data);
 
-            // Auto-clear result after 5 seconds
+            // Auto-clear result and re-enable scanning after 3 seconds
             setTimeout(() => {
                 setScanResult(null);
-            }, 5000);
-
-            // Add to Visual Log
-            const newLog = {
-                time: new Date().toLocaleTimeString().split(' ')[0],
-                success: response.data.success,
-                code: codigo,
-                message: response.data.message
-            };
-            setScanLogs(prev => [newLog, ...prev]);
+                setIsScanning(true);
+            }, 3000);
 
         } catch (error) {
-            console.error('Error scanning:', error);
-            const errorMsg = error.response?.data?.detail || error.message || "Error desconocido";
+            console.error('Scan error:', error);
+            const errorMsg = error.response?.data?.detail || error.message || 'ERROR AL ESCANEAR';
             setScanResult({
+                success: false,
                 status: 'error',
-                message: `ERROR: ${errorMsg}`,
+                message: errorMsg,
                 color: 'red'
             });
 
-            // Log failure to debug console
-            const newLog = {
-                time: new Date().toLocaleTimeString().split(' ')[0],
-                success: false,
-                code: decodedText, // Use original text if parsing failed
-                message: `API ERROR: ${errorMsg}`
-            };
-            setScanLogs(prev => [newLog, ...prev]);
+            // Re-enable scanning after 3 seconds
+            setTimeout(() => {
+                setScanResult(null);
+                setIsScanning(true);
+            }, 3000);
         } finally {
             setLoading(false);
         }
@@ -168,26 +166,6 @@ export default function ScannerPage() {
                     <p>Validando...</p>
                 </div>
             )}
-
-            {/* --- VISUAL DEBUG LOGS (User Request) --- */}
-            <div className="debug-console-overlay" style={{ zIndex: 9999 }}>
-                <h3 style={{ fontSize: '10px', color: '#888', borderBottom: '1px solid #333', marginBottom: '5px' }}>📟 DEBUG LOGS</h3>
-                <div className="debug-logs-list">
-                    {scanLogs.map((log, i) => (
-                        <div key={i} className="debug-log-entry">
-                            <span className="log-time">{log.time}</span>
-                            <span className={log.success ? "log-status success" : "log-status fail"}>
-                                {log.success ? "OK" : "FAIL"}
-                            </span>
-                            <span style={{ fontSize: '9px', bg: '#222', padding: '2px', borderRadius: '3px', fontFamily: 'monospace', color: '#8ac' }}>
-                                [{log.code ? log.code.substring(0, 40) : '?'}]
-                            </span>
-                            <span className="log-msg">{log.message}</span>
-                        </div>
-                    ))}
-                    {scanLogs.length === 0 && <span style={{ color: '#444' }}>No logs yet...</span>}
-                </div>
-            </div>
         </div>
     );
 }
