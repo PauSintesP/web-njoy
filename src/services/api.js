@@ -5,6 +5,7 @@ import { mapEventsFromAPI, mapEventFromAPI } from '../utils/dataMapper';
 // En desarrollo local: VITE_API_URL debe estar en .env
 // En producción (Vercel): usa el fallback
 const API_URL = import.meta.env.VITE_API_URL || 'https://projecte-n-joy.vercel.app';
+console.log('API URL configured:', API_URL); // Debug log
 
 const api = axios.create({
     baseURL: API_URL,

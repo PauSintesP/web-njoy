@@ -43,6 +43,7 @@ export default function ScannerPage() {
     const onScanSuccess = async (decodedText) => {
         // Prevent scanning if in cooldown
         if (!isScanning) {
+            console.log('Scan blocked - cooldown active');
             return;
         }
 
