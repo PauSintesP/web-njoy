@@ -12,9 +12,15 @@ export default function TicketCard({ ticket }) {
 
     const { ticket_id, codigo_ticket, activado, nombre_asistente, evento } = ticket;
 
+    // CRITICAL FIX: Ensure we have a valid code for QR generation
+    // If codigo_ticket is missing (old tickets or API error), use ticket_id as fallback
+    const safeCodigoTicket = codigo_ticket || `NJOY-TICKET-${ticket_id}`;
+
+    console.log('DEBUG TicketCard:', { ticket_id, codigo_ticket, safeCodigoTicket });
+
     // Generate QR code data with secure code
     const qrData = JSON.stringify({
-        codigo: codigo_ticket,
+        codigo: safeCodigoTicket,
         eventoId: evento.id,
         eventoNombre: evento.nombre
     });
