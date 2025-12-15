@@ -16,8 +16,6 @@ export default function TicketCard({ ticket }) {
     // If codigo_ticket is missing (old tickets or API error), use ticket_id as fallback
     const safeCodigoTicket = codigo_ticket || `NJOY-TICKET-${ticket_id}`;
 
-    console.log('DEBUG TicketCard:', { ticket_id, codigo_ticket, safeCodigoTicket });
-
     // OPTIMIZED: QR code contains ONLY the ticket code (not JSON)
     // This makes the QR much simpler and easier to scan
     const qrData = safeCodigoTicket;
