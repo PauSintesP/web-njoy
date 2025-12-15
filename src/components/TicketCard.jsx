@@ -18,12 +18,9 @@ export default function TicketCard({ ticket }) {
 
     console.log('DEBUG TicketCard:', { ticket_id, codigo_ticket, safeCodigoTicket });
 
-    // Generate QR code data with secure code
-    const qrData = JSON.stringify({
-        codigo: safeCodigoTicket,
-        eventoId: evento.id,
-        eventoNombre: evento.nombre
-    });
+    // OPTIMIZED: QR code contains ONLY the ticket code (not JSON)
+    // This makes the QR much simpler and easier to scan
+    const qrData = safeCodigoTicket;
 
     const formatDate = (dateString, includeWeekDay = false) => {
         if (!dateString) return 'Fecha por confirmar';
