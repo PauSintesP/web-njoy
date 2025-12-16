@@ -1,0 +1,452 @@
+
+/* ============================================
+   PASSWORD VERIFICATION MODAL STYLES
+   ============================================ */
+
+.password-verification-modal {
+  max-width: 480px;
+}
+
+.modal-icon-header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.security-icon-wrapper {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.2));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulse-security 2s ease-in-out infinite;
+}
+
+.security-icon {
+  color: var(--primary);
+}
+
+@keyframes pulse-security {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(139, 92, 246, 0);
+  }
+}
+
+.modal-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.5rem;
+  color: white;
+  margin-bottom: 0;
+}
+
+.security-message {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.security-text {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+}
+
+.event-name-display {
+  color: white;
+  font-size: 0.9rem;
+  margin: 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.event-name-display strong {
+  color: var(--primary);
+}
+
+.password-verification-form {
+  margin-bottom: 1rem;
+}
+
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input {
+  padding-right: 3rem;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 0.75rem;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.password-toggle-btn:hover {
+  color: white;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.modal-actions .btn {
+  flex: 1;
+}
+
+.privacy-notice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 10px;
+  color: #6ee7b7;
+  font-size: 0.85rem;
+  margin-top: 1rem;
+}
+
+.privacy-notice i {
+  font-size: 1rem;
+}
+
+
+/* ============================================
+   HOURLY ENTRIES CHART STYLES
+   ============================================ */
+
+.hourly-entries-chart {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-top: 2rem;
+}
+
+.hourly-entries-chart.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.hourly-entries-chart .empty-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.hourly-entries-chart .empty-text {
+  color: white;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.hourly-entries-chart .empty-subtitle {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.chart-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.5rem;
+  color: white;
+  margin: 0;
+}
+
+.peak-hour-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 20px;
+  color: #fcd34d;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.hourly-chart-container {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  min-height: 300px;
+}
+
+.chart-y-axis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-right: 1rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.y-axis-label {
+  line-height: 1;
+}
+
+.chart-bars-container {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  border-left: 2px solid var(--border);
+  border-bottom: 2px solid var(--border);
+  position: relative;
+}
+
+.chart-bar-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.chart-bar-column {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  position: relative;
+}
+
+.chart-bar {
+  width: 100%;
+  max-width: 50px;
+  background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+  border-radius: 8px 8px 0 0;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  animation: growBar 0.6s ease-out;
+  animation-fill-mode: both;
+  box-shadow: 0 -4px 10px rgba(139, 92, 246, 0.3);
+}
+
+.chart-bar.peak {
+  background: linear-gradient(180deg, #fbbf24, #f59e0b);
+  box-shadow: 0 -4px 15px rgba(251, 191, 36, 0.5);
+}
+
+.chart-bar:hover {
+  transform: translateY(-4px);
+  filter: brightness(1.2);
+}
+
+.chart-bar:hover .chart-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-10px);
+}
+
+@keyframes growBar {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.chart-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s;
+  pointer-events: none;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.chart-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.9);
+}
+
+.chart-tooltip strong {
+  display: block;
+  color: var(--primary);
+  margin-bottom: 0.25rem;
+}
+
+.chart-x-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  transform: rotate(-45deg);
+  white-space: nowrap;
+  margin-top: 1.5rem;
+}
+
+.chart-legend {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--border);
+  margin-top: 1rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.legend-color {
+  width: 20px;
+  height: 12px;
+  border-radius: 4px;
+}
+
+.legend-color.normal {
+  background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+}
+
+.legend-color.peak {
+  background: linear-gradient(180deg, #fbbf24, #f59e0b);
+}
+
+.chart-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.summary-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.summary-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.summary-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+}
+
+/* Responsive adjustments for hourly chart */
+@media (max-width: 768px) {
+  .hourly-chart-container {
+    min-height: 250px;
+  }
+
+  .chart-x-label {
+    font-size: 0.65rem;
+  }
+
+  .chart-bar {
+    max-width: 30px;
+  }
+
+  .peak-hour-badge {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hourly-entries-chart {
+    padding: 1.5rem 1rem;
+  }
+
+  .chart-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .chart-bars-container {
+    gap: 0.25rem;
+  }
+
+  .chart-bar {
+    max-width: 20px;
+  }
+
+  .chart-x-label {
+    font-size: 0.6rem;
+  }
+}
+
+/* Additional btn-info styles if needed */
+.btn-info {
+  background: rgba(59, 130, 246, 0.15);
+  color: #93c5fd;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.btn-info:hover {
+  background: rgba(59, 130, 246, 0.25);
+  border-color: rgba(59, 130, 246, 0.4);
+}

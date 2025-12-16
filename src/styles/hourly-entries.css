@@ -1,0 +1,257 @@
+/* ============================================
+   HOURLY ENTRIES CHART STYLES
+   ============================================ */
+
+.hourly-entries-chart {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-top: 2rem;
+}
+
+.hourly-entries-chart .chart-header {
+    margin-bottom: 2rem;
+}
+
+.hourly-entries-chart .chart-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.hourly-entries-chart .chart-subtitle {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.hourly-entries-chart .peak-hour-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(236, 72, 153, 0.15);
+    border: 1px solid rgba(236, 72, 153, 0.3);
+    border-radius: 8px;
+    padding: 0.4rem 0.75rem;
+    color: #fda4af;
+    font-weight: 600;
+}
+
+.hourly-chart-container {
+    position: relative;
+    height: 300px;
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 2px solid var(--border);
+}
+
+.hourly-bar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.hourly-bar:hover {
+    transform: translateY(-5px);
+}
+
+.bar-wrapper {
+    width: 100%;
+    height: 250px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    position: relative;
+}
+
+.bar-fill {
+    width: 70%;
+    background: linear-gradient(180deg, var(--primary) 0%, var(--accent) 100%);
+    border-radius: 8px 8px 0 0;
+    position: relative;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 -4px 12px rgba(139, 92, 246, 0.3);
+    animation: barGrow 0.8s ease-out backwards;
+}
+
+.bar-fill.peak {
+    background: linear-gradient(180deg, #ec4899 0%, #f472b6 100%);
+    box-shadow: 0 -4px 20px rgba(236, 72, 153, 0.5);
+    width: 80%;
+}
+
+@keyframes barGrow {
+    from {
+        height: 0 !important;
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.bar-value {
+    position: absolute;
+    top: -2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.hourly-bar:hover .bar-value {
+    opacity: 1;
+}
+
+.bar-label {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.bar-label.peak {
+    color: #fda4af;
+}
+
+.hourly-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+}
+
+.summary-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.summary-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.summary-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.summary-content {
+    flex: 1;
+}
+
+.summary-label {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+}
+
+.summary-value {
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Empty state */
+.hourly-entries-chart .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2rem;
+    text-align: center;
+}
+
+.hourly-entries-chart .empty-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.hourly-entries-chart .empty-text {
+    color: white;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.hourly-entries-chart .empty-subtitle {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hourly-chart-container {
+        height: 250px;
+        gap: 0.5rem;
+    }
+
+    .bar-wrapper {
+        height: 200px;
+    }
+
+    .bar-fill {
+        width: 60%;
+    }
+
+    .bar-label {
+        font-size: 0.75rem;
+    }
+
+    .hourly-summary {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .hourly-entries-chart {
+        padding: 1.5rem 1rem;
+    }
+
+    .hourly-chart-container {
+        height: 200px;
+    }
+
+    .bar-wrapper {
+        height: 150px;
+    }
+
+    .bar-value {
+        font-size: 0.75rem;
+    }
+}

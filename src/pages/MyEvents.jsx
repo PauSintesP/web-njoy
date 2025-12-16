@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import eventService from '../services/eventService';
 import authService from '../services/authService';
+import { verifyStatsAccess } from '../services/statsService';
+import PasswordVerificationModal from '../components/PasswordVerificationModal';
 import './MyEvents.css';
 
 export default function MyEvents() {
@@ -10,6 +12,12 @@ export default function MyEvents() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [user, setUser] = useState(null);
+
+    // Password verification modal state
+    const [showPasswordModal, setShowPasswordModal] = useState(false);
+    const [selectedEventForStats, setSelectedEventForStats] = useState(null);
+    const [verificationLoading, setVerificationLoading] = useState(false);
+    const [verificationError, setVerificationError] = useState(null);
 
     useEffect(() => {
         checkAuth();
@@ -51,6 +59,46 @@ export default function MyEvents() {
             console.error('Error deleting event:', err);
             alert('Error eliminando el evento');
         }
+    };
+
+    const handleStatsClick = (event) => {
+        setSelectedEventForStats(event);
+        setVerificationError(null);
+        setShowPasswordModal(true);
+    };
+
+    const handlePasswordVerify = async (password) => {
+        if (!selectedEventForStats) return;
+
+        setVerificationLoading(true);
+        setVerificationError(null);
+
+        try {
+            // Verify password and get temporary token
+            const result = await verifyStatsAccess(selectedEventForStats.id, password);
+
+            // Store temporary token (optional, API uses main auth token)
+            if (result.access_token) {
+                sessionStorage.setItem('stats_token', result.access_token);
+            }
+
+            // Close modal and navigate to stats
+            setShowPasswordModal(false);
+            navigate(`/event-stats/${selectedEventForStats.id}`);
+        } catch (err) {
+            console.error('Password verification failed:', err);
+            setVerificationError(
+                err.response?.data?.detail || 'Contraseña incorrecta'
+            );
+        } finally {
+            setVerificationLoading(false);
+        }
+    };
+
+    const handleClosePasswordModal = () => {
+        setShowPasswordModal(false);
+        setSelectedEventForStats(null);
+        setVerificationError(null);
     };
 
     if (loading) {
@@ -176,7 +224,7 @@ export default function MyEvents() {
                                             Editar
                                         </button>
                                         <button
-                                            onClick={() => navigate(`/event-stats/${event.id}`)}
+                                            onClick={() => handleStatsClick(event)}
                                             className="btn btn-info"
                                             title="Ver estadísticas del evento"
                                         >
@@ -197,6 +245,16 @@ export default function MyEvents() {
                     </div>
                 )}
             </div>
+
+            {/* Password Verification Modal */}
+            <PasswordVerificationModal
+                isOpen={showPasswordModal}
+                onClose={handleClosePasswordModal}
+                onVerify={handlePasswordVerify}
+                eventName={selectedEventForStats?.name}
+                loading={verificationLoading}
+                error={verificationError}
+            />
         </div>
     );
 }

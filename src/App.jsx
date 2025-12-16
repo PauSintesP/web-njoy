@@ -19,6 +19,7 @@ import TicketPurchase from './pages/TicketPurchase';
 import MyTickets from './pages/MyTickets';
 import Teams from './pages/Teams';
 import EventStats from './pages/EventStats';
+import VerifyEmail from './pages/VerifyEmail';
 import NotFound from './pages/NotFound';
 import ProtectedRoute from './components/ProtectedRoute';
 import authService from './services/authService';
@@ -122,6 +123,7 @@ function App() {
           />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/verify-email/:token" element={<VerifyEmail />} />
           <Route path="/profile" element={<Profile />} />
           <Route
             path="/create-event"
