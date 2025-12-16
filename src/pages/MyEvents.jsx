@@ -176,6 +176,14 @@ export default function MyEvents() {
                                             Editar
                                         </button>
                                         <button
+                                            onClick={() => navigate(`/event-stats/${event.id}`)}
+                                            className="btn btn-info"
+                                            title="Ver estadísticas del evento"
+                                        >
+                                            <i className="fa-solid fa-chart-line"></i>
+                                            Estadísticas
+                                        </button>
+                                        <button
                                             onClick={() => handleDelete(event.id, event.name)}
                                             className="btn btn-danger"
                                         >

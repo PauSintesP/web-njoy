@@ -18,6 +18,7 @@ import ScannerPage from './pages/ScannerPage';
 import TicketPurchase from './pages/TicketPurchase';
 import MyTickets from './pages/MyTickets';
 import Teams from './pages/Teams';
+import EventStats from './pages/EventStats';
 import NotFound from './pages/NotFound';
 import ProtectedRoute from './components/ProtectedRoute';
 import authService from './services/authService';
@@ -176,6 +177,14 @@ function App() {
             element={
               <ProtectedRoute user={user}>
                 <Teams />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/event-stats/:eventId"
+            element={
+              <ProtectedRoute user={user} requiredRole={['promotor', 'admin']}>
+                <EventStats />
               </ProtectedRoute>
             }
           />
