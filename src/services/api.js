@@ -159,11 +159,18 @@ export const getLocation = async (locationId) => {
 /**
  * Create a new event
  * @param {Object} eventData - Event data
+ * @param {Array} equiposIds - Array of team IDs authorized to scan
  * @returns {Promise<Object>} Created event
  */
-export const createEvent = async (eventData) => {
+export const createEvent = async (eventData, equiposIds = []) => {
     try {
-        const response = await api.post('/evento/', eventData);
+        // Build query params for equipos_ids
+        const params = {};
+        if (equiposIds && equiposIds.length > 0) {
+            params.equipos_ids = equiposIds;
+        }
+
+        const response = await api.post('/evento/', eventData, { params });
         return response.data;
     } catch (error) {
         console.error("Error creating event:", error);

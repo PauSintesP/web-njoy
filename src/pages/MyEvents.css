@@ -59,8 +59,23 @@
 
 .events-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 2rem;
+}
+
+@media (max-width: 768px) {
+    .events-container {
+        padding: 0 1rem;
+    }
+
+    .events-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .page-header h1 {
+        font-size: 2rem;
+    }
 }
 
 .event-card {

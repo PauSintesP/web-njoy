@@ -30,6 +30,8 @@ export default function CreateEvent() {
     const [genreText, setGenreText] = useState('');
 
     const [organizers, setOrganizers] = useState([]);
+    const [teams, setTeams] = useState([]);
+    const [selectedTeams, setSelectedTeams] = useState([]);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [loading, setLoading] = useState(false);
@@ -37,6 +39,7 @@ export default function CreateEvent() {
     useEffect(() => {
         checkAuth();
         loadOrganizers();
+        loadTeams();
     }, []);
 
     const checkAuth = async () => {
@@ -61,6 +64,31 @@ export default function CreateEvent() {
         } catch (err) {
             console.error("Error loading organizers:", err);
         }
+    };
+
+    const loadTeams = async () => {
+        try {
+            const token = localStorage.getItem('access_token');
+            const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://projecte-n-joy.vercel.app'}/teams/my-teams`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                setTeams(data);
+            }
+        } catch (err) {
+            console.error("Error loading teams:", err);
+        }
+    };
+
+    const toggleTeam = (teamId) => {
+        setSelectedTeams(prev =>
+            prev.includes(teamId)
+                ? prev.filter(id => id !== teamId)
+                : [...prev, teamId]
+        );
     };
 
     const handleChange = (e) => {
@@ -112,7 +140,8 @@ export default function CreateEvent() {
             if (genreId) eventData.genero_id = genreId;
             if (formData.imagen) eventData.imagen = formData.imagen;
 
-            await createEvent(eventData);
+            // Create event with team assignments
+            await createEvent(eventData, selectedTeams);
 
             setSuccess('¡Evento creado exitosamente!');
 
@@ -381,6 +410,57 @@ export default function CreateEvent() {
                                 />
                             </div>
                         </div>
+
+                        {/* Teams Section */}
+                        {teams.length > 0 && (
+                            <div style={{ marginBottom: '2rem' }}>
+                                <h3 className="card-title" style={{ borderBottom: '1px solid var(--border)', paddingBottom: '0.5rem', marginBottom: '1.5rem' }}>
+                                    <i className="fa-solid fa-user-group" style={{ marginRight: '0.5rem', color: 'var(--primary)' }}></i>
+                                    Equipos Autorizados para Escanear
+                                </h3>
+                                <p className="form-hint" style={{ marginBottom: '1rem' }}>
+                                    Selecciona los equipos cuyos miembros podrán escanear entradas de este evento
+                                </p>
+
+                                <div style={{ display: 'grid', gap: '0.75rem' }}>
+                                    {teams.map(team => (
+                                        <label
+                                            key={team.id}
+                                            style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                padding: '1rem',
+                                                background: selectedTeams.includes(team.id) ? 'rgba(139, 92, 246, 0.1)' : 'var(--bg-input)',
+                                                border: `1px solid ${selectedTeams.includes(team.id) ? 'var(--primary)' : 'var(--border)'}`,
+                                                borderRadius: '10px',
+                                                cursor: 'pointer',
+                                                transition: 'all 0.2s'
+                                            }}
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedTeams.includes(team.id)}
+                                                onChange={() => toggleTeam(team.id)}
+                                                disabled={loading}
+                                                style={{ marginRight: '0.75rem', width: '18px', height: '18px', cursor: 'pointer' }}
+                                            />
+                                            <div style={{ flex: 1 }}>
+                                                <div style={{ fontWeight: '600', color: 'var(--text-main)' }}>
+                                                    {team.nombre_equipo}
+                                                </div>
+                                                <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+                                                    <i className="fa-solid fa-users" style={{ marginRight: '0.25rem' }}></i>
+                                                    {team.num_miembros || 0} miembros
+                                                </div>
+                                            </div>
+                                            {selectedTeams.includes(team.id) && (
+                                                <i className="fa-solid fa-check-circle" style={{ color: 'var(--primary)', fontSize: '1.2rem' }}></i>
+                                            )}
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
 
                         {/* Actions */}
                         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '2rem', paddingTop: '1rem', borderTop: '1px solid var(--border)' }}>
