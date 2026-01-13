@@ -229,6 +229,7 @@
         opacity: 0;
         transform: translateY(-10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -353,35 +354,85 @@
     background: var(--primary-hover);
 }
 
-/* --- MOBILE RESPONSIVE --- */
+/* --- NEAR ME BUTTON --- */
+.near-me-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.near-me-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.near-me-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+.near-me-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.location-error {
+    font-size: 0.75rem;
+    color: #ef4444;
+    margin-top: 0.25rem;
+}
+
+.distance-badge {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.distance-badge i {
+    color: var(--primary);
+}
+
 @media (max-width: 768px) {
     .search-bar {
         flex-wrap: wrap;
     }
-    
+
     .search-input {
         min-width: 100%;
         order: 1;
     }
-    
+
     .search-icon {
         order: 0;
     }
-    
+
     .search-btn,
     .filter-toggle-btn {
         order: 2;
         flex: 1;
     }
-    
+
     .advanced-filters {
         flex-direction: column;
     }
-    
+
     .filter-group {
         width: 100%;
     }
-    
+
     .filter-actions {
         width: 100%;
         margin-left: 0;

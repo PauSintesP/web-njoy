@@ -19,6 +19,47 @@ const HomePage = ({ events, loading, error, handleEventClick }) => {
     const [selectedLocation, setSelectedLocation] = useState('');
     const [isSearching, setIsSearching] = useState(false);
 
+    // Geolocation state
+    const [userLocation, setUserLocation] = useState(null);
+    const [locationError, setLocationError] = useState(null);
+    const [sortByDistance, setSortByDistance] = useState(false);
+    const [isLoadingLocation, setIsLoadingLocation] = useState(false);
+
+    // Request user location
+    const requestLocation = () => {
+        if (!('geolocation' in navigator)) {
+            setLocationError('Tu navegador no soporta geolocalización');
+            return;
+        }
+
+        setIsLoadingLocation(true);
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                setUserLocation({
+                    lat: position.coords.latitude,
+                    lon: position.coords.longitude
+                });
+                setLocationError(null);
+                setIsLoadingLocation(false);
+                setSortByDistance(true);
+            },
+            (err) => {
+                setLocationError(err.message);
+                setIsLoadingLocation(false);
+            },
+            { enableHighAccuracy: true, timeout: 10000 }
+        );
+    };
+
+    // Toggle distance sorting
+    const toggleDistanceSort = () => {
+        if (!userLocation && !sortByDistance) {
+            requestLocation();
+        } else {
+            setSortByDistance(!sortByDistance);
+        }
+    };
+
     // Load dynamic types and locations on mount
     useEffect(() => {
         const loadFilters = async () => {
@@ -59,6 +100,13 @@ const HomePage = ({ events, loading, error, handleEventClick }) => {
             if (priceMax) filters.precio_max = parseFloat(priceMax);
             if (selectedLocation) filters.localidad_id = parseInt(selectedLocation);
 
+            // Add geolocation params if available and sorting by distance
+            if (userLocation && sortByDistance) {
+                filters.user_lat = userLocation.lat;
+                filters.user_lon = userLocation.lon;
+                filters.order_by_distance = true;
+            }
+
             const results = await searchEvents(filters);
             setFilteredEvents(results);
         } catch (err) {
@@ -68,6 +116,13 @@ const HomePage = ({ events, loading, error, handleEventClick }) => {
         }
     };
 
+    // Re-search when sortByDistance changes
+    useEffect(() => {
+        if (userLocation) {
+            handleSearch();
+        }
+    }, [sortByDistance]);
+
     // Clear filters
     const clearFilters = () => {
         setSearchQuery('');
@@ -75,6 +130,7 @@ const HomePage = ({ events, loading, error, handleEventClick }) => {
         setPriceMin('');
         setPriceMax('');
         setSelectedLocation('');
+        setSortByDistance(false);
         setFilteredEvents(events);
     };
 
@@ -162,6 +218,25 @@ const HomePage = ({ events, loading, error, handleEventClick }) => {
                                         <option key={loc.id} value={loc.id}>{loc.ciudad}</option>
                                     ))}
                                 </select>
+                            </div>
+                            <div className="filter-group">
+                                <label>Distancia</label>
+                                <button
+                                    className={`near-me-btn ${sortByDistance ? 'active' : ''}`}
+                                    onClick={toggleDistanceSort}
+                                    disabled={isLoadingLocation}
+                                >
+                                    {isLoadingLocation ? (
+                                        <><i className="fa-solid fa-spinner fa-spin"></i> Localizando...</>
+                                    ) : sortByDistance ? (
+                                        <><i className="fa-solid fa-location-crosshairs"></i> Cerca de mí ✓</>
+                                    ) : (
+                                        <><i className="fa-solid fa-location-crosshairs"></i> Cerca de mí</>
+                                    )}
+                                </button>
+                                {locationError && (
+                                    <span className="location-error">{locationError}</span>
+                                )}
                             </div>
                             <div className="filter-actions">
                                 <button className="btn-clear" onClick={clearFilters}>
