@@ -100,6 +100,47 @@ export const getEvents = async (params = {}) => {
 };
 
 /**
+ * Get unique event types from database
+ * @returns {Promise<Array>} Array of event type strings
+ */
+export const getEventTypes = async () => {
+    try {
+        const response = await api.get('/evento/tipos');
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching event types:", error);
+        return [];
+    }
+};
+
+/**
+ * Search events with advanced filters
+ * @param {Object} filters - Search filters
+ * @returns {Promise<Array>} Array of events matching filters
+ */
+export const searchEvents = async (filters = {}) => {
+    try {
+        const [eventsResponse, locationsResponse] = await Promise.all([
+            api.get('/evento/search', { params: filters }),
+            api.get('/localidad/')
+        ]);
+
+        const locationsMap = {};
+        if (Array.isArray(locationsResponse.data)) {
+            locationsResponse.data.forEach(loc => {
+                locationsMap[loc.id] = loc.ciudad;
+            });
+        }
+
+        return mapEventsFromAPI(eventsResponse.data, locationsMap);
+    } catch (error) {
+        console.error("Error searching events:", error);
+        throw error;
+    }
+};
+
+
+/**
  * Get a single event by ID
  * @param {number} eventId - The event ID
  * @returns {Promise<Object>} Event object in frontend format
