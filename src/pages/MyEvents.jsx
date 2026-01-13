@@ -208,7 +208,7 @@ export default function MyEvents() {
                                             <i className="fa-solid fa-users"></i>
                                             {event.capacity} plazas
                                         </span>
-                                        {event.price && (
+                                        {event.price && typeof event.price === 'number' && (
                                             <span className="meta-item price">
                                                 <i className="fa-solid fa-euro-sign"></i>
                                                 {event.price.toFixed(2)}

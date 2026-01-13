@@ -13,6 +13,13 @@ export const mapEventFromAPI = (apiEvent, locationsMap = {}) => {
 
     const cityName = locationsMap[apiEvent.localidad_id] || 'Unknown Location';
 
+    // Safe price parsing - ensure it's always a number or 'Free'
+    let price = 'Free';
+    if (apiEvent.precio != null && apiEvent.precio !== '') {
+        const parsedPrice = parseFloat(apiEvent.precio);
+        price = isNaN(parsedPrice) ? 'Free' : parsedPrice;
+    }
+
     return {
         id: apiEvent.id,
         title: apiEvent.nombre || '',
@@ -22,9 +29,9 @@ export const mapEventFromAPI = (apiEvent, locationsMap = {}) => {
             city: cityName,
             venue: apiEvent.recinto || ''
         },
-        price: apiEvent.precio != null ? apiEvent.precio : 'Free',
+        price: price,
         category: apiEvent.tipo || 'Other',
-        image: apiEvent.imagen || '',
+        image: apiEvent.imagen || '/default-event.jpg',
         // Availability Logic
         capacity: apiEvent.plazas || 0,
         ticketsSold: apiEvent.tickets_vendidos || 0,
