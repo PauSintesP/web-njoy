@@ -68,9 +68,7 @@ export default function TicketCard({ ticket }) {
                 pdf.rect(0, i, pageWidth, 1.5, 'F');
             }
 
-            // Card shadow
-            pdf.setFillColor(180, 180, 195);
-            pdf.roundedRect(ticketX + 3, ticketY + 3, ticketWidth, ticketHeight, 10, 10, 'F');
+
 
             // Card background
             pdf.setFillColor(255, 255, 255);
@@ -178,16 +176,7 @@ export default function TicketCard({ ticket }) {
             pdf.setFont('courier', 'bold');
             pdf.text(safeCodigoTicket, ticketX + ticketWidth / 2, qrY + 75, { align: 'center' });
 
-            // Status badge
-            const statusY = qrY + 83;
-            const statusColor = activado ? green : red;
-            const statusText = activado ? '✓ VÁLIDA' : '✗ USADA';
-            pdf.setFillColor(statusColor[0], statusColor[1], statusColor[2]);
-            pdf.roundedRect(ticketX + ticketWidth / 2 - 18, statusY, 36, 9, 3, 3, 'F');
-            pdf.setTextColor(255, 255, 255);
-            pdf.setFontSize(8);
-            pdf.setFont('helvetica', 'bold');
-            pdf.text(statusText, ticketX + ticketWidth / 2, statusY + 6.5, { align: 'center' });
+
 
             // Footer
             const footY = ticketY + ticketHeight - 18;
@@ -197,12 +186,7 @@ export default function TicketCard({ ticket }) {
             pdf.text('Presenta este QR en la entrada del evento', ticketX + ticketWidth / 2, footY, { align: 'center' });
             pdf.text('web-njoy.vercel.app', ticketX + ticketWidth / 2, footY + 5, { align: 'center' });
 
-            // Decorative dots
-            pdf.setFillColor(purple[0], purple[1], purple[2]);
-            for (let i = 0; i < 3; i++) {
-                pdf.circle(ticketX + 15 + i * 5, ticketY + ticketHeight - 10, 1, 'F');
-                pdf.circle(ticketX + ticketWidth - 15 - i * 5, ticketY + ticketHeight - 10, 1, 'F');
-            }
+
 
             const safeEventName = evento.nombre.replace(/[^a-z0-9]/gi, '-').replace(/-+/g, '-').substring(0, 25);
             pdf.save(`Entrada-${safeCodigoTicket}-${safeEventName}.pdf`);
