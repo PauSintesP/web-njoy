@@ -1,18 +1,140 @@
+/* --- MY TICKETS PAGE STYLES --- */
+
+/* Enhanced page header */
+.page-header.center {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.page-header h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.page-header h1 i {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.page-header .subtitle {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+}
+
+/* --- TICKETS GRID --- */
 .tickets-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
     gap: 2rem;
     padding: 1rem 0;
 }
 
+/* --- EMPTY STATE --- */
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 5rem 2rem;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(236, 72, 153, 0.05) 100%);
+    border-radius: 24px;
+    border: 1px dashed var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.empty-icon {
+    font-size: 5rem;
+    filter: grayscale(30%);
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.empty-state h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0;
+}
+
+.empty-state p {
+    color: var(--text-muted);
+    max-width: 400px;
+    margin: 0;
+}
+
+.empty-state .btn {
+    margin-top: 1rem;
+}
+
+/* --- LOADING & ERROR STATES --- */
+.loading-state,
+.error-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh;
+    gap: 1.5rem;
+    text-align: center;
+}
+
+.loading-state i {
+    font-size: 3rem;
+    color: var(--primary);
+}
+
+.loading-state p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+}
+
+.error-state {
+    color: #fca5a5;
+}
+
+.error-state i {
+    font-size: 3rem;
+    color: #ef4444;
+}
+
+/* --- BACK BUTTON --- */
 .back-button-floating {
     position: absolute;
     left: 2rem;
     top: 6rem;
-    /* Adjust based on navbar */
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 992px) {
+    .tickets-grid {
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    }
 }
 
 @media (max-width: 768px) {
+    .page-header h1 {
+        font-size: 1.8rem;
+    }
+
     .back-button-floating {
         position: static;
         margin-bottom: 1rem;
@@ -20,5 +142,14 @@
 
     .tickets-grid {
         grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .empty-state {
+        padding: 3rem 1.5rem;
+    }
+
+    .empty-icon {
+        font-size: 4rem;
     }
 }
