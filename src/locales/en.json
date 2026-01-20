@@ -7,20 +7,33 @@
         "food": "Food"
     },
     "common": {
-        "loading": "Loading events...",
+        "loading": "Loading...",
+        "loadingEvents": "Loading events...",
         "error": "Failed to load events. Please try again later.",
         "noEvents": "No events found in {{location}} at the moment.",
         "authError": "Authentication error. Please reload the page.",
         "sessionExpired": "Your session has expired. Please log in again.",
         "cancel": "Cancel",
         "save": "Save Changes",
-        "saving": "Saving..."
+        "saving": "Saving...",
+        "delete": "Delete",
+        "edit": "Edit",
+        "confirm": "Confirm",
+        "back": "Back",
+        "next": "Next",
+        "search": "Search",
+        "close": "Close",
+        "yes": "Yes",
+        "no": "No"
     },
     "navbar": {
         "login": "Login",
         "logout": "Logout",
         "profile": "My Profile",
-        "createEvent": "Create Event"
+        "createEvent": "Create Event",
+        "myTickets": "My Tickets",
+        "admin": "Admin Panel",
+        "home": "Home"
     },
     "profile": {
         "title": "My Profile",
@@ -42,11 +55,22 @@
         "invalidEmail": "Please enter a valid email address",
         "updateSuccess": "Profile updated successfully!",
         "updateError": "Failed to update profile. Please try again.",
-        "errorLoading": "Failed to load profile data. Please try again."
+        "errorLoading": "Failed to load profile data. Please try again.",
+        "bio": "Biography",
+        "bioPlaceholder": "Tell us about yourself...",
+        "changePassword": "Change Password",
+        "currentPassword": "Current Password",
+        "newPassword": "New Password",
+        "confirmNewPassword": "Confirm New Password"
     },
     "eventCard": {
         "location": "Location",
-        "date": "Date"
+        "date": "Date",
+        "price": "Price",
+        "free": "Free",
+        "soldOut": "Sold Out",
+        "available": "Available",
+        "tickets": "tickets"
     },
     "filters": {
         "upcoming": "Upcoming Events",
@@ -54,11 +78,27 @@
         "music": "Music",
         "art": "Art",
         "tech": "Tech",
-        "food": "Food"
+        "food": "Food",
+        "price": "Price",
+        "priceMin": "Min €",
+        "priceMax": "Max €",
+        "location": "Location",
+        "allLocations": "All locations",
+        "distance": "Distance",
+        "nearMe": "Near me",
+        "locating": "Locating...",
+        "date": "Date",
+        "dateFrom": "From",
+        "dateTo": "To",
+        "clear": "Clear",
+        "apply": "Apply",
+        "clearFilters": "Clear filters",
+        "noResultsFilters": "No events found with these filters"
     },
     "hero": {
-        "title": "Discover the best events in {{location}}",
-        "subtitle": "Find and book tickets for concerts, festivals, and cultural events"
+        "title": "Discover the best events",
+        "subtitle": "Find and book tickets for concerts, festivals, and cultural events",
+        "searchPlaceholder": "Search events..."
     },
     "login": {
         "title": "Welcome Back",
@@ -70,7 +110,8 @@
         "noAccount": "Don't have an account?",
         "register": "Register",
         "registerLink": "Register here",
-        "errorMessage": "Incorrect email or password"
+        "errorMessage": "Incorrect email or password",
+        "forgotPassword": "Forgot password?"
     },
     "register": {
         "title": "Create Account",
@@ -89,7 +130,9 @@
         "hasAccount": "Already have an account?",
         "login": "Login",
         "loginLink": "Login here",
-        "errorMessage": "Error creating account. Please try again."
+        "errorMessage": "Error creating account. Please try again.",
+        "passwordsDontMatch": "Passwords do not match",
+        "passwordTooShort": "Password must be at least 6 characters"
     },
     "eventDetail": {
         "back": "Back",
@@ -100,7 +143,67 @@
         "price": "Price",
         "category": "Category",
         "organizer": "Organizer",
-        "description": "Description"
+        "description": "Description",
+        "venue": "Venue",
+        "capacity": "Capacity",
+        "available": "Available",
+        "soldOut": "Sold Out",
+        "salesPaused": "Sales Paused",
+        "selectQuantity": "Select quantity",
+        "total": "Total",
+        "processing": "Processing...",
+        "purchaseSuccess": "Purchase successful!",
+        "purchaseError": "Error processing purchase"
+    },
+    "createEvent": {
+        "title": "Create New Event",
+        "eventName": "Event Name",
+        "eventNamePlaceholder": "Summer Festival 2025",
+        "description": "Description",
+        "descriptionPlaceholder": "Describe your event...",
+        "location": "Location",
+        "locationHint": "Write or select on the map",
+        "venue": "Venue",
+        "venuePlaceholder": "Stadium, Club, etc.",
+        "dateTime": "Date & Time",
+        "capacity": "Capacity",
+        "type": "Type",
+        "typePlaceholder": "Concert, Festival, etc.",
+        "price": "Price",
+        "pricePlaceholder": "0 for free",
+        "genre": "Genre",
+        "genrePlaceholder": "Rock, Pop, Jazz...",
+        "organizer": "Organizer",
+        "selectOrganizer": "Select Organizer",
+        "imageUrl": "Image URL",
+        "imageUrlPlaceholder": "http://example.com/image.jpg",
+        "submit": "Create Event",
+        "creating": "Creating...",
+        "success": "Event created successfully!",
+        "error": "Error creating event"
+    },
+    "myTickets": {
+        "title": "My Tickets",
+        "subtitle": "All your purchased tickets",
+        "noTickets": "You don't have any tickets yet",
+        "noTicketsDescription": "When you purchase tickets, they will appear here",
+        "browseEvents": "Browse Events",
+        "downloadPdf": "Download PDF",
+        "viewQr": "View QR",
+        "valid": "Valid",
+        "used": "Used",
+        "expired": "Expired",
+        "ticketCode": "Ticket Code",
+        "attendee": "Attendee",
+        "owner": "Owner",
+        "purchaseDate": "Purchase Date",
+        "eventDate": "Event Date"
+    },
+    "locationPicker": {
+        "placeholder": "Search for an address, city or place...",
+        "showMap": "Show map",
+        "hideMap": "Hide map",
+        "mapHint": "Click on the map to select the exact location"
     },
     "admin": {
         "panelTitle": "Admin Panel",

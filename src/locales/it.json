@@ -7,20 +7,33 @@
         "food": "Cibo"
     },
     "common": {
-        "loading": "Caricamento eventi...",
+        "loading": "Caricamento...",
+        "loadingEvents": "Caricamento eventi...",
         "error": "Impossibile caricare gli eventi. Riprova più tardi.",
         "noEvents": "Nessun evento trovato a {{location}} al momento.",
         "authError": "Errore di autenticazione. Ricarica la pagina.",
-        "sessionExpired": "La tua sessione è scaduta. Accedi di nuovo.",
+        "sessionExpired": "La sessione è scaduta. Effettua nuovamente l'accesso.",
         "cancel": "Annulla",
         "save": "Salva Modifiche",
-        "saving": "Salvataggio..."
+        "saving": "Salvataggio...",
+        "delete": "Elimina",
+        "edit": "Modifica",
+        "confirm": "Conferma",
+        "back": "Indietro",
+        "next": "Avanti",
+        "search": "Cerca",
+        "close": "Chiudi",
+        "yes": "Sì",
+        "no": "No"
     },
     "navbar": {
         "login": "Accedi",
         "logout": "Esci",
         "profile": "Il Mio Profilo",
-        "createEvent": "Crea Evento"
+        "createEvent": "Crea Evento",
+        "myTickets": "I Miei Biglietti",
+        "admin": "Pannello Admin",
+        "home": "Home"
     },
     "profile": {
         "title": "Il Mio Profilo",
@@ -31,7 +44,7 @@
         "email": "Email",
         "birthDate": "Data di Nascita",
         "country": "Paese",
-        "accountStatus": "Stato dell'Account",
+        "accountStatus": "Stato Account",
         "active": "Attivo",
         "inactive": "Inattivo",
         "memberSince": "Membro dal",
@@ -41,12 +54,23 @@
         "nameRequired": "Nome e cognome sono obbligatori",
         "invalidEmail": "Inserisci un indirizzo email valido",
         "updateSuccess": "Profilo aggiornato con successo!",
-        "updateError": "Impossibile aggiornare il profilo. Riprova.",
-        "errorLoading": "Impossibile caricare i dati del profilo. Riprova."
+        "updateError": "Errore nell'aggiornamento. Riprova.",
+        "errorLoading": "Errore nel caricamento del profilo. Riprova.",
+        "bio": "Biografia",
+        "bioPlaceholder": "Parlaci di te...",
+        "changePassword": "Cambia Password",
+        "currentPassword": "Password Attuale",
+        "newPassword": "Nuova Password",
+        "confirmNewPassword": "Conferma Nuova Password"
     },
     "eventCard": {
-        "location": "Posizione",
-        "date": "Data"
+        "location": "Luogo",
+        "date": "Data",
+        "price": "Prezzo",
+        "free": "Gratis",
+        "soldOut": "Esaurito",
+        "available": "Disponibili",
+        "tickets": "biglietti"
     },
     "filters": {
         "upcoming": "Prossimi Eventi",
@@ -54,49 +78,138 @@
         "music": "Musica",
         "art": "Arte",
         "tech": "Tecnologia",
-        "food": "Cibo"
+        "food": "Cibo",
+        "price": "Prezzo",
+        "priceMin": "Min €",
+        "priceMax": "Max €",
+        "location": "Zona",
+        "allLocations": "Tutte le zone",
+        "distance": "Distanza",
+        "nearMe": "Vicino a me",
+        "locating": "Localizzazione...",
+        "date": "Data",
+        "dateFrom": "Da",
+        "dateTo": "A",
+        "clear": "Cancella",
+        "apply": "Applica",
+        "clearFilters": "Cancella filtri",
+        "noResultsFilters": "Nessun evento trovato con questi filtri"
     },
     "hero": {
-        "title": "Scopri i migliori eventi a {{location}}",
-        "subtitle": "Trova e prenota biglietti per concerti, festival ed eventi culturali"
+        "title": "Scopri i migliori eventi",
+        "subtitle": "Trova e prenota biglietti per concerti, festival ed eventi culturali",
+        "searchPlaceholder": "Cerca eventi..."
     },
     "login": {
         "title": "Bentornato",
+        "welcome": "Bentornato",
         "email": "Email",
         "password": "Password",
         "submit": "Accedi",
+        "loggingIn": "Accesso in corso...",
         "noAccount": "Non hai un account?",
-        "register": "Registrati"
+        "register": "Registrati",
+        "registerLink": "Registrati qui",
+        "errorMessage": "Email o password non corretti",
+        "forgotPassword": "Password dimenticata?"
     },
     "register": {
         "title": "Crea Account",
+        "createAccount": "Crea il tuo account",
         "firstName": "Nome",
+        "name": "Nome",
         "lastName": "Cognome",
         "email": "Email",
         "password": "Password",
         "confirmPassword": "Conferma Password",
         "dateOfBirth": "Data di Nascita",
+        "birthDate": "Data di Nascita",
         "country": "Paese",
         "submit": "Registrati",
+        "creating": "Creazione account...",
         "hasAccount": "Hai già un account?",
-        "login": "Accedi"
+        "login": "Accedi",
+        "loginLink": "Accedi qui",
+        "errorMessage": "Errore nella creazione dell'account. Riprova.",
+        "passwordsDontMatch": "Le password non corrispondono",
+        "passwordTooShort": "La password deve avere almeno 6 caratteri"
     },
     "eventDetail": {
         "back": "Indietro",
         "buyTickets": "Acquista Biglietti",
         "date": "Data",
         "time": "Ora",
-        "location": "Posizione",
+        "location": "Luogo",
         "price": "Prezzo",
         "category": "Categoria",
         "organizer": "Organizzatore",
-        "description": "Descrizione"
+        "description": "Descrizione",
+        "venue": "Sede",
+        "capacity": "Capacità",
+        "available": "Disponibili",
+        "soldOut": "Esaurito",
+        "salesPaused": "Vendite Sospese",
+        "selectQuantity": "Seleziona quantità",
+        "total": "Totale",
+        "processing": "Elaborazione...",
+        "purchaseSuccess": "Acquisto completato!",
+        "purchaseError": "Errore nell'acquisto"
+    },
+    "createEvent": {
+        "title": "Crea Nuovo Evento",
+        "eventName": "Nome Evento",
+        "eventNamePlaceholder": "Festival Estate 2025",
+        "description": "Descrizione",
+        "descriptionPlaceholder": "Descrivi il tuo evento...",
+        "location": "Luogo",
+        "locationHint": "Scrivi o seleziona sulla mappa",
+        "venue": "Sede",
+        "venuePlaceholder": "Stadio, Club, ecc.",
+        "dateTime": "Data e Ora",
+        "capacity": "Capacità",
+        "type": "Tipo",
+        "typePlaceholder": "Concerto, Festival, ecc.",
+        "price": "Prezzo",
+        "pricePlaceholder": "0 per gratis",
+        "genre": "Genere",
+        "genrePlaceholder": "Rock, Pop, Jazz...",
+        "organizer": "Organizzatore",
+        "selectOrganizer": "Seleziona Organizzatore",
+        "imageUrl": "URL Immagine",
+        "imageUrlPlaceholder": "http://esempio.com/immagine.jpg",
+        "submit": "Crea Evento",
+        "creating": "Creazione...",
+        "success": "Evento creato con successo!",
+        "error": "Errore nella creazione dell'evento"
+    },
+    "myTickets": {
+        "title": "I Miei Biglietti",
+        "subtitle": "Tutti i tuoi biglietti acquistati",
+        "noTickets": "Non hai ancora biglietti",
+        "noTicketsDescription": "Quando acquisti biglietti, appariranno qui",
+        "browseEvents": "Esplora Eventi",
+        "downloadPdf": "Scarica PDF",
+        "viewQr": "Vedi QR",
+        "valid": "Valido",
+        "used": "Usato",
+        "expired": "Scaduto",
+        "ticketCode": "Codice Biglietto",
+        "attendee": "Partecipante",
+        "owner": "Proprietario",
+        "purchaseDate": "Data Acquisto",
+        "eventDate": "Data Evento"
+    },
+    "locationPicker": {
+        "placeholder": "Cerca un indirizzo, città o luogo...",
+        "showMap": "Mostra mappa",
+        "hideMap": "Nascondi mappa",
+        "mapHint": "Clicca sulla mappa per selezionare la posizione esatta"
     },
     "admin": {
-        "panelTitle": "Pannello Admin",
+        "panelTitle": "Pannello di Amministrazione",
         "panelSubtitle": "Gestione utenti e statistiche",
         "statistics": {
-            "totalUsers": "Utenti totali",
+            "totalUsers": "Utenti Totali",
             "activeUsers": "Attivi",
             "bannedUsers": "Bannati",
             "owners": "Proprietari"
@@ -123,7 +236,7 @@
         "actions": {
             "edit": "Modifica",
             "ban": "Banna",
-            "unban": "Rimuovi ban",
+            "unban": "Togli ban",
             "delete": "Elimina",
             "promoteToOwner": "Promuovi a Proprietario"
         },
@@ -138,19 +251,19 @@
             "email": "Email",
             "country": "Paese",
             "role": "Ruolo",
-            "isActive": "Utente attivo",
-            "isBanned": "Utente bannato",
+            "isActive": "Utente Attivo",
+            "isBanned": "Utente Bannato",
             "cancel": "Annulla",
-            "save": "Salva modifiche"
+            "save": "Salva Modifiche"
         },
         "messages": {
             "loadingUsers": "Caricamento utenti...",
             "noUsers": "Nessun utente trovato",
-            "errorLoading": "Errore nel caricamento utenti",
-            "errorUpdating": "Errore nell'aggiornamento utente",
-            "errorDeleting": "Errore nell'eliminazione utente",
-            "errorBanning": "Errore nell'aggiornamento stato ban",
-            "errorPromoting": "Errore nella promozione utente"
+            "errorLoading": "Errore di caricamento",
+            "errorUpdating": "Errore di aggiornamento",
+            "errorDeleting": "Errore di eliminazione",
+            "errorBanning": "Errore nel ban",
+            "errorPromoting": "Errore nella promozione"
         }
     }
 }
