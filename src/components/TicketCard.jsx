@@ -9,7 +9,7 @@ export default function TicketCard({ ticket }) {
     const [showQRModal, setShowQRModal] = useState(false);
     const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
 
-    const { ticket_id, codigo_ticket, activado, nombre_asistente, evento } = ticket;
+    const { ticket_id, codigo_ticket, activado, nombre_asistente, propietario, evento } = ticket;
 
     // CRITICAL FIX: Ensure we have a valid code for QR generation
     // If codigo_ticket is missing (old tickets or API error), use ticket_id as fallback
@@ -70,9 +70,9 @@ export default function TicketCard({ ticket }) {
 
 
 
-            // Card background
+            // Card background (square borders)
             pdf.setFillColor(255, 255, 255);
-            pdf.roundedRect(ticketX, ticketY, ticketWidth, ticketHeight, 10, 10, 'F');
+            pdf.rect(ticketX, ticketY, ticketWidth, ticketHeight, 'F');
 
             // Header gradient (70mm height)
             const headerH = 70;
@@ -82,12 +82,7 @@ export default function TicketCard({ ticket }) {
                 const g = Math.round(darkPurple[1] + (purple[1] - darkPurple[1]) * ratio * 0.6);
                 const b = Math.round(darkPurple[2] + (purple[2] - darkPurple[2]) * ratio * 0.6);
                 pdf.setFillColor(r, g, b);
-                if (i < 10) {
-                    const offset = 10 - Math.sqrt(100 - (10 - i) * (10 - i));
-                    pdf.rect(ticketX + offset, ticketY + i, ticketWidth - offset * 2, 1.2, 'F');
-                } else {
-                    pdf.rect(ticketX, ticketY + i, ticketWidth, 1.2, 'F');
-                }
+                pdf.rect(ticketX, ticketY + i, ticketWidth, 1.2, 'F');
             }
 
             // nJoy branding
@@ -99,10 +94,10 @@ export default function TicketCard({ ticket }) {
             pdf.setDrawColor(255, 255, 255);
             pdf.line(ticketX + 12, ticketY + 19, ticketX + 35, ticketY + 19);
 
-            // Genre badge
+            // Genre badge (square)
             const genre = (evento.genero || 'EVENTO').toUpperCase();
             pdf.setFillColor(pink[0], pink[1], pink[2]);
-            pdf.roundedRect(ticketX + ticketWidth - 45, ticketY + 10, 35, 10, 3, 3, 'F');
+            pdf.rect(ticketX + ticketWidth - 45, ticketY + 10, 35, 10, 'F');
             pdf.setFontSize(8);
             pdf.text(genre, ticketX + ticketWidth - 27.5, ticketY + 17, { align: 'center' });
 
@@ -160,10 +155,21 @@ export default function TicketCard({ ticket }) {
             pdf.setFont('helvetica', 'normal');
             pdf.text(nombre_asistente || 'Portador de la entrada', ticketX + 15, attY + 7);
 
-            // QR Section background
-            const qrY = attY + 22;
+            // Owner (propietario)
+            const ownerY = attY + 20;
+            pdf.setTextColor(120, 120, 130);
+            pdf.setFontSize(8);
+            pdf.setFont('helvetica', 'bold');
+            pdf.text('PROPIETARIO', ticketX + 15, ownerY);
+            pdf.setTextColor(40, 40, 50);
+            pdf.setFontSize(11);
+            pdf.setFont('helvetica', 'normal');
+            pdf.text(propietario || 'Usuario nJoy', ticketX + 15, ownerY + 7);
+
+            // QR Section background (square)
+            const qrY = ownerY + 20;
             pdf.setFillColor(245, 246, 250);
-            pdf.roundedRect(ticketX + 20, qrY, ticketWidth - 40, 100, 6, 6, 'F');
+            pdf.rect(ticketX + 20, qrY, ticketWidth - 40, 100, 'F');
 
             // QR Code
             const qrImageData = qrCanvas.toDataURL('image/png');
