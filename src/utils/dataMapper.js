@@ -35,7 +35,10 @@ export const mapEventFromAPI = (apiEvent, locationsMap = {}) => {
         // Availability Logic
         capacity: apiEvent.plazas || 0,
         ticketsSold: apiEvent.tickets_vendidos || 0,
-        ticketsAvailable: (apiEvent.plazas || 0) - (apiEvent.tickets_vendidos || 0)
+        ticketsAvailable: (apiEvent.plazas || 0) - (apiEvent.tickets_vendidos || 0),
+        // Sales control
+        venta_pausada: apiEvent.venta_pausada || false,
+        salesPaused: apiEvent.venta_pausada || false
     };
 };
 

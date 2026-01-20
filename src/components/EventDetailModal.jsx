@@ -21,6 +21,29 @@ const EventDetailModal = ({ event, isOpen, onClose }) => {
         return new Date(dateString).toLocaleDateString(i18n.language, options);
     };
 
+    // Verificar estado de la venta
+    const now = new Date();
+    const eventDate = new Date(event.date);
+    const salesCloseTime = new Date(eventDate.getTime() - 10 * 60 * 1000); // 10 min antes
+
+    const isEventPast = now >= eventDate;
+    const isSalesClosed = now >= salesCloseTime;
+    const isSoldOut = event.ticketsAvailable <= 0;
+    const isSalesPaused = event.venta_pausada || event.salesPaused;
+
+    // Determinar si se puede comprar
+    const canPurchase = !isEventPast && !isSalesClosed && !isSoldOut && !isSalesPaused;
+
+    // Mensaje de estado de venta
+    const getSalesStatusMessage = () => {
+        if (isSoldOut) return { text: 'SOLD OUT', color: '#ef4444' };
+        if (isEventPast) return { text: 'Evento finalizado', color: '#6b7280' };
+        if (isSalesClosed) return { text: 'Venta cerrada (10 min antes)', color: '#f59e0b' };
+        if (isSalesPaused) return { text: '⏸️ Venta pausada temporalmente', color: '#f59e0b' };
+        if (event.ticketsAvailable < 20) return { text: `¡Solo quedan ${event.ticketsAvailable} entradas!`, color: '#f59e0b' };
+        return { text: `Entradas disponibles: ${event.ticketsAvailable}`, color: '#10b981' };
+    };
+
     const handleBuyTickets = () => {
         onClose();
         navigate(`/tickets/purchase/${event.id}`);
@@ -75,27 +98,19 @@ const EventDetailModal = ({ event, isOpen, onClose }) => {
 
                     {/* Availability Info */}
                     <div className="availability-info" style={{ marginBottom: '20px', textAlign: 'center' }}>
-                        {event.ticketsAvailable <= 0 ? (
-                            <span style={{ color: '#ef4444', fontWeight: 'bold' }}>SOLD OUT</span>
-                        ) : event.ticketsAvailable < 20 ? (
-                            <span style={{ color: '#f59e0b', fontWeight: 'bold' }}>
-                                ¡Solo quedan {event.ticketsAvailable} entradas!
-                            </span>
-                        ) : (
-                            <span style={{ color: '#10b981' }}>
-                                Entradas disponibles: {event.ticketsAvailable}
-                            </span>
-                        )}
+                        <span style={{ color: getSalesStatusMessage().color, fontWeight: 'bold' }}>
+                            {getSalesStatusMessage().text}
+                        </span>
                     </div>
 
                     <div className="event-detail-actions">
                         <button
-                            className={`btn btn-primary full-width ${event.ticketsAvailable <= 0 ? 'disabled' : ''}`}
+                            className={`btn btn-primary full-width ${!canPurchase ? 'disabled' : ''}`}
                             onClick={handleBuyTickets}
-                            disabled={event.ticketsAvailable <= 0}
-                            style={event.ticketsAvailable <= 0 ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+                            disabled={!canPurchase}
+                            style={!canPurchase ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
                         >
-                            <i className="fa-solid fa-ticket"></i> {event.ticketsAvailable <= 0 ? 'SOLD OUT' : t('eventDetail.buyTickets')}
+                            <i className="fa-solid fa-ticket"></i> {!canPurchase ? getSalesStatusMessage().text : t('eventDetail.buyTickets')}
                         </button>
                     </div>
                 </div>

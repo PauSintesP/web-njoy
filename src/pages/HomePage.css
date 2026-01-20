@@ -270,6 +270,27 @@
     border-color: var(--primary);
 }
 
+.date-range {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.date-input {
+    padding: 0.6rem 0.8rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 0.9rem;
+    color-scheme: dark;
+}
+
+.date-input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
 .location-select {
     padding: 0.6rem 0.8rem;
     background: rgba(255, 255, 255, 0.05);

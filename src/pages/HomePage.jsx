@@ -18,6 +18,8 @@ const HomePage = ({ events, loading, error, handleEventClick }) => {
     const [priceMax, setPriceMax] = useState('');
     const [selectedLocation, setSelectedLocation] = useState('');
     const [isSearching, setIsSearching] = useState(false);
+    const [dateFrom, setDateFrom] = useState('');
+    const [dateTo, setDateTo] = useState('');
 
     // Geolocation state
     const [userLocation, setUserLocation] = useState(null);
@@ -99,6 +101,8 @@ const HomePage = ({ events, loading, error, handleEventClick }) => {
             if (priceMin) filters.precio_min = parseFloat(priceMin);
             if (priceMax) filters.precio_max = parseFloat(priceMax);
             if (selectedLocation) filters.localidad_id = parseInt(selectedLocation);
+            if (dateFrom) filters.fecha_desde = dateFrom;
+            if (dateTo) filters.fecha_hasta = dateTo;
 
             // Add geolocation params if available and sorting by distance
             if (userLocation && sortByDistance) {
@@ -130,6 +134,8 @@ const HomePage = ({ events, loading, error, handleEventClick }) => {
         setPriceMin('');
         setPriceMax('');
         setSelectedLocation('');
+        setDateFrom('');
+        setDateTo('');
         setSortByDistance(false);
         setFilteredEvents(events);
     };
@@ -238,6 +244,24 @@ const HomePage = ({ events, loading, error, handleEventClick }) => {
                                     <span className="location-error">{locationError}</span>
                                 )}
                             </div>
+                            <div className="filter-group">
+                                <label>Fecha</label>
+                                <div className="date-range">
+                                    <input
+                                        type="date"
+                                        value={dateFrom}
+                                        onChange={(e) => setDateFrom(e.target.value)}
+                                        className="date-input"
+                                    />
+                                    <span>-</span>
+                                    <input
+                                        type="date"
+                                        value={dateTo}
+                                        onChange={(e) => setDateTo(e.target.value)}
+                                        className="date-input"
+                                    />
+                                </div>
+                            </div>
                             <div className="filter-actions">
                                 <button className="btn-clear" onClick={clearFilters}>
                                     <i className="fa-solid fa-times"></i> Limpiar
@@ -287,8 +311,8 @@ const HomePage = ({ events, loading, error, handleEventClick }) => {
                     ) : (
                         <div className="no-events">
                             <i className="fa-solid fa-calendar-xmark"></i>
-                            <p>{searchQuery ? 'No se encontraron eventos con esos filtros' : t('common.noEvents')}</p>
-                            {(searchQuery || priceMin || priceMax || selectedLocation) && (
+                            <p>{searchQuery ? 'No se encontraron eventos con esos filtros' : t('common.noEvents', { location: selectedLocation ? locations.find(l => l.id == selectedLocation)?.ciudad : 'tu zona' })}</p>
+                            {(searchQuery || priceMin || priceMax || selectedLocation || dateFrom || dateTo) && (
                                 <button className="btn-clear-search" onClick={clearFilters}>
                                     Limpiar filtros
                                 </button>

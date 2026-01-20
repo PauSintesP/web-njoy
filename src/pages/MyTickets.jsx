@@ -52,10 +52,6 @@ export default function MyTickets() {
         <div className="page-container">
             <div className="container">
                 <div className="page-header center">
-                    <button onClick={() => navigate('/')} className="btn btn-text back-button-floating">
-                        <i className="fa-solid fa-arrow-left"></i>
-                        Volver
-                    </button>
                     <h1>
                         <i className="fa-solid fa-ticket"></i>
                         Mis Entradas
