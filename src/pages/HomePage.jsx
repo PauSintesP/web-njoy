@@ -152,7 +152,7 @@ const HomePage = ({ events, loading, error, handleEventClick }) => {
             <section className="hero">
                 <div className="container hero-content">
                     <h1 className="hero-title">
-                        {t('Find your next favorite event')}
+                        {t('hero.title')}
                     </h1>
                     <p className="hero-subtitle">
                         {t('hero.subtitle')}
@@ -168,7 +168,7 @@ const HomePage = ({ events, loading, error, handleEventClick }) => {
                         <i className="fa-solid fa-search search-icon"></i>
                         <input
                             type="text"
-                            placeholder={t('Buscar eventos...')}
+                            placeholder={t('hero.searchPlaceholder')}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             onKeyPress={handleKeyPress}
@@ -179,7 +179,7 @@ const HomePage = ({ events, loading, error, handleEventClick }) => {
                             onClick={handleSearch}
                             disabled={isSearching}
                         >
-                            {isSearching ? <i className="fa-solid fa-spinner fa-spin"></i> : t('Buscar')}
+                            {isSearching ? <i className="fa-solid fa-spinner fa-spin"></i> : t('common.search')}
                         </button>
                         <button
                             className={`filter-toggle-btn ${showAdvancedFilters ? 'active' : ''}`}
@@ -193,11 +193,11 @@ const HomePage = ({ events, loading, error, handleEventClick }) => {
                     {showAdvancedFilters && (
                         <div className="advanced-filters">
                             <div className="filter-group">
-                                <label>Precio</label>
+                                <label>{t('filters.price')}</label>
                                 <div className="price-range">
                                     <input
                                         type="number"
-                                        placeholder="Min €"
+                                        placeholder={t('filters.priceMin')}
                                         value={priceMin}
                                         onChange={(e) => setPriceMin(e.target.value)}
                                         className="price-input"
@@ -205,7 +205,7 @@ const HomePage = ({ events, loading, error, handleEventClick }) => {
                                     <span>-</span>
                                     <input
                                         type="number"
-                                        placeholder="Max €"
+                                        placeholder={t('filters.priceMax')}
                                         value={priceMax}
                                         onChange={(e) => setPriceMax(e.target.value)}
                                         className="price-input"
@@ -213,31 +213,31 @@ const HomePage = ({ events, loading, error, handleEventClick }) => {
                                 </div>
                             </div>
                             <div className="filter-group">
-                                <label>Zona</label>
+                                <label>{t('filters.location')}</label>
                                 <select
                                     value={selectedLocation}
                                     onChange={(e) => setSelectedLocation(e.target.value)}
                                     className="location-select"
                                 >
-                                    <option value="">Todas las zonas</option>
+                                    <option value="">{t('filters.allLocations')}</option>
                                     {locations.map(loc => (
                                         <option key={loc.id} value={loc.id}>{loc.ciudad}</option>
                                     ))}
                                 </select>
                             </div>
                             <div className="filter-group">
-                                <label>Distancia</label>
+                                <label>{t('filters.distance')}</label>
                                 <button
                                     className={`near-me-btn ${sortByDistance ? 'active' : ''}`}
                                     onClick={toggleDistanceSort}
                                     disabled={isLoadingLocation}
                                 >
                                     {isLoadingLocation ? (
-                                        <><i className="fa-solid fa-spinner fa-spin"></i> Localizando...</>
+                                        <><i className="fa-solid fa-spinner fa-spin"></i> {t('filters.locating')}</>
                                     ) : sortByDistance ? (
-                                        <><i className="fa-solid fa-location-crosshairs"></i> Cerca de mí ✓</>
+                                        <><i className="fa-solid fa-location-crosshairs"></i> {t('filters.nearMe')} ✓</>
                                     ) : (
-                                        <><i className="fa-solid fa-location-crosshairs"></i> Cerca de mí</>
+                                        <><i className="fa-solid fa-location-crosshairs"></i> {t('filters.nearMe')}</>
                                     )}
                                 </button>
                                 {locationError && (
@@ -245,7 +245,7 @@ const HomePage = ({ events, loading, error, handleEventClick }) => {
                                 )}
                             </div>
                             <div className="filter-group">
-                                <label>Fecha</label>
+                                <label>{t('filters.date')}</label>
                                 <div className="date-range">
                                     <input
                                         type="date"
@@ -264,10 +264,10 @@ const HomePage = ({ events, loading, error, handleEventClick }) => {
                             </div>
                             <div className="filter-actions">
                                 <button className="btn-clear" onClick={clearFilters}>
-                                    <i className="fa-solid fa-times"></i> Limpiar
+                                    <i className="fa-solid fa-times"></i> {t('filters.clear')}
                                 </button>
                                 <button className="btn-apply" onClick={handleSearch}>
-                                    <i className="fa-solid fa-check"></i> Aplicar
+                                    <i className="fa-solid fa-check"></i> {t('filters.apply')}
                                 </button>
                             </div>
                         </div>
@@ -311,17 +311,17 @@ const HomePage = ({ events, loading, error, handleEventClick }) => {
                     ) : (
                         <div className="no-events">
                             <i className="fa-solid fa-calendar-xmark"></i>
-                            <p>{searchQuery ? 'No se encontraron eventos con esos filtros' : t('common.noEvents', { location: selectedLocation ? locations.find(l => l.id == selectedLocation)?.ciudad : 'tu zona' })}</p>
+                            <p>{searchQuery ? t('filters.noResultsFilters') : t('common.noEvents', { location: selectedLocation ? locations.find(l => l.id == selectedLocation)?.ciudad : '' })}</p>
                             {(searchQuery || priceMin || priceMax || selectedLocation || dateFrom || dateTo) && (
                                 <button className="btn-clear-search" onClick={clearFilters}>
-                                    Limpiar filtros
+                                    {t('filters.clearFilters')}
                                 </button>
                             )}
                         </div>
                     )}
                 </div>
             </section>
-        </main>
+        </main >
     );
 };
 

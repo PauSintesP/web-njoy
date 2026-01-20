@@ -26,7 +26,7 @@ const CreateEventModal = ({ isOpen, onClose, onEventCreated }) => {
         longitud: null
     });
     const [genreText, setGenreText] = useState('');
-    
+
     const [locations, setLocations] = useState([]);
     const [genres, setGenres] = useState([]);
     const [organizers, setOrganizers] = useState([]);
@@ -154,7 +154,7 @@ const CreateEventModal = ({ isOpen, onClose, onEventCreated }) => {
             <div className="modal-content glass" onClick={(e) => e.stopPropagation()}>
                 <button className="close-btn" onClick={handleClose}>&times;</button>
 
-                <h2 className="modal-title">Create New Event</h2>
+                <h2 className="modal-title">{t('createEvent.title')}</h2>
 
                 {error && (
                     <div className="error-message">
@@ -165,16 +165,16 @@ const CreateEventModal = ({ isOpen, onClose, onEventCreated }) => {
 
                 {loadingData ? (
                     <div className="loading-state">
-                        <i className="fa-solid fa-spinner fa-spin"></i> Loading form data...
+                        <i className="fa-solid fa-spinner fa-spin"></i> {t('common.loading')}
                     </div>
                 ) : (
                     <form className="register-form" onSubmit={handleSubmit}>
                         <div className="form-group">
-                            <label>Event Name *</label>
+                            <label>{t('createEvent.eventName')} *</label>
                             <input
                                 type="text"
                                 name="nombre"
-                                placeholder="Summer Festival 2025"
+                                placeholder={t('createEvent.eventNamePlaceholder')}
                                 value={formData.nombre}
                                 onChange={handleChange}
                                 required
@@ -183,10 +183,10 @@ const CreateEventModal = ({ isOpen, onClose, onEventCreated }) => {
                         </div>
 
                         <div className="form-group">
-                            <label>Description *</label>
+                            <label>{t('createEvent.description')} *</label>
                             <textarea
                                 name="descripcion"
-                                placeholder="Describe your event..."
+                                placeholder={t('createEvent.descriptionPlaceholder')}
                                 value={formData.descripcion}
                                 onChange={handleChange}
                                 required
@@ -195,19 +195,19 @@ const CreateEventModal = ({ isOpen, onClose, onEventCreated }) => {
                         </div>
 
                         <div className="form-group">
-                            <label>Location (optional - write or select on map)</label>
-                            <LocationPicker 
+                            <label>{t('createEvent.location')} ({t('createEvent.locationHint')})</label>
+                            <LocationPicker
                                 onLocationChange={(loc) => setLocationData(loc)}
                             />
                         </div>
 
                         <div className="form-row">
                             <div className="form-group">
-                                <label>Venue (optional)</label>
+                                <label>{t('createEvent.venue')}</label>
                                 <input
                                     type="text"
                                     name="recinto"
-                                    placeholder="Stadium, Club, etc."
+                                    placeholder={t('createEvent.venuePlaceholder')}
                                     value={formData.recinto}
                                     onChange={handleChange}
                                     disabled={loading}
@@ -217,7 +217,7 @@ const CreateEventModal = ({ isOpen, onClose, onEventCreated }) => {
 
                         <div className="form-row">
                             <div className="form-group">
-                                <label>Date & Time (optional)</label>
+                                <label>{t('createEvent.dateTime')}</label>
                                 <input
                                     type="datetime-local"
                                     name="fechayhora"
@@ -228,7 +228,7 @@ const CreateEventModal = ({ isOpen, onClose, onEventCreated }) => {
                             </div>
 
                             <div className="form-group">
-                                <label>Capacity (optional)</label>
+                                <label>{t('createEvent.capacity')}</label>
                                 <input
                                     type="number"
                                     name="plazas"
@@ -243,11 +243,11 @@ const CreateEventModal = ({ isOpen, onClose, onEventCreated }) => {
 
                         <div className="form-row">
                             <div className="form-group">
-                                <label>Type (optional)</label>
+                                <label>{t('createEvent.type')}</label>
                                 <input
                                     type="text"
                                     name="tipo"
-                                    placeholder="Concert, Festival, etc."
+                                    placeholder={t('createEvent.typePlaceholder')}
                                     value={formData.tipo}
                                     onChange={handleChange}
                                     disabled={loading}
@@ -255,11 +255,11 @@ const CreateEventModal = ({ isOpen, onClose, onEventCreated }) => {
                             </div>
 
                             <div className="form-group">
-                                <label>Price Category (optional)</label>
+                                <label>{t('createEvent.price')}</label>
                                 <input
                                     type="text"
                                     name="categoria_precio"
-                                    placeholder="General, VIP, etc."
+                                    placeholder={t('createEvent.pricePlaceholder')}
                                     value={formData.categoria_precio}
                                     onChange={handleChange}
                                     disabled={loading}
@@ -269,11 +269,11 @@ const CreateEventModal = ({ isOpen, onClose, onEventCreated }) => {
 
                         <div className="form-row">
                             <div className="form-group">
-                                <label>Genre (optional - write to create new)</label>
+                                <label>{t('createEvent.genre')}</label>
                                 <input
                                     type="text"
                                     name="genero_text"
-                                    placeholder="Rock, Pop, Jazz..."
+                                    placeholder={t('createEvent.genrePlaceholder')}
                                     value={genreText}
                                     onChange={(e) => setGenreText(e.target.value)}
                                     disabled={loading}
@@ -281,14 +281,14 @@ const CreateEventModal = ({ isOpen, onClose, onEventCreated }) => {
                             </div>
 
                             <div className="form-group">
-                                <label>Organizer (optional)</label>
+                                <label>{t('createEvent.organizer')}</label>
                                 <select
                                     name="organizador_dni"
                                     value={formData.organizador_dni || ''}
                                     onChange={handleChange}
                                     disabled={loading}
                                 >
-                                    <option value="">Select Organizer</option>
+                                    <option value="">{t('createEvent.selectOrganizer')}</option>
                                     {organizers.map(org => (
                                         <option key={org.dni} value={org.dni}>{org.ncompleto}</option>
                                     ))}
@@ -297,11 +297,11 @@ const CreateEventModal = ({ isOpen, onClose, onEventCreated }) => {
                         </div>
 
                         <div className="form-group">
-                            <label>Image URL</label>
+                            <label>{t('createEvent.imageUrl')}</label>
                             <input
                                 type="text"
                                 name="imagen"
-                                placeholder="http://example.com/image.jpg"
+                                placeholder={t('createEvent.imageUrlPlaceholder')}
                                 value={formData.imagen}
                                 onChange={handleChange}
                                 disabled={loading}
@@ -315,10 +315,10 @@ const CreateEventModal = ({ isOpen, onClose, onEventCreated }) => {
                         >
                             {loading ? (
                                 <>
-                                    <i className="fa-solid fa-spinner fa-spin"></i> Creating...
+                                    <i className="fa-solid fa-spinner fa-spin"></i> {t('createEvent.creating')}
                                 </>
                             ) : (
-                                'Create Event'
+                                t('createEvent.submit')
                             )}
                         </button>
                     </form>

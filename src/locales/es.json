@@ -24,7 +24,9 @@
         "search": "Buscar",
         "close": "Cerrar",
         "yes": "Sí",
-        "no": "No"
+        "no": "No",
+        "generating": "Generando...",
+        "retry": "Reintentar"
     },
     "navbar": {
         "login": "Iniciar Sesión",
@@ -66,6 +68,7 @@
     "eventCard": {
         "location": "Ubicación",
         "date": "Fecha",
+        "dateToConfirm": "Fecha por confirmar",
         "price": "Precio",
         "free": "Gratis",
         "soldOut": "Agotado",
@@ -190,6 +193,7 @@
         "browseEvents": "Explorar Eventos",
         "downloadPdf": "Descargar PDF",
         "viewQr": "Ver QR",
+        "scanQr": "Escanea tu QR",
         "valid": "Válida",
         "used": "Usada",
         "expired": "Expirada",

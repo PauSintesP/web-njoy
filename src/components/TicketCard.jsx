@@ -1,9 +1,11 @@
 import React, { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { QRCodeCanvas } from 'qrcode.react';
 import jsPDF from 'jspdf';
 import './TicketCard.css';
 
 export default function TicketCard({ ticket }) {
+    const { t, i18n } = useTranslation();
     const ticketRef = useRef(null);
     const qrCanvasRef = useRef(null);
     const [showQRModal, setShowQRModal] = useState(false);
@@ -22,9 +24,10 @@ export default function TicketCard({ ticket }) {
     const qrData = safeCodigoTicket;
 
     const formatDate = (dateString, includeWeekDay = false) => {
-        if (!dateString) return 'Fecha por confirmar';
+        if (!dateString) return t('eventCard.dateToConfirm') || 'TBC';
         const date = new Date(dateString);
-        return date.toLocaleDateString('es-ES', {
+        const locale = i18n.language || 'en';
+        return date.toLocaleDateString(locale, {
             weekday: includeWeekDay ? 'long' : undefined,
             year: 'numeric',
             month: 'long',
@@ -271,7 +274,7 @@ export default function TicketCard({ ticket }) {
                                 />
                                 <div className="qr-overlay">
                                     <i className="fa-solid fa-expand"></i>
-                                    <span>Clic para ampliar</span>
+                                    <span>{t('myTickets.viewQr')}</span>
                                 </div>
                             </div>
                         </div>
@@ -285,12 +288,12 @@ export default function TicketCard({ ticket }) {
                                 {activado ? (
                                     <>
                                         <i className="fa-solid fa-check-circle"></i>
-                                        VÁLIDO
+                                        {t('myTickets.valid')}
                                     </>
                                 ) : (
                                     <>
                                         <i className="fa-solid fa-times-circle"></i>
-                                        USADO
+                                        {t('myTickets.used')}
                                     </>
                                 )}
                             </div>
@@ -317,7 +320,7 @@ export default function TicketCard({ ticket }) {
                         ) : (
                             <i className="fa-solid fa-file-pdf"></i>
                         )}
-                        {isGeneratingPdf ? 'Generando...' : 'Descargar PDF'}
+                        {isGeneratingPdf ? t('common.generating') || 'Generating...' : t('myTickets.downloadPdf')}
                     </button>
 
                     <button
@@ -355,7 +358,7 @@ export default function TicketCard({ ticket }) {
                         <button className="qr-modal-close" onClick={() => setShowQRModal(false)}>
                             <i className="fa-solid fa-times"></i>
                         </button>
-                        <h3>Escanea tu QR</h3>
+                        <h3>{t('myTickets.scanQr') || 'Scan your QR'}</h3>
                         <div className="qr-modal-content">
                             <QRCodeCanvas
                                 value={qrData}

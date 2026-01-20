@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import ticketService from '../services/ticketService';
 import TicketCard from '../components/TicketCard';
 import './MyTickets.css';
 
 export default function MyTickets() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [tickets, setTickets] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -21,7 +23,7 @@ export default function MyTickets() {
             setTickets(data);
         } catch (err) {
             console.error('Error loading tickets:', err);
-            setError('Error cargando tus entradas');
+            setError(t('common.error'));
         } finally {
             setLoading(false);
         }
@@ -31,7 +33,7 @@ export default function MyTickets() {
         return (
             <div className="page-container loading-state">
                 <i className="fa-solid fa-spinner fa-spin" style={{ fontSize: '3rem', color: 'var(--primary)' }}></i>
-                <p>Cargando tus entradas...</p>
+                <p>{t('common.loading')}</p>
             </div>
         );
     }
@@ -42,7 +44,7 @@ export default function MyTickets() {
                 <i className="fa-solid fa-circle-exclamation"></i>
                 <p>{error}</p>
                 <button onClick={loadTickets} className="btn btn-primary">
-                    Reintentar
+                    {t('common.retry') || 'Retry'}
                 </button>
             </div>
         );
@@ -54,12 +56,12 @@ export default function MyTickets() {
                 <div className="page-header center">
                     <h1>
                         <i className="fa-solid fa-ticket"></i>
-                        Mis Entradas
+                        {t('myTickets.title')}
                     </h1>
                     <p className="subtitle">
                         {tickets.length === 0
-                            ? 'Aún no tienes entradas'
-                            : `Tienes ${tickets.length} entrada${tickets.length !== 1 ? 's' : ''}`
+                            ? t('myTickets.noTickets')
+                            : t('myTickets.subtitle')
                         }
                     </p>
                 </div>
@@ -67,14 +69,14 @@ export default function MyTickets() {
                 {tickets.length === 0 ? (
                     <div className="empty-state">
                         <div className="empty-icon">🎫</div>
-                        <h2>No tienes entradas todavía</h2>
-                        <p>Explora los eventos disponibles y compra tus primeras entradas</p>
+                        <h2>{t('myTickets.noTickets')}</h2>
+                        <p>{t('myTickets.noTicketsDescription')}</p>
                         <button
                             onClick={() => navigate('/')}
                             className="btn btn-primary"
                         >
                             <i className="fa-solid fa-magnifying-glass"></i>
-                            Explorar Eventos
+                            {t('myTickets.browseEvents')}
                         </button>
                     </div>
                 ) : (
