@@ -1,12 +1,11 @@
 import React, { useRef, useState } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
 import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 import './TicketCard.css';
 
 export default function TicketCard({ ticket }) {
     const ticketRef = useRef(null);
-    const pdfTemplateRef = useRef(null);
+    const qrCanvasRef = useRef(null);
     const [showQRModal, setShowQRModal] = useState(false);
     const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
 
@@ -40,37 +39,174 @@ export default function TicketCard({ ticket }) {
         setIsGeneratingPdf(true);
 
         try {
-            const input = pdfTemplateRef.current;
+            // Get QR canvas element to extract image data
+            const qrCanvas = qrCanvasRef.current?.querySelector('canvas');
+            if (!qrCanvas) {
+                throw new Error('QR Canvas not found');
+            }
 
-            // Wait for images to render (simple timeout usually enough for cached images, 
-            // or we could use onLoad handlers, but html2canvas handles it mostly)
-            await new Promise(resolve => setTimeout(resolve, 500));
-
-            const canvas = await html2canvas(input, {
-                scale: 2, // Higher quality
-                useCORS: true, // Allow cross-origin images
-                logging: false,
-                backgroundColor: '#ffffff',
-                width: 794, // A4 width in px at 96 DPI approx (210mm)
-                height: 1123, // Force A4 height ratio
-                windowWidth: 1200
-            });
-
-            const imgData = canvas.toDataURL('image/png');
+            // Create PDF in A4 portrait
             const pdf = new jsPDF({
                 orientation: 'portrait',
                 unit: 'mm',
                 format: 'a4'
             });
 
-            const pdfWidth = pdf.internal.pageSize.getWidth();
-            const pdfHeight = pdf.internal.pageSize.getHeight();
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+            const margin = 15;
+            const contentWidth = pageWidth - (margin * 2);
 
-            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            // Colors
+            const primaryColor = [102, 126, 234]; // #667eea
+            const accentColor = [236, 72, 153];   // #ec4899
+            const darkColor = [30, 30, 50];
+            const grayColor = [100, 100, 100];
+            const lightGray = [240, 240, 240];
+
+            // ================== HEADER WITH GRADIENT ====================
+            // Draw gradient header background
+            const headerHeight = 60;
+            for (let i = 0; i < headerHeight; i++) {
+                const ratio = i / headerHeight;
+                const r = Math.round(primaryColor[0] + (accentColor[0] - primaryColor[0]) * ratio);
+                const g = Math.round(primaryColor[1] + (accentColor[1] - primaryColor[1]) * ratio);
+                const b = Math.round(primaryColor[2] + (accentColor[2] - primaryColor[2]) * ratio);
+                pdf.setFillColor(r, g, b);
+                pdf.rect(0, i * (headerHeight / headerHeight), pageWidth, 1.5, 'F');
+            }
+
+            // Event genre badge
+            pdf.setFillColor(255, 255, 255);
+            pdf.roundedRect(margin, 15, 50, 10, 5, 5, 'F');
+            pdf.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+            pdf.setFontSize(10);
+            pdf.setFont('helvetica', 'bold');
+            const genre = evento.genero || 'EVENTO';
+            pdf.text(genre.toUpperCase(), margin + 25, 22, { align: 'center' });
+
+            // Event name
+            pdf.setTextColor(255, 255, 255);
+            pdf.setFontSize(24);
+            pdf.setFont('helvetica', 'bold');
+            const eventName = evento.nombre.length > 35
+                ? evento.nombre.substring(0, 35) + '...'
+                : evento.nombre;
+            pdf.text(eventName, margin, 48);
+
+            // ================== EVENT INFO SECTION ====================
+            let yPos = headerHeight + 20;
+
+            // Info box background
+            pdf.setFillColor(lightGray[0], lightGray[1], lightGray[2]);
+            pdf.roundedRect(margin, yPos - 5, contentWidth, 55, 3, 3, 'F');
+
+            // Date and Time
+            pdf.setTextColor(grayColor[0], grayColor[1], grayColor[2]);
+            pdf.setFontSize(9);
+            pdf.setFont('helvetica', 'bold');
+            pdf.text('FECHA Y HORA', margin + 5, yPos + 5);
+            pdf.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
+            pdf.setFontSize(11);
+            pdf.setFont('helvetica', 'normal');
+            pdf.text(formatDate(evento.fechayhora, true), margin + 5, yPos + 13);
+
+            // Venue
+            pdf.setTextColor(grayColor[0], grayColor[1], grayColor[2]);
+            pdf.setFontSize(9);
+            pdf.setFont('helvetica', 'bold');
+            pdf.text('RECINTO', margin + contentWidth / 2, yPos + 5);
+            pdf.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
+            pdf.setFontSize(11);
+            pdf.setFont('helvetica', 'normal');
+            const recintoText = evento.recinto?.length > 30
+                ? evento.recinto.substring(0, 30) + '...'
+                : (evento.recinto || 'Por confirmar');
+            pdf.text(recintoText, margin + contentWidth / 2, yPos + 13);
+
+            // Attendee
+            pdf.setTextColor(grayColor[0], grayColor[1], grayColor[2]);
+            pdf.setFontSize(9);
+            pdf.setFont('helvetica', 'bold');
+            pdf.text('ASISTENTE', margin + 5, yPos + 28);
+            pdf.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
+            pdf.setFontSize(11);
+            pdf.setFont('helvetica', 'normal');
+            pdf.text(nombre_asistente || 'Portador de la entrada', margin + 5, yPos + 36);
+
+            // Price
+            pdf.setTextColor(grayColor[0], grayColor[1], grayColor[2]);
+            pdf.setFontSize(9);
+            pdf.setFont('helvetica', 'bold');
+            pdf.text('PRECIO', margin + contentWidth / 2, yPos + 28);
+            pdf.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+            pdf.setFontSize(14);
+            pdf.setFont('helvetica', 'bold');
+            pdf.text(evento.precio ? `${evento.precio.toFixed(2)} €` : 'Gratis', margin + contentWidth / 2, yPos + 37);
+
+            // ================== QR CODE SECTION ====================
+            yPos += 70;
+
+            // QR section background
+            pdf.setDrawColor(200, 200, 200);
+            pdf.setLineDashPattern([3, 3], 0);
+            pdf.roundedRect(margin, yPos, contentWidth, 120, 3, 3, 'S');
+            pdf.setLineDashPattern([], 0);
+
+            // QR Code - get from canvas
+            const qrImageData = qrCanvas.toDataURL('image/png');
+            const qrSize = 70;
+            const qrX = (pageWidth - qrSize) / 2;
+            pdf.addImage(qrImageData, 'PNG', qrX, yPos + 10, qrSize, qrSize);
+
+            // Ticket code
+            pdf.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
+            pdf.setFontSize(16);
+            pdf.setFont('courier', 'bold');
+            pdf.text(safeCodigoTicket, pageWidth / 2, yPos + 90, { align: 'center' });
+
+            // Status badge
+            const statusY = yPos + 102;
+            if (activado) {
+                pdf.setFillColor(16, 185, 129);
+                pdf.roundedRect((pageWidth - 60) / 2, statusY - 5, 60, 12, 3, 3, 'F');
+                pdf.setTextColor(255, 255, 255);
+                pdf.setFontSize(10);
+                pdf.setFont('helvetica', 'bold');
+                pdf.text('✓ ENTRADA VÁLIDA', pageWidth / 2, statusY + 3, { align: 'center' });
+            } else {
+                pdf.setFillColor(239, 68, 68);
+                pdf.roundedRect((pageWidth - 55) / 2, statusY - 5, 55, 12, 3, 3, 'F');
+                pdf.setTextColor(255, 255, 255);
+                pdf.setFontSize(10);
+                pdf.setFont('helvetica', 'bold');
+                pdf.text('✗ ENTRADA USADA', pageWidth / 2, statusY + 3, { align: 'center' });
+            }
+
+            // ================== FOOTER ====================
+            yPos += 135;
+
+            // Separator line
+            pdf.setDrawColor(200, 200, 200);
+            pdf.setLineDashPattern([2, 2], 0);
+            pdf.line(margin, yPos, pageWidth - margin, yPos);
+            pdf.setLineDashPattern([], 0);
+
+            // Branding
+            pdf.setTextColor(grayColor[0], grayColor[1], grayColor[2]);
+            pdf.setFontSize(9);
+            pdf.setFont('helvetica', 'normal');
+            const today = new Date().toLocaleDateString('es-ES');
+            pdf.text(`Generado por nJoy • ${today} • web-njoy.vercel.app`, pageWidth / 2, yPos + 10, { align: 'center' });
+
+            // Important note
+            pdf.setFontSize(8);
+            pdf.text('Presenta este código QR en la entrada del evento para acceder.', pageWidth / 2, yPos + 18, { align: 'center' });
+            pdf.text('Esta entrada es personal e intransferible.', pageWidth / 2, yPos + 24, { align: 'center' });
 
             // Generate safe filename
-            const safeEventName = evento.nombre.replace(/[^a-z0-9]/gi, '-').replace(/-+/g, '-');
-            const fileName = `Entrada-${codigo_ticket}-${safeEventName}.pdf`;
+            const safeEventName = evento.nombre.replace(/[^a-z0-9]/gi, '-').replace(/-+/g, '-').substring(0, 30);
+            const fileName = `Entrada-${safeCodigoTicket}-${safeEventName}.pdf`;
 
             pdf.save(fileName);
 
@@ -215,79 +351,14 @@ export default function TicketCard({ ticket }) {
                 </div>
             </div>
 
-            {/* Hidden PDF Template (for generation only) */}
-            <div className="pdf-generator-container">
-                <div ref={pdfTemplateRef} className="ticket-pdf-modern">
-                    {/* Header */}
-                    <div className="pdf-header">
-                        {evento.imagen && (
-                            <img src={evento.imagen} alt="Event" className="pdf-header-bg" crossOrigin="anonymous" />
-                        )}
-                        <div className="pdf-overlay-gradient">
-                            <div className="pdf-event-badge">
-                                {evento.genero || 'EVENTO'}
-                            </div>
-                            <h1 className="pdf-event-title-large">{evento.nombre}</h1>
-                        </div>
-                    </div>
-
-                    {/* Body */}
-                    <div className="pdf-body">
-                        {/* Grid Info */}
-                        <div className="pdf-info-grid">
-                            <div className="pdf-info-item">
-                                <span className="pdf-label">Fecha y Hora</span>
-                                <span className="pdf-value">{formatDate(evento.fechayhora, true)}</span>
-                            </div>
-                            <div className="pdf-info-item">
-                                <span className="pdf-label">Recinto</span>
-                                <span className="pdf-value">{evento.recinto}</span>
-                            </div>
-                            <div className="pdf-info-item">
-                                <span className="pdf-label">Asistente</span>
-                                <span className="pdf-value">{nombre_asistente || 'Portador'}</span>
-                            </div>
-                            <div className="pdf-info-item">
-                                <span className="pdf-label">Organizador</span>
-                                <span className="pdf-value">nJoy Events</span>
-                            </div>
-                        </div>
-
-                        <div className="pdf-divider"></div>
-
-                        {/* QR Section */}
-                        <div className="pdf-qr-section">
-                            <div className="pdf-qr-box">
-                                <QRCodeCanvas
-                                    value={qrData}
-                                    size={250}
-                                    level="H"
-                                    includeMargin={false}
-                                    imageSettings={{
-                                        src: "/icon-192.png", // Optional branding in QR (assuming exists or fail safely)
-                                        height: 30,
-                                        width: 30,
-                                        excavate: true,
-                                    }}
-                                />
-                            </div>
-                            <div className="pdf-ticket-code">{codigo_ticket}</div>
-                            <div className={`pdf-ticket-status ${activado ? 'pdf-status-valid' : 'pdf-status-used'}`}>
-                                {activado ? 'ENTRADA VÁLIDA' : 'ENTRADA USADA'}
-                            </div>
-                        </div>
-
-                        {/* Footer Price */}
-                        <div className="pdf-footer">
-                            <div className="pdf-price-huge">{evento.precio ? `${evento.precio.toFixed(2)} €` : 'Entrada'}</div>
-                            <div className="pdf-brand">
-                                <span>Generado por nJoy</span>
-                                <span>•</span>
-                                <span>{new Date().toLocaleDateString()}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            {/* Hidden QR Canvas for PDF generation (off-screen but rendered) */}
+            <div ref={qrCanvasRef} style={{ position: 'absolute', left: '-9999px', top: 0 }}>
+                <QRCodeCanvas
+                    value={qrData}
+                    size={400}
+                    level="H"
+                    includeMargin={false}
+                />
             </div>
 
             {/* QR Code Modal for screen viewing */}
